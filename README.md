@@ -7,6 +7,10 @@ I believe we can do this together.
 
 ## Technical idea
 
+Imagine a piece of open source software that people can install on their servers and use that as an API to search all the Christian media. This system will search all media publishers at once and pass through the data. It will be lightweight in that there is not database and not much state in it. The main gist is that it generates links to user for pagination, meaning you can first fetch the first 40 items and then get the next 40. These items will be mixed from the different sources. This involves so complexity.
+
+Every media publisher can write code to get their source integrated. This requires a very good abstraction that has few methods to implement to get this going.
+
 ### Installation / updating
 - Every consumer needs to install their own instance
   - Needs a CORS whitelist so we can limit or allow use.
@@ -35,6 +39,14 @@ I believe we can do this together.
 - API hints should be inside the response, people might learn of this by opening endpoints in the console
 - We could offer consultancy for implementers with challenges working out how to implement DataSource correctly.
 - GitHub pages for the documentation
+- Levels of documentation
+  - Installation on a production server
+  - Installation for local development
+  - Usage of the endpoints
+  - Requirements for an integration / Developing an integration
+  - Scope of project, who is allowed to join, what kind of requirements do we have?
+  - Which organization back this product?
+  - Quality assurance
 
 ### Core implementation
 - The URL query should be transformed to an abstract Query which is then used to call the DataSource
@@ -42,6 +54,7 @@ I believe we can do this together.
 - We need an abstract class such as DataSource
 - Should language(s) be a required URL argument?
 - Fetches of data or DataSources in general should have a timeout. When nothing is returned this indicates that the source is done.
+- What if it kind of works like hypermedia in a way that if you open an endpoint in the browser it shows a UI and when you do a fetch with headers that it returns JSON?
 
 ### UI usage
 - We can have support for streaming results (also add resorting of data)
@@ -116,3 +129,8 @@ I believe we can do this together.
 ## Future ideas
 
 - Statistics of usage to a timeseries database system such as InfluxDB. This might be easpecially interesting for a centralized one. It should not be a requirement to use this component.
+
+## Deno (libraries) that might be interesting
+
+- https://github.com/rafaelmotaalves/better_permissions
+- https://deno.land/manual/node/import_maps
