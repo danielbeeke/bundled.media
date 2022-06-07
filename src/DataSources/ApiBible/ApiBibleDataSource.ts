@@ -19,6 +19,7 @@ export class ApiBibleDataSource extends BaseDataSource<ApiBibleRawItem, Thing> {
   async fetch (query: AbstractQuery) {
     const fetchUrl = new URL(`${this.url}/v1/bibles`)
 
+    // TODO this will be repeated, create helpers to normalize bcp47 to iso 2 or iso3.
     let matchedLanguage
     if (query.langCode) {
       if (query.langCode.length === 2) {
@@ -34,11 +35,7 @@ export class ApiBibleDataSource extends BaseDataSource<ApiBibleRawItem, Thing> {
 
     if (query.text) fetchUrl.searchParams.set('name', query.text)
 
-    const response = await fetch(fetchUrl, {
-      headers: {
-        'api-key': this.#options.key
-      }
-    })
+    const response = await fetch(fetchUrl, { headers: { 'api-key': this.#options.key }})
     const json = await response.json()
 
     this.done = true // We are always done after one search. This API does not have pagination.
@@ -55,7 +52,7 @@ export class ApiBibleDataSource extends BaseDataSource<ApiBibleRawItem, Thing> {
       'name': item.name,
       'description': item.description,
       'url': `https://bibles.org/bible/${item.id}/_`,
-      'inLanguage': bcp47Normalize(item.language.id)
+      'inLanguage': bcp47Normalize(item.language.id) // TODO wrap this in a cache, this normalization process might be expensive.
     }
 
     return normalizedItem

@@ -1,12 +1,16 @@
+/**
+ * When running bundled.media with this wrapper script it makes sure it can only fetch from the APIs that are attached.
+ * It will also limit read and  write access.
+ * This is done to prevent supply chain attacks.
+ */
 import { generatePermisions, PermissionOptions } from 'https://raw.githubusercontent.com/danielbeeke/better_permissions/master/mod.ts' // Audited
 import { dataSources } from './.env.ts'
 
+// Grabs the URLs from all the APIs
 const urls = dataSources().map(source => {
   const url = new URL(source.url)
   return url.hostname
 }).filter(Boolean)
-
-console.log(urls)
 
 const options: PermissionOptions = {
   env: true,
@@ -20,7 +24,7 @@ const options: PermissionOptions = {
     './src/Public/api.js',
     './src/Public/favicon.ico',
   ],
-  write: ['/tmp'],
+  write: false, // TODO in the future we need a cache folder that is not in /tmp
   hrtime: false,
   run: false,
   watch: Deno.args.includes('--watch')

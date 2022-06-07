@@ -11,6 +11,11 @@ type DataFetchObject = {
   filteredItems: Array<Thing>,
 }
 
+/**
+ * A sync route. 
+ * It searches through multiple APIs at once.
+ * We try to spread out items from all the different APIs.
+ */
 export class SearchRoute extends BaseRoute {
 
   static path = '/search'
@@ -40,7 +45,7 @@ export class SearchRoute extends BaseRoute {
     })
   }
 
-  // Would it be better to fetch for one dataSource?
+  // TODO Move to be one fetch for one dataSource?
   // It might give better flow for making sure sources have equals changes to fill the result set.
 
   // Goes through all the sources and fetches for  the current given page. (See above.. if page sizes do not match this it no a good plan)
@@ -68,7 +73,7 @@ export class SearchRoute extends BaseRoute {
     return promises
   }
 
-  // No real filtering yet. Here we will add filtering on the normalized data.
+  // No real filtering yet. TODO Here we will add filtering on the normalized data.
   filter (normalizedItems: Array<Thing>) {
     return normalizedItems
   }

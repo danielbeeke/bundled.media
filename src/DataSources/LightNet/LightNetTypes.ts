@@ -15,6 +15,7 @@ export type LightNetRawItem = {
   "name": string,
   "originalTitle": string,
   "urls": Array<string>,
+  "src": Array<string>,
 }
 
 export type LightNetOptions = {

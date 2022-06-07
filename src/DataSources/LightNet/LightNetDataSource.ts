@@ -47,7 +47,7 @@ export class LightNetDataSource extends BaseDataSource<LightNetRawItem, Thing> {
     const normalizedItem: Thing = {
       '@type': LightNetTypeMapping[item.type],
       'name': item.name,
-      'url': item.urls,
+      'url': item.urls ?? item.src,
       'inLanguage': item.langCode
     }
 
