@@ -1,9 +1,9 @@
 export abstract class BaseRoute {
 
-  public event: Deno.RequestEvent
+  public url: URL
 
-  constructor (requestEvent: Deno.RequestEvent) {
-    this.event = requestEvent
+  constructor (request: Request) {
+    this.url = new URL(request.url)
   }
 
   static path: string

@@ -7,16 +7,16 @@ I believe we can do this together.
 
 ## Technical idea
 
-Imagine a piece of open source software that people can install on their servers and use that as an API to search all the Christian media. This system will search all media publishers at once and pass through the data. It will be lightweight in that there is not database and not much state in it. The main gist is that it generates links to user for pagination, meaning you can first fetch the first 40 items and then get the next 40. These items will be mixed from the different sources. This involves so complexity.
+Imagine a piece of open source software that people can install on their servers and use that as an API to search all the Christian media. This system will search all media publishers at once and pass through the data. It will be lightweight in that there is not database and not much state in it. The main gist is that it generates links to use for pagination, meaning you can first fetch the first 40 items and then get the next 40. These items will be mixed from the different sources. This involves so complexity.
 
 Every media publisher can write code to get their source integrated. This requires a very good abstraction that has few methods to implement to get this going.
 
 ### Installation / updating
 - Every consumer needs to install their own instance
-  - Needs a CORS whitelist so we can limit or allow use.
+  - Needs a CORS (https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) whitelist so we can limit or allow use.
   - A centralized open one could be made in the future.
 - We advice to run the Deno script with --reload and a linux daemon service that restarts it every couple of days
-  - If we really go for such a crude way we need DTAP streets.
+  - If we really go for such a crude way we need DTAP (development / testing / acceptance / production) streets.
   - We could also have an update button in a UI that is behind a password set in the .env
 - It must be possible to enable/disable publishers in .env.
 
@@ -55,6 +55,7 @@ Every media publisher can write code to get their source integrated. This requir
 - Should language(s) be a required URL argument?
 - Fetches of data or DataSources in general should have a timeout. When nothing is returned this indicates that the source is done.
 - What if it kind of works like hypermedia in a way that if you open an endpoint in the browser it shows a UI and when you do a fetch with headers that it returns JSON?
+- We can use Web Workers for multi threading
 
 ### UI usage
 - We can have support for streaming results (also add resorting of data)
@@ -77,6 +78,7 @@ Every media publisher can write code to get their source integrated. This requir
 - We can create tests that use stubs of the real data.
 
 ### Data
+- It should be possible to filter on type beforehand. Types such as video / ebook etc.
 - All language identifiers must be normalized to bcp47
 - Outputs: RDF, JSON-ld, JSON, HTML?
 - All the data should be normalized by their DataSource
@@ -134,3 +136,5 @@ Every media publisher can write code to get their source integrated. This requir
 
 - https://github.com/rafaelmotaalves/better_permissions
 - https://deno.land/manual/node/import_maps
+- https://deno.land/x/cache@0.2.13
+- https://deno.land/x/validify@v0.2.0

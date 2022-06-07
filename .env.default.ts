@@ -1,4 +1,4 @@
-import { LightNetDataSource } from './src/DataSources/LightNetDataSource.ts'
+import { LightNetDataSource } from './src/DataSources/LightNet/LightNetDataSource.ts'
 
 export const dataSources = [
   new LightNetDataSource({

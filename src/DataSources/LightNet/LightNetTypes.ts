@@ -1,10 +1,8 @@
-import { BaseDataSource } from './BaseDataSource.ts'
-
 export type LightNetRawItem = {
   "language": string,
   "langCode": string,
   "id": string,
-  "type": string,
+  "type": 'video' | 'ebook',
   "description": string,
   "authors": Array<string>,
   "category": Array<string>,
@@ -25,22 +23,7 @@ export type LightNetOptions = {
   types: Array<'video' | 'ebook'>
 }
 
-export class LightNetDataSource extends BaseDataSource<LightNetRawItem, any> {
-
-  #options: LightNetOptions
-
-  constructor (options: LightNetOptions) {
-    super()
-    this.#options = options
-  }
-
-  done() {
-    return false
-  }
-
-  normalize(item: LightNetRawItem) {
-    console.log(item)
-    return {}
-  }
-
+export const LightNetTypeMapping = {
+  'video': 'VideoObject' as const,
+  'ebook': 'Book' as const
 }
