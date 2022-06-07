@@ -16,7 +16,9 @@ const options: PermissionOptions = {
   ],
   read: [
     './env',
-    './src/Public/index.html'
+    './src/Public/index.html',
+    './src/Public/api.js',
+    './src/Public/favicon.ico',
   ],
   write: ['/tmp'],
   hrtime: false,

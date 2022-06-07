@@ -16,14 +16,20 @@ export class LightNetDataSource extends BaseDataSource<LightNetRawItem, Thing> {
     return this.#options.url
   }
 
-  async fetch (query: AbstractQuery) {
+  async fetch (query: AbstractQuery, page = 0) {
     const fetchUrl = new URL(`${this.#options.url}/${this.#options.channel}/${this.#options.types.join(',')}`)
 
+    fetchUrl.searchParams.set('offset', (page * 30).toString())
+    fetchUrl.searchParams.set('limit', '30')
+    fetchUrl.searchParams.set('sort[name]', 'asc')
+    
     fetchUrl.searchParams.set('sidetrack[0]', 'authors')
     fetchUrl.searchParams.set('sidetrack[1]', 'category')
     fetchUrl.searchParams.set('sidetrack[2]', 'keywords')
 
     if (query.text) fetchUrl.searchParams.set('search', `*${query.text}*`)
+
+    // console.log(fetchUrl.toString())
 
     const response = await fetch(fetchUrl)
     const json = await response.json()

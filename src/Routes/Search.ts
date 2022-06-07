@@ -18,21 +18,32 @@ export class SearchRoute extends BaseRoute {
 
   #fetches: Map<string, Array<DataFetchObject>> = new Map()
 
+  /**
+   * The route handler. 
+   * We create a fresh set of dataSources and then fetch results.
+   */
   async handle () {
     const query = new AbstractQuery(this.url)
     const dataSources = createDataSources()
+
+    let page = 0
     
-    while (dataSources.some(dataSource => !dataSource.done) && this.results.length !== this.max) {
-      await Promise.all(this.fetch(dataSources, query))
+    while (dataSources.some(dataSource => !dataSource.done) && this.results.length < this.max) {
+      await Promise.all(this.fetch(dataSources, query, page))
+      page++
     }
 
-    return new Response(JSON.stringify(this.results, null, 2), {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    return new Response(JSON.stringify({
+      items: this.results
+    }, null, 2), {
+      headers: { 'Content-Type': 'application/json' }
     })
   }
 
+  // Would it be better to fetch for one dataSource?
+  // It might give better flow for making sure sources have equals changes to fill the result set.
+
+  // Goes through all the sources and fetches for  the current given page. (See above.. if page sizes do not match this it no a good plan)
   fetch (dataSources: Array<BaseDataSource<any, any>>, query: AbstractQuery, page = 0) {
     const promises: Array<Promise<any>> = []
 
@@ -57,12 +68,17 @@ export class SearchRoute extends BaseRoute {
     return promises
   }
 
+  // No real filtering yet. Here we will add filtering on the normalized data.
   filter (normalizedItems: Array<Thing>) {
     return normalizedItems
   }
 
+  /**
+   * This extracts all the filtered items from the seperate fetches and sources into one array.
+   */
   get results () {
-    return [...this.#fetches.values()].flatMap(dataSourcefetches => dataSourcefetches.flatMap(dataSourceFetch => dataSourceFetch.filteredItems))
+    return [...this.#fetches.values()]
+    .flatMap(dataSourcefetches => dataSourcefetches.flatMap(dataSourceFetch => dataSourceFetch.filteredItems))
   }
 
 }
