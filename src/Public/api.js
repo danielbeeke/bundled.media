@@ -19,7 +19,7 @@ const draw = () => {
       searchResults = json.items ?? []
 
       draw()
-
+      history.pushState({}, '', url)
     }} type="search" />
 
     <ul class="list-group">

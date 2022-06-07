@@ -28,6 +28,7 @@ export class LightNetDataSource extends BaseDataSource<LightNetRawItem, Thing> {
     fetchUrl.searchParams.set('sidetrack[2]', 'keywords')
 
     if (query.text) fetchUrl.searchParams.set('search', `*${query.text}*`)
+    if (query.langCode) fetchUrl.searchParams.set('langCode', query.langCode)
 
     // console.log(fetchUrl.toString())
 

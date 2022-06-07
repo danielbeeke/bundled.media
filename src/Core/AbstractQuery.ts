@@ -14,4 +14,7 @@ export class AbstractQuery {
     return this.#params.get('text')
   }
 
+  get langCode () {
+    return this.#params.get('langCode')
+  }
 }
