@@ -5,6 +5,7 @@
  */
 import { generatePermisions, PermissionOptions } from 'https://raw.githubusercontent.com/danielbeeke/better_permissions/master/mod.ts' // Audited
 import { dataSources } from './.env.ts'
+import { cachedir } from 'https://deno.land/x/cache@0.2.13/directories.ts'
 
 // Grabs the URLs from all the APIs
 const urls = dataSources().map(source => {
@@ -16,15 +17,19 @@ const options: PermissionOptions = {
   env: true,
   net: [
     '0.0.0.0:8080',
-    ...urls
+    ...urls,
   ],
   read: [
     './env',
     './src/Public/index.html',
     './src/Public/api.js',
     './src/Public/favicon.ico',
+    '/home/daniel/.cache/deno',
+    cachedir()
   ],
-  write: false, // TODO in the future we need a cache folder that is not in /tmp
+  write: [
+    cachedir()
+  ],
   hrtime: false,
   run: false,
   watch: Deno.args.includes('--watch')

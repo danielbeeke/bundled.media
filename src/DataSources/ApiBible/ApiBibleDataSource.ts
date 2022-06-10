@@ -2,45 +2,26 @@ import { BaseDataSource } from '../BaseDataSource.ts'
 import { AbstractQuery } from '../../Core/AbstractQuery.ts'
 import { Thing } from '../../schema.org.ts';
 import { ApiBibleOptions, ApiBibleRawItem } from './ApiBibleTypes.ts'
-import { iso6393 } from 'https://esm.sh/iso-639-3@3'
-import { bcp47Normalize } from 'https://esm.sh/bcp-47-normalize@2'
+import { bcp47Normalize } from '../../Helpers/bcp47Normalize.ts'
+import { ISO639_1_to_ISO639_3 } from '../../Helpers/ISO639_1_to_ISO639_3.ts'
+import { fetched } from '../../Helpers/fetched.ts'
 
-export class ApiBibleDataSource extends BaseDataSource<ApiBibleRawItem, Thing> {
+export class ApiBibleDataSource extends BaseDataSource<ApiBibleOptions, ApiBibleRawItem, Thing> {
 
   public url = 'https://api.scripture.api.bible'
 
-  #options: ApiBibleOptions
-  
-  constructor (options: ApiBibleOptions) {
-    super()
-    this.#options = options
-  }
-
-  async fetch (query: AbstractQuery) {
+  async fetch (query: AbstractQuery, page = 0, offset = 0) {
     const fetchUrl = new URL(`${this.url}/v1/bibles`)
 
-    // TODO this will be repeated, create helpers to normalize bcp47 to iso 2 or iso3.
-    let matchedLanguage
-    if (query.langCode) {
-      if (query.langCode.length === 2) {
-        matchedLanguage = iso6393.find(item => item.iso6391 === query.langCode)
-        if (matchedLanguage) {
-          fetchUrl.searchParams.set('language', matchedLanguage.iso6393)
-        }  
-      }
-      else {
-        fetchUrl.searchParams.set('language', query.langCode) 
-      }
-    }
-
+    if (query.langCode) fetchUrl.searchParams.set('language', ISO639_1_to_ISO639_3(query.langCode))
     if (query.text) fetchUrl.searchParams.set('name', query.text)
-
-    const response = await fetch(fetchUrl, { headers: { 'api-key': this.#options.key }})
+    
+    const response = await fetched(fetchUrl, { headers: { 'api-key': this.options.key }})
     const json = await response.json()
 
     this.done = true // We are always done after one search. This API does not have pagination.
 
-    return json.data ?? []
+    return (json.data as Array<any>).slice(offset) ?? []
   }
 
   /**

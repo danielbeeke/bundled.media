@@ -21,6 +21,7 @@ export type LightNetRawItem = {
 export type LightNetOptions = {
   url: string,
   channel: string,
+  limit: number,
   types: Array<'video' | 'ebook'>
 }
 

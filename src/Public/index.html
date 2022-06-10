@@ -7,6 +7,34 @@
   <title>Bundled Media</title>
   <script src="/api.js" type="module"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <style>
+    @import url('https://unpkg.com/bcp47-picker@1.0.8/dist/bcp47-picker.css');
+    bcp47-picker {
+      position: relative;
+      width: auto;
+    }
+
+    .hidden {
+       display: none;
+    }
+
+    .bcp47-value-wrapper {
+      border-radius: 0;
+    }
+
+    .bcp47-search {
+      border-radius: 0;
+      min-width: 330px !important;
+    }
+
+    .bcp47-results {
+      position: absolute;
+      z-index: 12;
+      min-width: 300px;
+      right: 0;
+      top: 42px;
+    }
+  </style>
 </head>
 <body>
   

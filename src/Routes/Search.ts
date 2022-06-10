@@ -5,6 +5,7 @@ import { BaseDataSource } from '../DataSources/BaseDataSource.ts'
 import { Thing } from '../schema.org.ts';
 
 type DataFetchObject = {
+  page: number,
   promise: Promise<void>,
   rawItems: Array<Thing>,
   normalizedItems: Array<Thing>,
@@ -19,9 +20,9 @@ type DataFetchObject = {
 export class SearchRoute extends BaseRoute {
 
   static path = '/search'
-  public max = 50
+  public max = 20
 
-  #fetches: Map<string, Array<DataFetchObject>> = new Map()
+  #fetches: Map<BaseDataSource, Array<DataFetchObject>> = new Map()
 
   /**
    * The route handler. 
@@ -32,45 +33,87 @@ export class SearchRoute extends BaseRoute {
     const dataSources = createDataSources()
 
     let page = 0
-    
-    while (dataSources.some(dataSource => !dataSource.done) && this.results.length < this.max) {
-      await Promise.all(this.fetch(dataSources, query, page))
+
+    /**
+     * Fetch all needed data
+     */
+    while (dataSources.some(dataSource => !dataSource.done) && this.getResultCount('all') < this.max) {
+      const ItemCountFinishedSources = this.getResultCount('done')
+      const average = (this.max - ItemCountFinishedSources) / dataSources.filter(dataSource => !dataSource.done).length
+      let dataSourceIndex = 0
+      const promises = []
+
+      for (const dataSource of dataSources) {
+        if (!dataSource.done && this.getResultCount('all', dataSource) < average)
+          promises.push(this.fetch(dataSource, query, page, query.pagenation[dataSourceIndex]))
+        dataSourceIndex++
+      }
+
+      await Promise.all(promises)
       page++
     }
 
+    /**
+     * Determine the pagination state per source.
+     * TODO this will get more complicated when there is a specific filter that the source does not support and we support a second level of filtering.
+     */
+    let items = []
+
+    const correctMax = Math.min(this.max, this.getResultCount())
+    const counters = new Map()
+    const mergedFilteredItems = new Map()
+
+    for (const [dataSource, dataSourcefetches] of this.#fetches.entries())
+      mergedFilteredItems.set(dataSource, dataSourcefetches.flatMap(dataSourcefetch => dataSourcefetch.filteredItems))
+
+    while (items.length < correctMax) {
+      for (const dataSource of this.#fetches.keys()) {
+        let counter = counters.get(dataSource) ?? 0
+        items.push(mergedFilteredItems.get(dataSource)[counter])
+        counter++
+        counters.set(dataSource, counter)
+      }
+    }
+
+    /**
+     * Create the next URL.
+     */
+    const nextUrl = new URL(this.url.toString())
+    const paginationString = [...this.#fetches.keys()].map((dataSource, index) => {
+      return (counters.get(dataSource) ?? 0) + (query.pagenation[index] ?? 0)
+    }).join(',')
+    nextUrl.searchParams.set('pagination', paginationString)
+
     return new Response(JSON.stringify({
-      items: this.results
+      items: items,
+      nextUrl
     }, null, 2), {
       headers: { 'Content-Type': 'application/json' }
     })
   }
 
-  // TODO Move to be one fetch for one dataSource?
-  // It might give better flow for making sure sources have equals changes to fill the result set.
+  /**
+   * Fetches data for one source.
+   * Page sizes may differ.
+   */
+  fetch (dataSource: BaseDataSource, query: AbstractQuery, page = 0, offset = 0) {
+    const dataSourcefetches: Array<DataFetchObject> = this.#fetches.get(dataSource) ?? []
 
-  // Goes through all the sources and fetches for  the current given page. (See above.. if page sizes do not match this it no a good plan)
-  fetch (dataSources: Array<BaseDataSource<any, any>>, query: AbstractQuery, page = 0) {
-    const promises: Array<Promise<any>> = []
-
-    for (const dataSource of dataSources) {
-      const dataSourcefetches: Array<DataFetchObject> = this.#fetches.get(dataSource.constructor.name) ?? []
-      const dataSourceFetch: DataFetchObject = {
-        rawItems: [],
-        normalizedItems: [],
-        filteredItems: [],
-        promise: dataSource.fetch(query, page).then((items: any) => {
-          dataSourceFetch.normalizedItems = items.map((item: any) => dataSource.normalize(item))
-          dataSourceFetch.filteredItems = this.filter(dataSourceFetch.normalizedItems)
-        })
-      }
-
-      promises.push(dataSourceFetch.promise)
-
-      dataSourcefetches.push(dataSourceFetch)
-      this.#fetches.set(dataSource.constructor.name, dataSourcefetches)
+    const dataSourceFetch: DataFetchObject = {
+      page,
+      rawItems: [],
+      normalizedItems: [],
+      filteredItems: [],
+      promise: dataSource.fetch(query, page, offset).then((items: Array<any>) => {
+        dataSourceFetch.normalizedItems = items.map((item: any) => dataSource.normalize(item))
+        dataSourceFetch.filteredItems = this.filter(dataSourceFetch.normalizedItems)
+      })
     }
 
-    return promises
+    dataSourcefetches.push(dataSourceFetch)
+    this.#fetches.set(dataSource, dataSourcefetches)
+
+    return dataSourceFetch.promise
   }
 
   // No real filtering yet. TODO Here we will add filtering on the normalized data.
@@ -81,9 +124,13 @@ export class SearchRoute extends BaseRoute {
   /**
    * This extracts all the filtered items from the seperate fetches and sources into one array.
    */
-  get results () {
-    return [...this.#fetches.values()]
-    .flatMap(dataSourcefetches => dataSourcefetches.flatMap(dataSourceFetch => dataSourceFetch.filteredItems))
+  getResultCount (type: 'all' | 'done' = 'all', filterSource: BaseDataSource | undefined = undefined) {
+
+    return [...this.#fetches.entries()]
+    .flatMap(([source, dataSourcefetches]) => 
+      (filterSource && source === filterSource || !filterSource) &&
+        (type === 'done' && source.done || type === 'all') ? 
+          dataSourcefetches.flatMap(dataSourceFetch => dataSourceFetch.filteredItems) : []).length
   }
 
 }

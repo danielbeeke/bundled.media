@@ -2,25 +2,19 @@ import { BaseDataSource } from '../BaseDataSource.ts'
 import { AbstractQuery } from '../../Core/AbstractQuery.ts'
 import { Thing } from '../../schema.org.ts';
 import { LightNetTypeMapping, LightNetOptions, LightNetRawItem } from './LightNetTypes.ts'
+import { fetched } from '../../Helpers/fetched.ts'
 
-export class LightNetDataSource extends BaseDataSource<LightNetRawItem, Thing> {
-
-  #options: LightNetOptions
-  
-  constructor (options: LightNetOptions) {
-    super()
-    this.#options = options
-  }
+export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNetRawItem, Thing> {
 
   get url () {
-    return this.#options.url
+    return this.options.url
   }
 
-  async fetch (query: AbstractQuery, page = 0) {
-    const fetchUrl = new URL(`${this.#options.url}/${this.#options.channel}/${this.#options.types.join(',')}`)
+  async fetch (query: AbstractQuery, page = 0, offset = 0) {
+    const fetchUrl = new URL(`${this.options.url}/${this.options.channel}/${this.options.types.join(',')}`)
 
-    fetchUrl.searchParams.set('offset', (page * 30).toString())
-    fetchUrl.searchParams.set('limit', '30')
+    fetchUrl.searchParams.set('offset', (offset + (page * this.options.limit)).toString())
+    fetchUrl.searchParams.set('limit', this.options.limit.toString())
     fetchUrl.searchParams.set('sort[name]', 'asc')
     
     fetchUrl.searchParams.set('sidetrack[0]', 'authors')
@@ -30,9 +24,7 @@ export class LightNetDataSource extends BaseDataSource<LightNetRawItem, Thing> {
     if (query.text) fetchUrl.searchParams.set('search', `*${query.text}*`)
     if (query.langCode) fetchUrl.searchParams.set('langCode', query.langCode)
 
-    // console.log(fetchUrl.toString())
-
-    const response = await fetch(fetchUrl)
+    const response = await fetched(fetchUrl)
     const json = await response.json()
 
     if (json.total === json.data.length || !json.data.length) this.done = true 
