@@ -13,13 +13,15 @@ type DataFetchObject = {
 }
 
 /**
- * A sync route. 
+ * A route with a sync response. 
  * It searches through multiple APIs at once.
  * We try to spread out items from all the different APIs.
  */
 export class SearchRoute extends BaseRoute {
 
   static path = '/search'
+  static description = `Search and filter through all the enabled sources in a synchronous way.`
+
   public max = 20
 
   #fetches: Map<BaseDataSource, Array<DataFetchObject>> = new Map()
@@ -31,6 +33,7 @@ export class SearchRoute extends BaseRoute {
   async handle () {
     const query = new AbstractQuery(this.url)
     const dataSources = createDataSources()
+    .filter(source => !query.types.length || query.types.some(type => source.types().includes(type)))
 
     let page = 0
 
@@ -57,7 +60,7 @@ export class SearchRoute extends BaseRoute {
      * Determine the pagination state per source.
      * TODO this will get more complicated when there is a specific filter that the source does not support and we support a second level of filtering.
      */
-    let items = []
+    const items: Array<Thing> = []
 
     const correctMax = Math.min(this.max, this.getResultCount())
     const counters = new Map()
@@ -69,27 +72,31 @@ export class SearchRoute extends BaseRoute {
     while (items.length < correctMax) {
       for (const dataSource of this.#fetches.keys()) {
         let counter = counters.get(dataSource) ?? 0
-        items.push(mergedFilteredItems.get(dataSource)[counter])
-        counter++
-        counters.set(dataSource, counter)
+        const sourceMergedFilteredItems = mergedFilteredItems.get(dataSource)
+        if (sourceMergedFilteredItems.length && sourceMergedFilteredItems[counter]) {
+          items.push(sourceMergedFilteredItems[counter])
+          counter++
+          counters.set(dataSource, counter)  
+        }
       }
     }
 
     /**
      * Create the next URL.
      */
-    const nextUrl = new URL(this.url.toString())
-    const paginationString = [...this.#fetches.keys()].map((dataSource, index) => {
-      return (counters.get(dataSource) ?? 0) + (query.pagenation[index] ?? 0)
-    }).join(',')
-    nextUrl.searchParams.set('pagination', paginationString)
+    let nextUrl: false | URL = false
+    if (dataSources.some(dataSource => !dataSource.done)) {
+      nextUrl = new URL(this.url.toString())
+      const paginationString = [...this.#fetches.keys()].map((dataSource, index) => {
+        return (counters.get(dataSource) ?? 0) + (query.pagenation[index] ?? 0)
+      }).join(',')
+      nextUrl.searchParams.set('pagination', paginationString)  
+    }
 
-    return new Response(JSON.stringify({
+    return {
       items: items,
       nextUrl
-    }, null, 2), {
-      headers: { 'Content-Type': 'application/json' }
-    })
+    }
   }
 
   /**
@@ -131,6 +138,16 @@ export class SearchRoute extends BaseRoute {
       (filterSource && source === filterSource || !filterSource) &&
         (type === 'done' && source.done || type === 'all') ? 
           dataSourcefetches.flatMap(dataSourceFetch => dataSourceFetch.filteredItems) : []).length
+  }
+
+  /**
+   * The template for the HyperMedia response
+   * We handle the HTML clientside.
+   */
+  async template (_variables: { [key: string]: any }){ 
+    return await `
+      <script src="/search.js" type="module"></script>
+    `
   }
 
 }

@@ -8,10 +8,10 @@ import { fetched } from '../../Helpers/fetched.ts'
 
 export class ApiBibleDataSource extends BaseDataSource<ApiBibleOptions, ApiBibleRawItem, Thing> {
 
-  public url = 'https://api.scripture.api.bible'
+  public url = new URL('https://api.scripture.api.bible')
 
   async fetch (query: AbstractQuery, page = 0, offset = 0) {
-    const fetchUrl = new URL(`${this.url}/v1/bibles`)
+    const fetchUrl = new URL(`${this.url}v1/bibles`)
 
     if (query.langCode) fetchUrl.searchParams.set('language', ISO639_1_to_ISO639_3(query.langCode))
     if (query.text) fetchUrl.searchParams.set('name', query.text)
@@ -21,7 +21,7 @@ export class ApiBibleDataSource extends BaseDataSource<ApiBibleOptions, ApiBible
 
     this.done = true // We are always done after one search. This API does not have pagination.
 
-    return (json.data as Array<any>).slice(offset) ?? []
+    return (json.data as Array<any>)?.slice(offset) ?? []
   }
 
   /**
@@ -33,9 +33,13 @@ export class ApiBibleDataSource extends BaseDataSource<ApiBibleOptions, ApiBible
       'name': item.name,
       'description': item.description,
       'url': `https://bibles.org/bible/${item.id}/_`,
-      'inLanguage': bcp47Normalize(item.language.id) // TODO wrap this in a cache, this normalization process might be expensive.
+      'inLanguage': bcp47Normalize(item.language.id)
     }
 
     return normalizedItem
+  }
+
+  types () {
+    return ['https://schema.org/Book']
   }
 }

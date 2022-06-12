@@ -8,5 +8,22 @@ export abstract class BaseRoute {
 
   static path: string
 
-  public abstract handle (): Promise<Response>
+  public abstract handle (): Promise<any>
+
+  async htmlVariables () {
+    return await {
+      title: 'bundled.media'
+    }
+  }
+
+  // async htmlVariables () {
+  //   return Object.assign(await super.htmlVariables(), {
+      
+  //   })
+  // }
+
+  async template (_variables: { [key: string]: any }) {
+    return await ``
+  }
+  
 }

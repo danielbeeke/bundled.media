@@ -1,17 +1,24 @@
 import { BaseDataSource } from '../BaseDataSource.ts'
 import { AbstractQuery } from '../../Core/AbstractQuery.ts'
 import { Thing } from '../../schema.org.ts';
-import { LightNetTypeMapping, LightNetOptions, LightNetRawItem } from './LightNetTypes.ts'
+import { LightNetTypeMapping, LightNetSchemaTypeMapping, LightNetOptions, LightNetRawItem } from './LightNetTypes.ts'
 import { fetched } from '../../Helpers/fetched.ts'
 
 export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNetRawItem, Thing> {
 
-  get url () {
-    return this.options.url
+  constructor (options: LightNetOptions) {
+    super(options)
+    this.url = new URL(`${options.url}/${options.channel}`)
   }
 
   async fetch (query: AbstractQuery, page = 0, offset = 0) {
-    const fetchUrl = new URL(`${this.options.url}/${this.options.channel}/${this.options.types.join(',')}`)
+    let types = this.options.types.join(',')
+    
+    if (query.types.length) {
+      types = query.types.map((type: string) => LightNetSchemaTypeMapping[type]).join(',')
+    }
+
+    const fetchUrl = new URL(`${this.options.url}/${this.options.channel}/${types}`)
 
     fetchUrl.searchParams.set('offset', (offset + (page * this.options.limit)).toString())
     fetchUrl.searchParams.set('limit', this.options.limit.toString())
@@ -36,13 +43,19 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
    * The transformation from an API specific item to a schema.org item.
    */
   normalize(item: LightNetRawItem) {
-    const normalizedItem: Thing = {
+    return {
       '@type': LightNetTypeMapping[item.type],
       'name': item.name,
       'url': item.urls ?? item.src,
       'inLanguage': item.langCode
-    }
+    } as Thing
+  }
 
-    return normalizedItem
+  /**
+   * Returns schema.org normalized types.
+   */
+  types () {
+    return this.options.types
+    .map(type => `https://schema.org/${LightNetTypeMapping[type]}`)
   }
 }

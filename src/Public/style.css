@@ -1,0 +1,29 @@
+@import url('https://unpkg.com/bcp47-picker@1.0.8/dist/bcp47-picker.css');
+bcp47-picker {
+  position: relative;
+  width: auto;
+}
+
+.hidden {
+   display: none;
+}
+
+.bcp47-value-wrapper {
+  border-radius: 0;
+}
+
+.bcp47-search.form-control {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: .375rem !important;
+  border-bottom-right-radius: .375rem !important;
+  min-width: 330px !important;
+}
+
+.bcp47-results {
+  position: absolute;
+  z-index: 12;
+  min-width: 300px;
+  right: 0;
+  top: 42px;
+}

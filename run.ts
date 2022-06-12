@@ -8,27 +8,26 @@ import { dataSources } from './.env.ts'
 import { cachedir } from 'https://deno.land/x/cache@0.2.13/directories.ts'
 
 // Grabs the URLs from all the APIs
-const urls = dataSources().map(source => {
-  const url = new URL(source.url)
-  return url.hostname
-}).filter(Boolean)
+const urls = dataSources().map(source => source.url.hostname).filter(Boolean)
+
+const cache = cachedir()
 
 const options: PermissionOptions = {
   env: true,
   net: [
     '0.0.0.0:8080',
+    'www.googleapis.com',
     ...urls,
   ],
   read: [
+    cache,
+    './',
     './env',
-    './src/Public/index.html',
     './src/Public/api.js',
     './src/Public/favicon.ico',
-    '/home/daniel/.cache/deno',
-    cachedir()
   ],
   write: [
-    cachedir()
+    cache
   ],
   hrtime: false,
   run: false,

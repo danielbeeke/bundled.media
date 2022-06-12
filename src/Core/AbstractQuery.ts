@@ -21,4 +21,8 @@ export class AbstractQuery {
   get pagenation () {
     return this.#params.get('pagination')?.split(',').map(item => parseInt(item)) ?? []
   }
+
+  get types () {
+    return this.#params.get('types')?.split(',') ?? []
+  }
 }
