@@ -3,6 +3,7 @@ import { dataSources as createDataSources } from '../../.env.ts'
 import { AbstractQuery } from '../Core/AbstractQuery.ts'
 import { BaseDataSource } from '../DataSources/BaseDataSource.ts'
 import { Thing } from '../schema.org.ts';
+import { natsort } from '../Helpers/natsort.js'
 
 type DataFetchObject = {
   page: number,
@@ -48,7 +49,7 @@ export class SearchRoute extends BaseRoute {
 
       for (const dataSource of dataSources) {
         if (!dataSource.done && this.getResultCount('all', dataSource) < average)
-          promises.push(this.fetch(dataSource, query, page, query.pagenation[dataSourceIndex]))
+          promises.push(this.fetch(dataSource, query, page, query.pagenation[dataSourceIndex],))
         dataSourceIndex++
       }
 
@@ -81,6 +82,10 @@ export class SearchRoute extends BaseRoute {
       }
     }
 
+    // Sorting
+    const sorter = natsort({ insensitive: true })
+    items.sort((a: any, b: any) => sorter(a.name, b.name))
+
     /**
      * Create the next URL.
      */
@@ -88,7 +93,14 @@ export class SearchRoute extends BaseRoute {
     if (dataSources.some(dataSource => !dataSource.done)) {
       nextUrl = new URL(this.url.toString())
       const paginationString = [...this.#fetches.keys()].map((dataSource, index) => {
-        return (counters.get(dataSource) ?? 0) + (query.pagenation[index] ?? 0)
+        if (dataSource.paginationType === 'offset') {
+          return (counters.get(dataSource) ?? 0) + (query.pagenation[index] ? parseInt(query.pagenation[index] + '') : 0 ?? 0)
+        }
+
+        if (dataSource.paginationType === 'token')
+          return dataSource.getLastToken()
+
+        throw new Error(`Pagination type: ${dataSource.paginationType} is not yet implemented`)
       }).join(',')
       nextUrl.searchParams.set('pagination', paginationString)  
     }
@@ -103,7 +115,7 @@ export class SearchRoute extends BaseRoute {
    * Fetches data for one source.
    * Page sizes may differ.
    */
-  fetch (dataSource: BaseDataSource, query: AbstractQuery, page = 0, offset = 0) {
+  fetch (dataSource: BaseDataSource, query: AbstractQuery, page = 0, offset: undefined | string | number = undefined) {
     const dataSourcefetches: Array<DataFetchObject> = this.#fetches.get(dataSource) ?? []
 
     const dataSourceFetch: DataFetchObject = {
@@ -113,7 +125,7 @@ export class SearchRoute extends BaseRoute {
       filteredItems: [],
       promise: dataSource.fetch(query, page, offset).then((items: Array<any>) => {
         dataSourceFetch.normalizedItems = items.map((item: any) => dataSource.normalize(item))
-        dataSourceFetch.filteredItems = this.filter(dataSourceFetch.normalizedItems)
+        dataSourceFetch.filteredItems = this.filter(dataSourceFetch.normalizedItems, query)
       })
     }
 
@@ -123,9 +135,9 @@ export class SearchRoute extends BaseRoute {
     return dataSourceFetch.promise
   }
 
-  // No real filtering yet. TODO Here we will add filtering on the normalized data.
-  filter (normalizedItems: Array<Thing>) {
+  filter (normalizedItems: Array<Thing>, query: AbstractQuery) {
     return normalizedItems
+    .filter((item: any) => query.langCode ? query.langCode.includes(item.inLanguage) : true)
   }
 
   /**

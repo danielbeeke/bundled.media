@@ -34,6 +34,11 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
     const response = await fetched(fetchUrl)
     const json = await response.json()
 
+    if (json.errors) {
+      console.log(json.errors)
+      return []
+    }
+
     if (json.total === json.data.length || !json.data.length) this.done = true 
 
     return json.data

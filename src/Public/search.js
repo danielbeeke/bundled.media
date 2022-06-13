@@ -60,7 +60,7 @@ const setParameter = (key, value, clearPagination = false) => {
 const draw = () => {
   render(document.querySelector('#app'), html`
     <div class="input-group mb-3">
-      <input placeholder="Search for a title" class="form-control" ?value=${url.searchParams.get('text')} onchange=${(event) => {
+      <input placeholder="Search for a title" class="form-control" value=${url.searchParams.get('text')} onchange=${(event) => {
         setParameter('text', event.target.value, true)
       }} type="search" />
 
@@ -76,6 +76,15 @@ const draw = () => {
       }} />
     </div>
 
+    <ul class="list-group mb-3">
+      ${searchResults.map(item => html`<li class="list-group-item">
+        <details>
+          <summary>${item?.name}</summary>
+          <pre>${JSON.stringify(item, null, 2)}</pre>
+        </details>
+      </li>`)}
+    </ul>
+
     <div>
       <a class=${`btn btn-secondary ${!prevUrls.get(location.toString()) ? 'disabled' : ''}`} onclick=${event => {
         event.preventDefault()
@@ -89,15 +98,6 @@ const draw = () => {
         fetchData()
       }} href=${nextUrl}>Next ></a>
     </div>
-
-    <ul class="list-group mt-3">
-      ${searchResults.map(item => html`<li class="list-group-item">
-        <details>
-          <summary>${item?.name}</summary>
-          <pre>${JSON.stringify(item, null, 2)}</pre>
-        </details>
-      </li>`)}
-    </ul>
   `)
 }
 

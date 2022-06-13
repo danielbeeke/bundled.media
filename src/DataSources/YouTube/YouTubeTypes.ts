@@ -1,28 +1,29 @@
+import { Thing } from '../../schema.org.ts';
+
+type YouTubeImage = { url: string, width: number, height: number }
+
 export type YouTubeRawItem = {
-  id: string,
-  dblId: string,
-  relatedDbl: string,
-  name: string,
-  nameLocal: string,
-  abbreviation: string,
-  abbreviationLocal: string,
-  description: string,
-  descriptionLocal: string,
-  language: {
-    id: string,
-    name: string,
-    nameLocal: string,
-    script: string,
-    scriptDirection: string
-  },
-  countries: Array<any>,
-  type: string,
-  updatedAt: string,
-  audioBibles: Array<any>
+  kind: string,
+  etag: string,
+  id: { kind: string, videoId?: string, playlistId?: string },
+  snippet: {
+    publishedAt: string,
+    channelId: string,
+    title: string,
+    description: string,
+    thumbnails: {
+      default: YouTubeImage,
+      medium: YouTubeImage,
+      high: YouTubeImage
+    },
+    channelTitle: string,
+    liveBroadcastContent: string,
+    publishTime: string
+  }
 }
 
 export type YouTubeOptions = {
-  langCode: string,
+  langCode: string | ((item: Thing) => string),
   key: string,
   channel: string
 }

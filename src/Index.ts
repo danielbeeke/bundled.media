@@ -50,6 +50,7 @@ async function serveHttp(request: Request) {
 
     // Fallback to error page.
     catch (exception) {
+      console.log(exception)
       return new Response(`Something went wrong: ${exception}`, { status: 500 })
     }
   }

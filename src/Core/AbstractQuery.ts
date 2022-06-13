@@ -18,8 +18,8 @@ export class AbstractQuery {
     return this.#params.get('langCode')
   }
 
-  get pagenation () {
-    return this.#params.get('pagination')?.split(',').map(item => parseInt(item)) ?? []
+  get pagenation (): Array<number | string> {
+    return this.#params.get('pagination')?.split(',') ?? []
   }
 
   get types () {
