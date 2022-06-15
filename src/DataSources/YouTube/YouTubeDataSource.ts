@@ -36,6 +36,7 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
 
     if (response.error) {
       console.error(response.error)
+      this.done = true 
       return []
     }
 
@@ -61,9 +62,6 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
       '@type': 'VideoObject',
       'url': `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`
     } as VideoObject
-    
-    normalizedItem.inLanguage = typeof this.options.langCode === 'function' ? 
-      this.options.langCode(normalizedItem) : this.options.langCode
 
     return normalizedItem
   }

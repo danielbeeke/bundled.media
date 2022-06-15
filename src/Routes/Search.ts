@@ -4,6 +4,7 @@ import { AbstractQuery } from '../Core/AbstractQuery.ts'
 import { BaseDataSource } from '../DataSources/BaseDataSource.ts'
 import { Thing } from '../schema.org.ts';
 import { natsort } from '../Helpers/natsort.js'
+import { tryToExtractLanguage } from '../Helpers/tryToExtractLanguage.ts'
 
 type DataFetchObject = {
   page: number,
@@ -35,8 +36,6 @@ export class SearchRoute extends BaseRoute {
     const dataSources = createDataSources()
     .filter(source => !query.types.length || query.types.some(type => source.types().includes(type)))
 
-    let page = 0
-
     /**
      * Fetch all needed data
      */
@@ -48,13 +47,12 @@ export class SearchRoute extends BaseRoute {
 
       for (const dataSource of dataSources) {
         if (!dataSource.done && this.getResultCount('all', dataSource) < average) {
-          promises.push(this.fetch(dataSource, query, page, query.pagenation[dataSourceIndex]))
+          promises.push(this.fetch(dataSource, query, query.pagenation[dataSourceIndex]))
         }
         dataSourceIndex++
       }
 
       await Promise.all(promises)
-      page++
     }
 
     /**
@@ -96,6 +94,10 @@ export class SearchRoute extends BaseRoute {
           return (counters.get(dataSource) ?? 0) + (query.pagenation[index] ? parseInt(query.pagenation[index] + '') : 0 ?? 0)
         }
 
+        if (dataSource.paginationType === 'page') {
+          return (Math.max(this.#fetches.get(dataSource)!.length, 0) ?? 0) + (query.pagenation[index] ? parseInt(query.pagenation[index] + '') : 0 ?? 0)
+        }
+
         if (dataSource.paginationType === 'token')
           return dataSource.getLastToken()
 
@@ -114,15 +116,34 @@ export class SearchRoute extends BaseRoute {
    * Fetches data for one source.
    * Page sizes may differ.
    */
-  fetch (dataSource: BaseDataSource, query: AbstractQuery, page = 0, offset: undefined | string | number = undefined) {
+  fetch (dataSource: BaseDataSource, query: AbstractQuery, offset: undefined | string | number = undefined) {
     const dataSourcefetches: Array<DataFetchObject> = this.#fetches.get(dataSource) ?? []
+
+    const page = dataSourcefetches.length
 
     const dataSourceFetch: DataFetchObject = {
       page,
       normalizedItems: [],
       filteredItems: [],
       promise: dataSource.fetch(query, page, offset).then((items: Array<any>) => {
-        dataSourceFetch.normalizedItems = items.map((item: any) => dataSource.normalize(item))
+        dataSourceFetch.normalizedItems = items.map((item: any) => {
+          const normalizedItem = dataSource.normalize(item) as any
+
+          if (!normalizedItem.inLanguage) {
+            if (typeof dataSource.options.langCode === 'string')
+              normalizedItem.inLanguage = dataSource.options.langCode
+
+            if (typeof dataSource.options.langCode === 'function')
+              normalizedItem.inLanguage = dataSource.options.langCode(normalizedItem)
+
+            if (!normalizedItem.inLanguage) {
+              normalizedItem.inLanguage = tryToExtractLanguage(normalizedItem.name)
+            }
+          }
+
+          return normalizedItem
+        })
+
         dataSourceFetch.filteredItems = this.filter(dataSource, dataSourceFetch.normalizedItems, query)
       })
     }

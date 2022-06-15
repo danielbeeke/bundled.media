@@ -42,6 +42,7 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
 
     if (json.errors) {
       console.log(json.errors)
+      this.done = true
       return []
     }
 

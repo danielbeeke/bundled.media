@@ -23,7 +23,7 @@ export type YouTubeRawItem = {
 }
 
 export type YouTubeOptions = {
-  langCode: string | ((item: Thing) => string),
+  langCode?: string | ((item: Thing) => string),
   key: string,
   channel: string
 }
