@@ -10,6 +10,12 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
   public url = new URL('https://youtube.com')
   public paginationType = 'token'
 
+  constructor (options: YouTubeOptions) {
+    super(options)
+    this.publisher = options.publisher
+    this.label = options.label
+  }
+
   /**
    * At the moment we went for playlist instead of search. Fetching the playlist can be cached.
    * It will have same results for everyone and this costs little credits.

@@ -8,6 +8,8 @@ export async function fetched(
   url: string | URL,
   options: RequestInit = {},
 ): Promise<Response> {
+  console.log(url + '')
+
   const signal = options?.signal ?? undefined
   const entry = new CacheEntry(url);
   try {
@@ -15,6 +17,7 @@ export async function fetched(
   } catch (error: unknown) {
     if (!(error instanceof Deno.errors.NotFound)) throw error;
   }
+
   const res = await fetch(url, options);
   if (res.status === 200) await entry.write(res.clone());
   return res;

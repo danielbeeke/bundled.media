@@ -1,9 +1,13 @@
 import { AbstractQuery } from '../Core/AbstractQuery.ts'
 import { Thing } from '../schema.org.ts';
+import { Publisher } from '../Publishers/Publisher.ts'
 
 export abstract class BaseDataSource<Options = any, RawItem = any, NormalizedItem = Thing> {
 
   public paginationType = 'offset'
+
+  public publisher: Publisher | undefined
+  public label: string | undefined
 
   public done = false
   public url: URL = new URL('https://example.com')

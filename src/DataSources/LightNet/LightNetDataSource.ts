@@ -15,6 +15,8 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
   constructor (options: LightNetOptions) {
     super(options)
     this.url = new URL(`${options.url}/${options.channel}`)
+    this.publisher = options.publisher
+    this.label = options.label
   }
 
   async fetch (query: AbstractQuery, page = 0, offset = 0) {
@@ -48,6 +50,18 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
 
     if (json.total === json.data.length || !json.data.length) this.done = true 
 
+    for (const item of json.data) {
+      item.authorsData = (item.authors ?? []).map((authorUrl: string) => {
+        const personTranslations = json.sidetrack.person?.filter((item: any) => item.id === authorUrl.split('/').pop()) ?? []
+        const organizationTranslations = json.sidetrack.organization?.filter((item: any) => item.id === authorUrl.split('/').pop()) ?? []
+  
+        return [
+          ...personTranslations,
+          ...organizationTranslations
+        ]
+      })
+    }
+
     return json.data
   }
 
@@ -57,12 +71,22 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
   normalize(item: LightNetRawItem) {
     const image = item.covers ? item.covers.find(image => image.url.includes('front')) ?? item.covers[0] : item.cover
 
+    const authors = item.authorsData.map((authorTranslations) => authorTranslations
+      .find((authorTranslation: any) => authorTranslation.langCode === item.langCode) ?? authorTranslations[0])
+    .map(author => ({
+      '@type': author.type.substring(0, 1).toUpperCase() + author.type.substring(1),
+      name: author.name,
+      url: `${this.options.url.toString().replace('data', 'rdf')}/contents/${author.type}/${author.id}`
+    }))
+
     return {
+      '@id': `${this.options.url.toString().replace('data', 'rdf')}/contents/${item.type}/${item.id}`,
       '@type': LightNetTypeMapping[item.type],
       'name': item.name,
       'url': item.urls ?? item.src,
       'inLanguage': item.langCode,
       'description': item.description,
+      'author': authors,
       'thumbnail': {
         url: image!.url,
         width: image!.width?.toString(),

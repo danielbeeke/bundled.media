@@ -1,4 +1,5 @@
 import { Thing } from '../../schema.org.ts';
+import { Publisher } from '../../Publishers/Publisher.ts'
 
 type YouTubeImage = { url: string, width: number, height: number }
 
@@ -23,7 +24,9 @@ export type YouTubeRawItem = {
 }
 
 export type YouTubeOptions = {
+  label: string,
   langCode?: string | ((item: Thing) => string),
   key: string,
-  channel: string
+  channel: string,
+  publisher: Publisher
 }

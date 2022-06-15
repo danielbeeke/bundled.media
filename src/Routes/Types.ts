@@ -1,6 +1,11 @@
 import { BaseRoute } from './BaseRoute.ts'
 import { dataSources as createDataSources } from '../../.env.ts'
 
+const typeLabels: { [key: string]: string } = {
+  'https://schema.org/Book': 'Book',
+  'https://schema.org/VideoObject': 'Video',
+}
+
 export class TypesRoute extends BaseRoute {
 
   static path = '/types'
@@ -19,7 +24,7 @@ export class TypesRoute extends BaseRoute {
       for (const type of source.types()) {
         if (!types[type]) {
           types[type] = {
-            label: type.split('/').pop()!,
+            label: typeLabels[type] ?? type.split('/').pop()!,
             uri: type,
             sources: [source.url]
           }  

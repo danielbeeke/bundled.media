@@ -46,7 +46,7 @@ export class SearchRoute extends BaseRoute {
       const promises = []
 
       for (const dataSource of dataSources) {
-        if (!dataSource.done && this.getResultCount('all', dataSource) < average) {
+        if (!dataSource.done && this.getResultCount('all', dataSource) < average && query.pagenation[dataSourceIndex] !== 'done') {
           promises.push(this.fetch(dataSource, query, query.pagenation[dataSourceIndex]))
         }
         dataSourceIndex++
@@ -90,6 +90,8 @@ export class SearchRoute extends BaseRoute {
     if (dataSources.some(dataSource => !dataSource.done)) {
       nextUrl = new URL(this.url.toString())
       const paginationString = [...this.#fetches.keys()].map((dataSource, index) => {
+        if (dataSource.done) return 'done'
+
         if (dataSource.paginationType === 'offset') {
           return (counters.get(dataSource) ?? 0) + (query.pagenation[index] ? parseInt(query.pagenation[index] + '') : 0 ?? 0)
         }
@@ -140,6 +142,8 @@ export class SearchRoute extends BaseRoute {
               normalizedItem.inLanguage = tryToExtractLanguage(normalizedItem.name)
             }
           }
+
+          normalizedItem.publisher = dataSource.publisher
 
           return normalizedItem
         })

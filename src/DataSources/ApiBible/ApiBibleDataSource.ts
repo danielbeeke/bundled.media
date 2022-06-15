@@ -5,8 +5,12 @@ import { ApiBibleOptions, ApiBibleRawItem } from './ApiBibleTypes.ts'
 import { bcp47Normalize } from '../../Helpers/bcp47Normalize.ts'
 import { ISO639_1_to_ISO639_3 } from '../../Helpers/ISO639_1_to_ISO639_3.ts'
 import { fetched } from '../../Helpers/fetched.ts'
+import { AmericanBibleSociety } from '../../Publishers/AmericanBibleSociety.ts'
 
 export class ApiBibleDataSource extends BaseDataSource<ApiBibleOptions, ApiBibleRawItem, Thing> {
+
+  public label = 'api.bible'
+  public publisher = AmericanBibleSociety
 
   public url = new URL('https://api.scripture.api.bible')
 

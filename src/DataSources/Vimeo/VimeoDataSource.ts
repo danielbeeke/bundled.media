@@ -10,6 +10,12 @@ export class VimeoDataSource extends BaseDataSource<VimeoOptions, VimeoRawItem, 
 
   public url = new URL('https://api.vimeo.com')
 
+  constructor (options: VimeoOptions) {
+    super(options)
+    this.publisher = options.publisher
+    this.label = options.label
+  }
+
   async fetch (_query: AbstractQuery, page = 0, offset: string | undefined = undefined) {
     const fetchUrl = new URL(`https://api.vimeo.com/users/${this.options.channel}/videos`)
     fetchUrl.searchParams.set('sort', 'alphabetical')

@@ -7,6 +7,7 @@ const prevUrls = new Map()
 const url = new URL(location)
 let types = {}
 let sources = {}
+const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 
 const fetchTypes = async () => {
   const response = await fetch(`/types`, { headers: { 'accept': 'application/json' }})
@@ -121,7 +122,7 @@ const draw = () => {
           fetchData()
         }} href=${prevUrls.get(location.toString())}>< Previous</a>
 
-        <a class=${`btn btn-secondary float-end ${!nextUrl ? 'disabled' : ''}`} onclick=${event => {
+        <a class=${`btn btn-primary float-end ${!nextUrl ? 'disabled' : ''}`} onclick=${event => {
           event.preventDefault()
           history.pushState({}, '', nextUrl)
           fetchData()
@@ -151,6 +152,9 @@ const draw = () => {
           ` : null}
           <div class="card-body">
             <h5 class="card-title">${item.name}</h5>
+            ${item.author?.length ? html`
+              <small class="card-sub-title d-block mb-2">${formatter.format(item.author.map(author => author.name))}</small>            
+            ` : null}
             <p class="card-text">${item.description}</p>
           </div>
         </div>`

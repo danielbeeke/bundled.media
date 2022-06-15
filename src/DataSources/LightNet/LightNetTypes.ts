@@ -1,3 +1,5 @@
+import { Publisher } from '../../Publishers/Publisher.ts'
+
 type Image = {
   height: string,
   width: string,
@@ -19,13 +21,16 @@ export type LightNetRawItem = {
   "originalTitle": string,
   "urls": Array<string>,
   "src": Array<string>,
+  'authorsData': Array<any>
 }
 
 export type LightNetOptions = {
+  label: string,
   url: string,
   channel: string,
   limit: number,
   types: Array<'video' | 'ebook'>,
+  publisher: Publisher
 }
 
 export const LightNetTypeMapping = {

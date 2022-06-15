@@ -1,4 +1,5 @@
 import { Thing } from '../../schema.org.ts';
+import { Publisher } from '../../Publishers/Publisher.ts'
 
 interface Live {
     streaming: boolean;
@@ -368,8 +369,10 @@ export type VimeoRawItem = {
 }
 
 export type VimeoOptions = {
+  label: string,
   langCode?: string | ((item: Thing) => string),
   clientId: string,
   clientSecret: string,
-  channel: string
+  channel: string,
+  publisher: Publisher
 }

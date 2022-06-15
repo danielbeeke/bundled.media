@@ -13,7 +13,7 @@ export class SourcesRoute extends BaseRoute {
 
     return sources.map((source: BaseDataSource) => ({
       uri: source.identifier(),
-      label: source.identifier(),
+      label: source.label,
       types: source.types()
     }))
   }
