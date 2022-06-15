@@ -1,9 +1,11 @@
 import { LightNetDataSource } from './src/DataSources/LightNet/LightNetDataSource.ts'
 import { ApiBibleDataSource } from './src/DataSources/ApiBible/ApiBibleDataSource.ts'
 import { YouTubeDataSource } from './src/DataSources/YouTube/YouTubeDataSource.ts'
-import { tryToExtractLanguage } from './src/Helpers/tryToExtractLanguage.ts'
+import { VimeoDataSource } from './src/DataSources/Vimeo/VimeoDataSource.ts'
 
 const youtubeKey = 'your-youtube-api-key'
+const vimeoClientId = 'vimeo-client-id'
+const vimeoClientSecret = 'vimeo-client-secret'
 
 export const dataSources = () => [
   new LightNetDataSource({
@@ -22,7 +24,11 @@ export const dataSources = () => [
   }),
   new YouTubeDataSource({
     channel: 'CreateInternational',
-    langCode: (item: any) => tryToExtractLanguage(item.name),
     key: youtubeKey,
+  }),
+  new VimeoDataSource({
+    channel: '37stories',
+    clientId: vimeoClientId,
+    clientSecret: vimeoClientSecret
   })
 ]
