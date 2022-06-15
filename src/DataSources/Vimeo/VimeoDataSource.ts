@@ -16,7 +16,6 @@ export class VimeoDataSource extends BaseDataSource<VimeoOptions, VimeoRawItem, 
     fetchUrl.searchParams.set('page', (offset !== undefined ? parseInt(offset) + 1 : page + 1).toString())
     fetchUrl.searchParams.set('per_page', '50')
 
-    console.log(fetchUrl.toString())
     const request = await fetched(fetchUrl, {
       headers: { 'Authorization': `basic ${btoa(`${this.options.clientId}:${this.options.clientSecret}`)}`}
     })
@@ -41,7 +40,7 @@ export class VimeoDataSource extends BaseDataSource<VimeoOptions, VimeoRawItem, 
       'name': item.name,
       'description': item.description,
       '@type': 'VideoObject',
-      'url': item.uri,
+      'url': item.link,
       'inLanguage': item.language
     } as VideoObject
 

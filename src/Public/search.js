@@ -78,7 +78,7 @@ const draw = () => {
 
     <ul class="list-group mb-3">
       ${searchResults.map(item => html`<li class="list-group-item">
-        <details>
+        <details .open=${null}>
           <summary>${item?.name}</summary>
           <pre>${JSON.stringify(item, null, 2)}</pre>
         </details>
