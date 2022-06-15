@@ -1,0 +1,10 @@
+@import url('https://unpkg.com/bcp47-picker@1.0.8/dist/bcp47-picker.css');
+
+@import './components/bcp47-picker';
+@import './components/card';
+@import './components/pagination';
+@import './components/top';
+
+pre {
+  white-space: pre-wrap;
+}

@@ -60,6 +60,11 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
       'name': Html5Entities.decode(item.snippet.title),
       'description': item.snippet.description,
       '@type': 'VideoObject',
+      'thumbnail': {
+        'url': item.snippet.thumbnails.high.url,
+        'width': item.snippet.thumbnails.high.width.toString(),
+        'height': item.snippet.thumbnails.high.height.toString(),
+      },
       'url': `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`
     } as VideoObject
 
@@ -68,5 +73,9 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
 
   types () {
     return ['https://schema.org/VideoObject']
+  }
+
+  identifier () {
+    return `${this.url}c/${this.options.channel}`
   }
 }

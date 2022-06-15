@@ -16,6 +16,7 @@ const options: PermissionOptions = {
   env: true,
   net: [
     '0.0.0.0:8080',
+    'deno.land',
     'www.googleapis.com',
     'yt.lemnoslife.com',
     ...urls,

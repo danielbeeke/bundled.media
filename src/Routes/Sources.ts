@@ -1,5 +1,6 @@
 import { BaseRoute } from './BaseRoute.ts'
 import { dataSources as createDataSources } from '../../.env.ts'
+import { BaseDataSource } from '../DataSources/BaseDataSource.ts'
 
 export class SourcesRoute extends BaseRoute {
 
@@ -10,7 +11,11 @@ export class SourcesRoute extends BaseRoute {
   async handle () {
     const sources = await createDataSources()
 
-    return sources
+    return sources.map((source: BaseDataSource) => ({
+      uri: source.identifier(),
+      label: source.identifier(),
+      types: source.types()
+    }))
   }
 
   /**
@@ -23,9 +28,9 @@ export class SourcesRoute extends BaseRoute {
       <ul class="list-group">
       ${sources.map((source) => `
         <li class="list-group-item">
-          <strong>${source.url}</strong><br>
+          <strong>${source.uri}</strong><br>
           <ul>
-            ${source.types().map(type => `
+            ${source.types.map(type => `
             <li><a href="${type}">${type}</a></li>
             `).join('')}
           </ul>

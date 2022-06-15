@@ -36,15 +36,26 @@ export class VimeoDataSource extends BaseDataSource<VimeoOptions, VimeoRawItem, 
    * The transformation from an API specific item to a schema.org item.
    */
   normalize(item: VimeoRawItem) {
+    const image = item.pictures.sizes.pop()!
+
     const normalizedItem = {
       'name': item.name,
       'description': item.description,
       '@type': 'VideoObject',
       'url': item.link,
+      'thumbnail': {
+        'url': image.link,
+        'width': image.width.toString(),
+        'height': image.height.toString(),
+      },
       'inLanguage': item.language
     } as VideoObject
 
     return normalizedItem
+  }
+
+  identifier () {
+    return `https://vimeo.com/${this.options.channel}`
   }
 
   types () {

@@ -55,11 +55,19 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
    * The transformation from an API specific item to a schema.org item.
    */
   normalize(item: LightNetRawItem) {
+    const image = item.covers ? item.covers.find(image => image.url.includes('front')) ?? item.covers[0] : item.cover
+
     return {
       '@type': LightNetTypeMapping[item.type],
       'name': item.name,
       'url': item.urls ?? item.src,
-      'inLanguage': item.langCode
+      'inLanguage': item.langCode,
+      'description': item.description,
+      'thumbnail': {
+        url: image!.url,
+        width: image!.width?.toString(),
+        height: image!.height?.toString()
+      },
     } as Thing
   }
 

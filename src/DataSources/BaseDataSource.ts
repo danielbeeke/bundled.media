@@ -26,6 +26,10 @@ export abstract class BaseDataSource<Options = any, RawItem = any, NormalizedIte
     this.options = options
   }
 
+  identifier () {
+    return this.url.toString()
+  }
+
   getLastToken () {
     return [...this.tokens.values()].pop()
   }

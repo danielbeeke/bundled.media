@@ -1,3 +1,9 @@
+type Image = {
+  height: string,
+  width: string,
+  url: string
+}
+
 export type LightNetRawItem = {
   "language": string,
   "langCode": string,
@@ -6,11 +12,8 @@ export type LightNetRawItem = {
   "description": string,
   "authors": Array<string>,
   "category": Array<string>,
-  "covers": Array<{
-    height: string,
-    width: string,
-    url: string
-  }>
+  "covers"?: Array<Image>
+  "cover"?: Image,
   "keywords": Array<string>,
   "name": string,
   "originalTitle": string,

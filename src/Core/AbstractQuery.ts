@@ -12,22 +12,22 @@ export class AbstractQuery extends EventTarget {
   }
 
   get text () {
-    this.dispatchEvent(new CustomEvent('used-text'))
     return this.#params.get('text')?.toLocaleLowerCase()
   }
 
   get langCode () {
-    this.dispatchEvent(new CustomEvent('used-langCode'))
     return this.#params.get('langCode')
   }
 
   get pagenation (): Array<number | string> {
-    this.dispatchEvent(new CustomEvent('used-pagination'))
     return this.#params.get('pagination')?.split(',') ?? []
   }
 
   get types () {
-    this.dispatchEvent(new CustomEvent('used-types'))
     return this.#params.get('types')?.split(',') ?? []
+  }
+
+  get sources () {
+    return this.#params.get('sources')?.split(',') ?? []
   }
 }

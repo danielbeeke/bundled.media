@@ -1,0 +1,70 @@
+.cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {  
+  flex: 1 1 250px;
+  cursor: pointer;
+
+  &.empty {
+    opacity: 0;
+  }
+
+  .card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .image-wrapper {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(226, 226, 216);
+    border-top-left-radius: var(--bs-card-border-radius);
+    border-top-right-radius: var(--bs-card-border-radius);
+    overflow: hidden;
+  }
+
+  .type-icon {
+    position: absolute;
+    left: var(--bs-card-spacer-x);
+    bottom: var(--bs-card-spacer-y);
+    filter: invert(1);
+  }
+
+  .language-label {
+    font-size: 10px;
+    position: absolute;
+    right: var(--bs-card-spacer-x);
+    bottom: var(--bs-card-spacer-y);
+  }
+
+  .image {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &.videoobject {
+    .image-wrapper {
+      background-color: black;
+    }
+  }
+
+  &.book:not(.bible) {
+    .image {
+      width: 35%;
+      height: fit-content;
+      box-shadow: rgba(black, .3) 0 3px 10px;
+    }
+  }
+}

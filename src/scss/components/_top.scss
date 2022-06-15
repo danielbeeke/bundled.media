@@ -1,0 +1,18 @@
+.top {
+  position: sticky;
+  top: 20px;
+  z-index: 10;
+
+  &:after {
+    position: absolute;
+    content: '';
+    left: 50%;
+    top: -21px;
+    width: 100vw;
+    transform: translateX(-50%);
+    display: block;
+    background: white;
+    height: 120px;
+    z-index: -1;
+  }
+}
