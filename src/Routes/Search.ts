@@ -8,7 +8,6 @@ import { natsort } from '../Helpers/natsort.js'
 type DataFetchObject = {
   page: number,
   promise: Promise<void>,
-  rawItems: Array<Thing>,
   normalizedItems: Array<Thing>,
   filteredItems: Array<Thing>,
 }
@@ -48,8 +47,9 @@ export class SearchRoute extends BaseRoute {
       const promises = []
 
       for (const dataSource of dataSources) {
-        if (!dataSource.done && this.getResultCount('all', dataSource) < average)
-          promises.push(this.fetch(dataSource, query, page, query.pagenation[dataSourceIndex],))
+        if (!dataSource.done && this.getResultCount('all', dataSource) < average) {
+          promises.push(this.fetch(dataSource, query, page, query.pagenation[dataSourceIndex]))
+        }
         dataSourceIndex++
       }
 
@@ -59,7 +59,6 @@ export class SearchRoute extends BaseRoute {
 
     /**
      * Determine the pagination state per source.
-     * TODO this will get more complicated when there is a specific filter that the source does not support and we support a second level of filtering.
      */
     const items: Array<Thing> = []
 
@@ -120,12 +119,11 @@ export class SearchRoute extends BaseRoute {
 
     const dataSourceFetch: DataFetchObject = {
       page,
-      rawItems: [],
       normalizedItems: [],
       filteredItems: [],
       promise: dataSource.fetch(query, page, offset).then((items: Array<any>) => {
         dataSourceFetch.normalizedItems = items.map((item: any) => dataSource.normalize(item))
-        dataSourceFetch.filteredItems = this.filter(dataSourceFetch.normalizedItems, query)
+        dataSourceFetch.filteredItems = this.filter(dataSource, dataSourceFetch.normalizedItems, query)
       })
     }
 
@@ -135,16 +133,23 @@ export class SearchRoute extends BaseRoute {
     return dataSourceFetch.promise
   }
 
-  filter (normalizedItems: Array<Thing>, query: AbstractQuery) {
-    return normalizedItems
-    .filter((item: any) => query.langCode ? query.langCode.includes(item.inLanguage) : true)
+  /**
+   * This is the second filtering.
+   * If the source support full text search / langCode filtering / or type selection we do not repeat that process.
+   */
+  filter (dataSource: BaseDataSource, normalizedItems: Array<Thing>, query: AbstractQuery) {
+    const filteredItems = normalizedItems
+    .filter((item: any) => query.langCode && !dataSource.nativelySupports.langCode ? query.langCode.includes(item.inLanguage) : true)
+    .filter((item: any) => query.text && !dataSource.nativelySupports.text ? item.name.toLocaleLowerCase().includes(query.text) : true)
+    .filter((item: any) => query.types.length && !dataSource.nativelySupports.types ? query.types.map(type => type.split('/').pop()).includes(item['@type']) : true)
+
+    return filteredItems
   }
 
   /**
    * This extracts all the filtered items from the seperate fetches and sources into one array.
    */
   getResultCount (type: 'all' | 'done' = 'all', filterSource: BaseDataSource | undefined = undefined) {
-
     return [...this.#fetches.entries()]
     .flatMap(([source, dataSourcefetches]) => 
       (filterSource && source === filterSource || !filterSource) &&

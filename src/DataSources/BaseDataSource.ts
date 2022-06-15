@@ -10,6 +10,12 @@ export abstract class BaseDataSource<Options = any, RawItem = any, NormalizedIte
   public options: Options = {} as Options
   public tokens = new Map()
 
+  public nativelySupports = {
+    text: false,
+    langCode: false,
+    types: false
+  }
+
   abstract normalize(item: RawItem): NormalizedItem
 
   abstract fetch(query: AbstractQuery, page: number, offset: number | string | undefined): Promise<Array<NormalizedItem>>

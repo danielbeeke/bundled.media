@@ -10,6 +10,12 @@ export class ApiBibleDataSource extends BaseDataSource<ApiBibleOptions, ApiBible
 
   public url = new URL('https://api.scripture.api.bible')
 
+  public nativelySupports = {
+    text: true,
+    langCode: true,
+    types: true
+  }
+
   async fetch (query: AbstractQuery, page = 0, offset = 0) {
     const fetchUrl = new URL(`${this.url}v1/bibles`)
 

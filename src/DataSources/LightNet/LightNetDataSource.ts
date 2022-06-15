@@ -6,6 +6,12 @@ import { fetched } from '../../Helpers/fetched.ts'
 
 export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNetRawItem, Thing> {
 
+  public nativelySupports = {
+    text: true,
+    langCode: true,
+    types: true
+  }
+
   constructor (options: LightNetOptions) {
     super(options)
     this.url = new URL(`${options.url}/${options.channel}`)

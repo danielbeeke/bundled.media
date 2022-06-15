@@ -5,6 +5,12 @@
 What if we could bundle most of the Christian media together for ministries to find media for their audiences?
 I believe we can do this together.
 
+## How to run
+
+- Install Deno: https://deno.land/
+- Copy .env.default.ts to .env.ts and configure it
+- deno run --allow-run --allow-env run.ts --watch
+
 ## Technical idea
 
 Imagine a piece of open source software that people can install on their servers and use that as an API to search all the Christian media. This system will search all media publishers at once and pass through the data. It will be lightweight in that there is not database and not much state in it. The main gist is that it generates links to use for pagination, meaning you can first fetch the first 40 items and then get the next 40. These items will be mixed from the different sources. This involves so complexity.

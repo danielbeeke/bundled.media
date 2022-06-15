@@ -17,6 +17,7 @@ const options: PermissionOptions = {
   net: [
     '0.0.0.0:8080',
     'www.googleapis.com',
+    'yt.lemnoslife.com',
     ...urls,
   ],
   read: [

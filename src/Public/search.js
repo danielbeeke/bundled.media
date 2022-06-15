@@ -64,14 +64,14 @@ const draw = () => {
         setParameter('text', event.target.value, true)
       }} type="search" />
 
-      <select class="form-select" onchange=${event => {
+      <select class="form-select type-dropdown" onchange=${event => {
         setParameter('types', event.target.value, true)
       }}>
         <option selected value="">- all types -</option>
         ${Object.values(types).map(type => html`<option ?selected=${(url.searchParams.get('types') ?? '').split(',').includes(type.uri)} value=${type.uri}>${type.label}</option>`)}
       </select>
 
-      <bcp47-picker multiple ?value=${url.searchParams.get('langCode')} onchange=${event => {
+      <bcp47-picker multiple value=${url.searchParams.get('langCode')} onchange=${event => {
         setParameter('langCode', event.target.value, true)
       }} />
     </div>
