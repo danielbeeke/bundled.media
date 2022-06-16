@@ -73,11 +73,14 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
 
     const authors = item.authorsData.map((authorTranslations) => authorTranslations
       .find((authorTranslation: any) => authorTranslation.langCode === item.langCode) ?? authorTranslations[0])
-    .map(author => ({
-      '@type': author.type.substring(0, 1).toUpperCase() + author.type.substring(1),
-      name: author.name,
-      url: `${this.options.url.toString().replace('data', 'rdf')}/contents/${author.type}/${author.id}`
-    }))
+    .filter(Boolean)  
+    .map(author => {
+      return {
+        '@type': author.type.substring(0, 1).toUpperCase() + author.type.substring(1),
+        name: author.name,
+        url: `${this.options.url.toString().replace('data', 'rdf')}/contents/${author.type}/${author.id}`
+      }
+    })
 
     return {
       '@id': `${this.options.url.toString().replace('data', 'rdf')}/contents/${item.type}/${item.id}`,

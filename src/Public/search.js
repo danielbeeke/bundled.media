@@ -145,7 +145,11 @@ const draw = () => {
         }} data-bs-toggle="modal" data-bs-target="#infoModal" class=${`card ${item['@type'].toLowerCase()} ${!item.thumbnail?.url  && item['@type'] === 'Book' ? 'bible' : ''}`}>
           ${image ? html`
             <div class="image-wrapper">
-              <img class="type-icon" src=${`/images/${item['@type'].toLowerCase()}.svg`} />
+              <div class="type-icon" ref=${async (element) => {
+                const response = await fetch(`/images/${item['@type'].toLowerCase()}.svg`)
+                const svgData = await response.text()
+                element.innerHTML = svgData
+              }} src=${`/images/${item['@type'].toLowerCase()}.svg`}></div>
               <span class="badge rounded-pill text-bg-light language-label">${item.inLanguage}</span>   
               <img src=${`//images.weserv.nl/?url=${image}&h=200${item['@type'] === 'VideoObject' ? '' : ''}`} class="image" alt=${item.name}>            
             </div>

@@ -41,7 +41,12 @@
     position: absolute;
     left: var(--bs-card-spacer-x);
     bottom: var(--bs-card-spacer-y);
-    filter: invert(1);
+
+    * {
+      fill: white;
+    }
+
+    filter: drop-shadow( 1px 1px 3px rgba(0, 0, 0, .3));
   }
 
   .language-label {
