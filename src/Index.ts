@@ -1,21 +1,12 @@
 import { serve } from 'https://deno.land/std@0.125.0/http/server.ts'
 import routes from './Routes/routes.ts'
-import staticFiles from 'https://deno.land/x/static_files@1.1.6/mod.ts'
 import layout from './Templates/layout.ts'
 import { dataSources as createDataSources } from '../.env.ts'
+import { serveFile } from 'https://deno.land/std@0.140.0/http/file_server.ts'
 
 const port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 8080
 serve(serveHttp, { port });
 console.info(`bundled.media is running locally at: http://localhost:${port}/`)
-
-function setHeaders(headers: Headers, path: string, stats?: Deno.FileInfo) {
-  headers.set("Content-disposition", "attachment; filename=" + path);
-}
-
-const serveFiles = (req: Request) => staticFiles('./src/Public', { setHeaders })({ 
-  request: req, 
-  respondWith: (r: Response) => r 
-})
 
 async function serveHttp(request: Request) {
   const requestURL = new URL(request.url)
@@ -57,9 +48,9 @@ async function serveHttp(request: Request) {
 
   // Try static resources.
   try {
-    const file = Deno.readTextFileSync('./src/Public' + requestURL.pathname)
+    const file = await Deno.readTextFile('./src/Public' + requestURL.pathname)
     if (file) {
-      return serveFiles(request)
+      return await serveFile(request, './src/Public' + requestURL.pathname)
     }  
   }
   catch {
