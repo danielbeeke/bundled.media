@@ -23,7 +23,7 @@ export class SearchRoute extends BaseRoute {
   static path = '/search'
   static description = `Search and filter through all the enabled sources in a synchronous way.`
 
-  public max = 20
+  public max = 40
 
   #fetches: Map<BaseDataSource, Array<DataFetchObject>> = new Map()
 
@@ -48,10 +48,12 @@ export class SearchRoute extends BaseRoute {
      */
     while (dataSources.some(dataSource => !dataSource.done) && this.getResultCount('all') < this.max) {
       const ItemCountFinishedSources = this.getResultCount('done')
+      // TODO average is probably to low. Investigate how to get a better number.
       const average = (this.max - ItemCountFinishedSources) / dataSources.filter(dataSource => !dataSource.done).length
       let dataSourceIndex = 0
       const promises = []
 
+      // TODO add chunking of dataSources.
       for (const dataSource of dataSources) {
         if (!dataSource.done && this.getResultCount('all', dataSource) < average) {
           promises.push(this.fetch(dataSource, query, query.pagenation[dataSourceIndex]))
