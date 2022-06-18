@@ -32,7 +32,7 @@ export class SearchRoute extends BaseRoute {
    * We create a fresh set of dataSources and then fetch results.
    */
   async handle () {
-    const query = new AbstractQuery(this.url)
+    const query = new AbstractQuery(this.url, '0-4')
     const dataSources = createDataSources()
     .filter(source => !query.types.length || query.types.some(type => source.types().includes(type)))
 
@@ -43,6 +43,8 @@ export class SearchRoute extends BaseRoute {
       dataSourceIndex++
     }
 
+    const range = [...query.range]
+
     /**
      * Fetch all needed data
      */
@@ -50,15 +52,13 @@ export class SearchRoute extends BaseRoute {
       const ItemCountFinishedSources = this.getResultCount('done')
       // TODO average is probably to low. Investigate how to get a better number.
       const average = (this.max - ItemCountFinishedSources) / dataSources.filter(dataSource => !dataSource.done).length
-      let dataSourceIndex = 0
       const promises = []
 
       // TODO add chunking of dataSources.
-      for (const dataSource of dataSources) {
-        if (!dataSource.done && this.getResultCount('all', dataSource) < average) {
-          promises.push(this.fetch(dataSource, query, query.pagenation[dataSourceIndex]))
+      for (const [index, dataSource] of dataSources.entries()) {
+        if (range.includes(index) && !dataSource.done && this.getResultCount('all', dataSource) < average) {
+          promises.push(this.fetch(dataSource, query, query.pagenation[index]))
         }
-        dataSourceIndex++
       }
 
       await Promise.all(promises)
