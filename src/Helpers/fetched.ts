@@ -8,6 +8,7 @@ export async function fetched(
   url: string | URL,
   options: RequestInit = {},
 ): Promise<Response> {
+  console.log(url.toString())
   const signal = options?.signal ?? undefined
   const entry = new CacheEntry(url);
   try {

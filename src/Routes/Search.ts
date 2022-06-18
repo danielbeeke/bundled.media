@@ -36,6 +36,13 @@ export class SearchRoute extends BaseRoute {
     const dataSources = createDataSources()
     .filter(source => !query.types.length || query.types.some(type => source.types().includes(type)))
 
+    // If we are in a second page or further it might be that some sources are already done, save that into the current state.
+    let dataSourceIndex = 0
+    for (const dataSource of dataSources) {
+      if (query.pagenation[dataSourceIndex] === 'done') dataSource.done = true
+      dataSourceIndex++
+    }
+
     /**
      * Fetch all needed data
      */
@@ -46,7 +53,7 @@ export class SearchRoute extends BaseRoute {
       const promises = []
 
       for (const dataSource of dataSources) {
-        if (!dataSource.done && this.getResultCount('all', dataSource) < average && query.pagenation[dataSourceIndex] !== 'done') {
+        if (!dataSource.done && this.getResultCount('all', dataSource) < average) {
           promises.push(this.fetch(dataSource, query, query.pagenation[dataSourceIndex]))
         }
         dataSourceIndex++
@@ -125,7 +132,7 @@ export class SearchRoute extends BaseRoute {
 
     const dataSourceFetch: DataFetchObject = {
       page,
-      normalizedItems: [],
+      normalizedItems: [], // TODO free from memory.
       filteredItems: [],
       promise: dataSource.fetch(query, page, offset).then((items: Array<any>) => {
         dataSourceFetch.normalizedItems = items.map((item: any) => {

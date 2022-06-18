@@ -1,6 +1,6 @@
 import { BaseDataSource } from '../BaseDataSource.ts'
 import { AbstractQuery } from '../../Core/AbstractQuery.ts'
-import { Thing } from '../../schema.org.ts';
+import { Thing, VideoObject, Book } from '../../schema.org.ts';
 import { LightNetTypeMapping, LightNetSchemaTypeMapping, LightNetOptions, LightNetRawItem } from './LightNetTypes.ts'
 import { fetched } from '../../Helpers/fetched.ts'
 
@@ -33,8 +33,6 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
     fetchUrl.searchParams.set('sort[name]', 'asc')
     
     fetchUrl.searchParams.set('sidetrack[0]', 'authors')
-    fetchUrl.searchParams.set('sidetrack[1]', 'category')
-    fetchUrl.searchParams.set('sidetrack[2]', 'keywords')
 
     if (query.text) fetchUrl.searchParams.set('search', `*${query.text}*`)
     if (query.langCode) fetchUrl.searchParams.set('langCode', query.langCode)
@@ -95,7 +93,7 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
         width: image!.width?.toString(),
         height: image!.height?.toString()
       },
-    } as Thing
+    } as VideoObject | Book
   }
 
   /**
