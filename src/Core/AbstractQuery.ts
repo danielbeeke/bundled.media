@@ -2,13 +2,11 @@ export class AbstractQuery extends EventTarget {
 
   #url: URL
   #params: URLSearchParams
-  #defaultRange: `${number}-${number}`
 
-  constructor (url: URL, defaultRange: `${number}-${number}`) {
+  constructor (url: URL) {
     super()
     this.#url = url
     this.#params = url.searchParams
-    this.#defaultRange = defaultRange
 
     // TODO throw a fatal when the URL is invalid.
   }
@@ -33,8 +31,7 @@ export class AbstractQuery extends EventTarget {
     return this.#params.get('sources')?.split('|') ?? []
   }
 
-  get range () {
-    const [start, end] = (this.#params.get('range') ?? this.#defaultRange).split('-').map(item => parseInt(item)) as [number, number]
-    return [...Array(end + 1).keys()].slice(start)
+  get lastIndex () {
+    return parseInt(this.#params.get('lastIndex') ?? '0')
   }
 }

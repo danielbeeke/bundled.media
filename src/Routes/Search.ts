@@ -24,6 +24,7 @@ export class SearchRoute extends BaseRoute {
   static description = `Search and filter through all the enabled sources in a synchronous way.`
 
   public max = 40
+  public rangeSize = 3
 
   #fetches: Map<BaseDataSource, Array<DataFetchObject>> = new Map()
 
@@ -32,7 +33,7 @@ export class SearchRoute extends BaseRoute {
    * We create a fresh set of dataSources and then fetch results.
    */
   async handle () {
-    const query = new AbstractQuery(this.url, '0-4')
+    const query = new AbstractQuery(this.url)
     const dataSources = createDataSources()
     .filter(source => !query.types.length || query.types.some(type => source.types().includes(type)))
 
@@ -43,7 +44,7 @@ export class SearchRoute extends BaseRoute {
       dataSourceIndex++
     }
 
-    const range = [...query.range]
+    dataSourceIndex = query.lastIndex;
 
     /**
      * Fetch all needed data
@@ -54,11 +55,18 @@ export class SearchRoute extends BaseRoute {
       const average = (this.max - ItemCountFinishedSources) / dataSources.filter(dataSource => !dataSource.done).length
       const promises = []
 
-      // TODO add chunking of dataSources.
-      for (const [index, dataSource] of dataSources.entries()) {
-        if (range.includes(index) && !dataSource.done && this.getResultCount('all', dataSource) < average) {
-          promises.push(this.fetch(dataSource, query, query.pagenation[index]))
+      // Add a total counter, otherwise the loop would never end if there are less sources left then the rangeSize
+      let totalCounter = 0
+      let dataSourceCount = 0
+      while (dataSourceCount < this.rangeSize && totalCounter < dataSources.length) {
+        const dataSource = dataSources[dataSourceIndex]
+        if(!dataSource.done && this.getResultCount('all', dataSource) < average) {
+          promises.push(this.fetch(dataSource, query, query.pagenation[dataSourceIndex]))
+          dataSourceCount++
         }
+
+        dataSourceIndex = dataSourceIndex === dataSources.length - 1 ? 0 : dataSourceIndex + 1;
+        totalCounter++
       }
 
       await Promise.all(promises)
@@ -115,6 +123,7 @@ export class SearchRoute extends BaseRoute {
         throw new Error(`Pagination type: ${dataSource.paginationType} is not yet implemented`)
       }).join(',')
       nextUrl.searchParams.set('pagination', paginationString)  
+      nextUrl.searchParams.set('lastIndex', dataSourceIndex.toString())
     }
 
     return {
