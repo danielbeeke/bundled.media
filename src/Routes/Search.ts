@@ -72,9 +72,9 @@ export class SearchRoute extends BaseRoute {
    */
   async fetchDataForResponse () {
     while (this.#sources.some(dataSource => !dataSource.done) && this.getResultCount('all') < this.max) {
-      const ItemCountFinishedSources = this.getResultCount('done')
+      const finishedSourcesItemCount = this.getResultCount('done')
       // TODO average is probably to low. Investigate how to get a better number.
-      const average = (this.max - ItemCountFinishedSources) / this.#sources.filter(dataSource => !dataSource.done).length
+      const average = (this.max - finishedSourcesItemCount) / this.#sources.filter(dataSource => !dataSource.done).length
       const promises = []
 
       // Add a total counter, otherwise the loop would never end if there are less sources left then the rangeSize
@@ -145,10 +145,14 @@ export class SearchRoute extends BaseRoute {
    */
    filter (dataSource: BaseDataSource, normalizedItems: Array<Thing>, query: AbstractQuery) {
     return normalizedItems
-    .filter((item: any) => query.langCode && !dataSource.nativelySupports.langCode ? query.langCode.includes(item.inLanguage) : true)
-    .filter((item: any) => query.sources.length ? query.sources.includes(dataSource.identifier()) : true)
-    .filter((item: any) => query.text && !dataSource.nativelySupports.text ? item.name.toLocaleLowerCase().includes(query.text) : true)
-    .filter((item: any) => query.types.length && !dataSource.nativelySupports.types ? query.types.map(type => type.split('/').pop()).includes(item['@type']) : true)
+    .filter((item: any) => query.langCode && !dataSource.nativelySupports.langCode ? 
+      query.langCode.includes(item.inLanguage) : true)
+    .filter((item: any) => query.sources.length ? 
+      query.sources.includes(dataSource.identifier()) : true)
+    .filter((item: any) => query.text && !dataSource.nativelySupports.text ? 
+      item.name.toLocaleLowerCase().includes(query.text) : true)
+    .filter((item: any) => query.types.length && !dataSource.nativelySupports.types ? 
+      query.types.map(type => type.split('/').pop()).includes(item['@type']) : true)
   }
 
   /**
