@@ -144,13 +144,11 @@ export class SearchRoute extends BaseRoute {
    * If the source support full text search / langCode filtering / or type selection we do not repeat that process.
    */
    filter (dataSource: BaseDataSource, normalizedItems: Array<Thing>, query: AbstractQuery) {
-    const filteredItems = normalizedItems
+    return normalizedItems
     .filter((item: any) => query.langCode && !dataSource.nativelySupports.langCode ? query.langCode.includes(item.inLanguage) : true)
     .filter((item: any) => query.sources.length ? query.sources.includes(dataSource.identifier()) : true)
     .filter((item: any) => query.text && !dataSource.nativelySupports.text ? item.name.toLocaleLowerCase().includes(query.text) : true)
     .filter((item: any) => query.types.length && !dataSource.nativelySupports.types ? query.types.map(type => type.split('/').pop()).includes(item['@type']) : true)
-
-    return filteredItems
   }
 
   /**
