@@ -207,8 +207,11 @@ export class SearchRoute extends BaseRoute {
     let nextUrl: false | URL = false
     
     if (this.#sources.some(dataSource => !dataSource.done)) {
-      nextUrl = new URL(baseUrl.toString())
-      nextUrl.pathname = SearchRoute.path
+      nextUrl = new URL(this.url.toString())
+      nextUrl.hostname = baseUrl.hostname
+      nextUrl.protocol = baseUrl.protocol
+      nextUrl.host = baseUrl.host
+      nextUrl.port = baseUrl.port
 
       const paginationString = this.#sources.map((dataSource, index) => {
         if (dataSource.done) return 'd'
