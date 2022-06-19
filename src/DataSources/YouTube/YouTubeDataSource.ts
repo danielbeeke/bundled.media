@@ -63,6 +63,7 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
    */
   normalize(item: YouTubeRawItem) {
     const normalizedItem = {
+      '@id': `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`,
       'name': Html5Entities.decode(item.snippet.title),
       'description': item.snippet.description,
       '@type': 'VideoObject',

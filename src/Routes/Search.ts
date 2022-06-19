@@ -23,7 +23,7 @@ export class SearchRoute extends BaseRoute {
   static path = '/search'
   static description = `Search and filter through all the enabled sources in a synchronous way.`
 
-  public max = 40
+  public max = 20
   public rangeSize = 3
 
   #fetches: Map<BaseDataSource, Array<DataFetchObject>> = new Map()
@@ -83,7 +83,13 @@ export class SearchRoute extends BaseRoute {
       while (dataSourceCount < this.rangeSize && totalCounter < this.#sources.length) {
         const dataSource = this.#sources[this.#lastIndex]
         if(!dataSource.done && this.getResultCount('all', dataSource) < average) {
-          promises.push(this.fetch(dataSource, this.#query, this.#query.pagenation[this.#lastIndex]))
+          let sourcePagination = this.#query.pagenation[this.#lastIndex]
+
+          if (['page', 'offset'].includes(dataSource.paginationType) && sourcePagination && typeof sourcePagination === 'string')  {
+            sourcePagination = parseInt(sourcePagination)
+          }
+
+          promises.push(this.fetch(dataSource, this.#query, sourcePagination))
           dataSourceCount++
         }
 

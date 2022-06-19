@@ -16,10 +16,10 @@ export class VimeoDataSource extends BaseDataSource<VimeoOptions, VimeoRawItem, 
     this.label = options.label
   }
 
-  async fetch (_query: AbstractQuery, page = 0, offset: string | undefined = undefined) {
+  async fetch (_query: AbstractQuery, page = 0, offset = 0) {
     const fetchUrl = new URL(`https://api.vimeo.com/users/${this.options.channel}/videos`)
     fetchUrl.searchParams.set('sort', 'alphabetical')
-    fetchUrl.searchParams.set('page', (offset !== undefined ? parseInt(offset) + 1 : page + 1).toString())
+    fetchUrl.searchParams.set('page', (offset > 0 ? offset + 1 : page + 1).toString())
     fetchUrl.searchParams.set('per_page', '50')
 
     const request = await fetched(fetchUrl, {
@@ -45,6 +45,7 @@ export class VimeoDataSource extends BaseDataSource<VimeoOptions, VimeoRawItem, 
     const image = item.pictures.sizes.pop()!
 
     const normalizedItem = {
+      '@id': item.link,
       'name': item.name,
       'description': item.description,
       '@type': 'VideoObject',

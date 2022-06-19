@@ -9,15 +9,13 @@ let types = {}
 let sources = {}
 const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 
-const fetchTypes = async () => {
-  const response = await fetch(`/types`, { headers: { 'accept': 'application/json' }})
+const fetchOptions = async (endpoint) => {
+  const response = await fetch(`/${endpoint}`, { headers: { 'accept': 'application/json' }})
   return await response.json()
 }
 
-const fetchSources = async () => {
-  const response = await fetch(`/sources`, { headers: { 'accept': 'application/json' }})
-  return await response.json()
-}
+const fetchTypes = () => fetchOptions('types')
+const fetchSources = () => fetchOptions('sources')
 
 /**
  * The main fetch function
@@ -83,7 +81,7 @@ const draw = () => {
             <pre>${JSON.stringify(selectedCard, null, 2)}
             </pre>
 
-            <a class="btn btn-primary" href=${selectedCard.url} target="_blank">View</a>
+            <a class="btn btn-primary" href=${selectedCard.url[0]} target="_blank">View</a>
           </div>
           ` : null}
         </div>
