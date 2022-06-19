@@ -19,7 +19,7 @@ export class VimeoDataSource extends BaseDataSource<VimeoOptions, VimeoRawItem, 
   async fetch (_query: AbstractQuery, page = 0, offset = 0) {
     const fetchUrl = new URL(`https://api.vimeo.com/users/${this.options.channel}/videos`)
     fetchUrl.searchParams.set('sort', 'alphabetical')
-    fetchUrl.searchParams.set('page', (offset > 0 ? offset + 1 : page + 1).toString())
+    fetchUrl.searchParams.set('page', (offset + page + 1).toString())
     fetchUrl.searchParams.set('per_page', '50')
 
     const request = await fetched(fetchUrl, {
