@@ -27,45 +27,43 @@ export class SearchRoute extends BaseRoute {
   public rangeSize = 3
 
   #fetches: Map<BaseDataSource, Array<DataFetchObject>> = new Map()
+  #sources: Array<BaseDataSource> = []
+  #query: AbstractQuery = new AbstractQuery(this.url)
 
   /**
    * The route handler. 
    * We create a fresh set of dataSources and then fetch results.
    */
   async handle () {
-    const query = new AbstractQuery(this.url)
-    const dataSources = createDataSources()
-    .filter(source => !query.types.length || query.types.some(type => source.types().includes(type)))
+    this.#query = new AbstractQuery(this.url)
+    this.#sources = createDataSources()
+    .filter(source => !this.#query.types.length || this.#query.types.some(type => source.types().includes(type)))
+    this.applyPreviousState(this.#query)
 
-    // If we are in a second page or further it might be that some sources are already done, save that into the current state.
-    let dataSourceIndex = 0
-    for (const dataSource of dataSources) {
-      if (query.pagenation[dataSourceIndex] === 'done') dataSource.done = true
-      dataSourceIndex++
-    }
+    let dataSourceIndex = this.#query.lastIndex;
 
-    dataSourceIndex = query.lastIndex;
+    console.log(this.#query.pagenation)
 
     /**
      * Fetch all needed data
      */
-    while (dataSources.some(dataSource => !dataSource.done) && this.getResultCount('all') < this.max) {
+    while (this.#sources.some(dataSource => !dataSource.done) && this.getResultCount('all') < this.max) {
       const ItemCountFinishedSources = this.getResultCount('done')
       // TODO average is probably to low. Investigate how to get a better number.
-      const average = (this.max - ItemCountFinishedSources) / dataSources.filter(dataSource => !dataSource.done).length
+      const average = (this.max - ItemCountFinishedSources) / this.#sources.filter(dataSource => !dataSource.done).length
       const promises = []
 
       // Add a total counter, otherwise the loop would never end if there are less sources left then the rangeSize
       let totalCounter = 0
       let dataSourceCount = 0
-      while (dataSourceCount < this.rangeSize && totalCounter < dataSources.length) {
-        const dataSource = dataSources[dataSourceIndex]
+      while (dataSourceCount < this.rangeSize && totalCounter < this.#sources.length) {
+        const dataSource = this.#sources[dataSourceIndex]
         if(!dataSource.done && this.getResultCount('all', dataSource) < average) {
-          promises.push(this.fetch(dataSource, query, query.pagenation[dataSourceIndex]))
+          promises.push(this.fetch(dataSource, this.#query, this.#query.pagenation[dataSourceIndex]))
           dataSourceCount++
         }
 
-        dataSourceIndex = dataSourceIndex === dataSources.length - 1 ? 0 : dataSourceIndex + 1;
+        dataSourceIndex = dataSourceIndex === this.#sources.length - 1 ? 0 : dataSourceIndex + 1;
         totalCounter++
       }
 
@@ -104,24 +102,26 @@ export class SearchRoute extends BaseRoute {
      * Create the next URL.
      */
     let nextUrl: false | URL = false
-    if (dataSources.some(dataSource => !dataSource.done)) {
+    if (this.#sources.some(dataSource => !dataSource.done)) {
       nextUrl = new URL(this.url.toString())
-      const paginationString = [...this.#fetches.keys()].map((dataSource, index) => {
+
+      // Incorrect, if chunking, pagination string should reflect the sources.
+      const paginationString = this.#sources.map((dataSource, index) => {
         if (dataSource.done) return 'done'
 
         if (dataSource.paginationType === 'offset') {
-          return (counters.get(dataSource) ?? 0) + (query.pagenation[index] ? parseInt(query.pagenation[index] + '') : 0 ?? 0)
+          return (counters.get(dataSource) ?? 0) + (this.#query.pagenation[index] ? parseInt(this.#query.pagenation[index] + '') : 0 ?? 0)
         }
 
         if (dataSource.paginationType === 'page') {
-          return (Math.max(this.#fetches.get(dataSource)!.length, 0) ?? 0) + (query.pagenation[index] ? parseInt(query.pagenation[index] + '') : 0 ?? 0)
+          return (Math.max(this.#fetches.get(dataSource)!.length, 0) ?? 0) + (this.#query.pagenation[index] ? parseInt(this.#query.pagenation[index] + '') : 0 ?? 0)
         }
 
         if (dataSource.paginationType === 'token')
           return dataSource.getLastToken()
 
         throw new Error(`Pagination type: ${dataSource.paginationType} is not yet implemented`)
-      }).join(',')
+      }).join('|')
       nextUrl.searchParams.set('pagination', paginationString)  
       nextUrl.searchParams.set('lastIndex', dataSourceIndex.toString())
     }
@@ -129,6 +129,16 @@ export class SearchRoute extends BaseRoute {
     return {
       items: items,
       nextUrl
+    }
+  }
+
+  /**
+   * If we are in a second page or further 
+   * it might be that some sources are already done, save that into the current state.
+   */
+  applyPreviousState (query: AbstractQuery) {
+    for (const [index, dataSource] of this.#sources.entries()) {
+      if (query.pagenation[index] === 'done') dataSource.done = true
     }
   }
 
