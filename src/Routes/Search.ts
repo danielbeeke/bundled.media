@@ -180,7 +180,7 @@ export class SearchRoute extends BaseRoute {
       for (const dataSource of this.#fetches.keys()) {
         let counter = this.#counters.get(dataSource) ?? 0
         const sourceMergedFilteredItems = mergedFilteredItems.get(dataSource)
-        if (sourceMergedFilteredItems.length && sourceMergedFilteredItems[counter]) {
+        if (sourceMergedFilteredItems.length && sourceMergedFilteredItems[counter] && items.length < correctMax) {
           items.push(sourceMergedFilteredItems[counter])
           counter++
           this.#counters.set(dataSource, counter)  
