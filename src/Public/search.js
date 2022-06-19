@@ -8,6 +8,8 @@ const url = new URL(location)
 let types = {}
 let sources = {}
 const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
+let isFetchingNext = true
+let isFetchingPrevious = false
 
 const fetchOptions = async (endpoint) => {
   const response = await fetch(`/${endpoint}`, { headers: { 'accept': 'application/json' }})
@@ -29,6 +31,9 @@ const fetchData = async () => {
   const response = await fetch(url, { headers: { 'accept': 'application/json' }})
   const json = await response.json()
   searchResults = json.items ?? []
+
+  isFetchingPrevious = false
+  isFetchingNext = false
 
   if (json.nextUrl)
     prevUrls.set(json.nextUrl, url.toString())
@@ -115,17 +120,21 @@ const draw = () => {
       </div>
 
       <div class="pagination mb-3">
-        <a class=${`btn btn-secondary ${!prevUrls.get(location.toString()) ? 'disabled' : ''}`} onclick=${event => {
+        <a class=${`btn btn-secondary ${isFetchingPrevious || isFetchingNext ? 'disabled' : ''} ${isFetchingPrevious ? 'is-fetching' : ''} ${!prevUrls.get(location.toString()) ? 'disabled' : ''}`} onclick=${event => {
           event.preventDefault()
           history.pushState({}, '', prevUrls.get(location.toString()))
+          isFetchingPrevious = true
+          draw()
           fetchData()
-        }} href=${prevUrls.get(location.toString())}>< Previous</a>
+        }} href=${prevUrls.get(location.toString())}>${isFetchingPrevious ? html`Fetching <img src="/images/spin.svg" />` : '< Previous'}</a>
 
-        <a class=${`btn btn-primary float-end ${!nextUrl ? 'disabled' : ''}`} onclick=${event => {
+        <a class=${`btn btn-primary ${isFetchingPrevious || isFetchingNext ? 'disabled' : ''} ${isFetchingNext ? 'is-fetching' : ''} float-end ${!nextUrl ? 'disabled' : ''}`} onclick=${event => {
           event.preventDefault()
           history.pushState({}, '', nextUrl)
+          isFetchingNext = true
+          draw()
           fetchData()
-        }} href=${nextUrl}>Next ></a>
+        }} href=${nextUrl}>${isFetchingNext ? html`Fetching <img src="/images/spin.svg" />` : 'Next >'}</a>
       </div>
 
     </div>
