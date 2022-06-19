@@ -29,6 +29,8 @@ export class SearchRoute extends BaseRoute {
   #fetches: Map<BaseDataSource, Array<DataFetchObject>> = new Map()
   #sources: Array<BaseDataSource> = []
   #query: AbstractQuery = new AbstractQuery(this.url)
+  #counters: Map<BaseDataSource, number> = new Map()
+  #lastIndex = 0
 
   /**
    * The route handler. 
@@ -40,13 +42,35 @@ export class SearchRoute extends BaseRoute {
     .filter(source => !this.#query.types.length || this.#query.types.some(type => source.types().includes(type)))
     this.applyPreviousState(this.#query)
 
-    let dataSourceIndex = this.#query.lastIndex;
+    await this.fetchDataForResponse()
+    const items = this.aggregateFetchedResults()
 
-    console.log(this.#query.pagenation)
+    // Sorting
+    const sorter = natsort({ insensitive: true })
+    items.sort((a: any, b: any) => sorter(a.name, b.name))
 
-    /**
-     * Fetch all needed data
-     */
+    return {
+      items: items,
+      nextUrl: this.createNextUrl()
+    }
+  }
+
+  /**
+   * If we are in a second page or further,
+   * it might be that some sources are already done, save that into the current state.
+   */
+  applyPreviousState (query: AbstractQuery) {
+    this.#lastIndex = this.#query.lastIndex;
+
+    for (const [index, dataSource] of this.#sources.entries()) {
+      if (query.pagenation[index] === 'd') dataSource.done = true
+    }
+  }
+
+  /**
+   * Fetch all needed data
+   */
+  async fetchDataForResponse () {
     while (this.#sources.some(dataSource => !dataSource.done) && this.getResultCount('all') < this.max) {
       const ItemCountFinishedSources = this.getResultCount('done')
       // TODO average is probably to low. Investigate how to get a better number.
@@ -57,88 +81,17 @@ export class SearchRoute extends BaseRoute {
       let totalCounter = 0
       let dataSourceCount = 0
       while (dataSourceCount < this.rangeSize && totalCounter < this.#sources.length) {
-        const dataSource = this.#sources[dataSourceIndex]
+        const dataSource = this.#sources[this.#lastIndex]
         if(!dataSource.done && this.getResultCount('all', dataSource) < average) {
-          promises.push(this.fetch(dataSource, this.#query, this.#query.pagenation[dataSourceIndex]))
+          promises.push(this.fetch(dataSource, this.#query, this.#query.pagenation[this.#lastIndex]))
           dataSourceCount++
         }
 
-        dataSourceIndex = dataSourceIndex === this.#sources.length - 1 ? 0 : dataSourceIndex + 1;
+        this.#lastIndex = this.#lastIndex === this.#sources.length - 1 ? 0 : this.#lastIndex + 1;
         totalCounter++
       }
 
       await Promise.all(promises)
-    }
-
-    /**
-     * Determine the pagination state per source.
-     */
-    const items: Array<Thing> = []
-
-    const correctMax = Math.min(this.max, this.getResultCount())
-    const counters = new Map()
-    const mergedFilteredItems = new Map()
-
-    for (const [dataSource, dataSourcefetches] of this.#fetches.entries())
-      mergedFilteredItems.set(dataSource, dataSourcefetches.flatMap(dataSourcefetch => dataSourcefetch.filteredItems))
-
-    while (items.length < correctMax) {
-      for (const dataSource of this.#fetches.keys()) {
-        let counter = counters.get(dataSource) ?? 0
-        const sourceMergedFilteredItems = mergedFilteredItems.get(dataSource)
-        if (sourceMergedFilteredItems.length && sourceMergedFilteredItems[counter]) {
-          items.push(sourceMergedFilteredItems[counter])
-          counter++
-          counters.set(dataSource, counter)  
-        }
-      }
-    }
-
-    // Sorting
-    const sorter = natsort({ insensitive: true })
-    items.sort((a: any, b: any) => sorter(a.name, b.name))
-
-    /**
-     * Create the next URL.
-     */
-    let nextUrl: false | URL = false
-    if (this.#sources.some(dataSource => !dataSource.done)) {
-      nextUrl = new URL(this.url.toString())
-
-      // Incorrect, if chunking, pagination string should reflect the sources.
-      const paginationString = this.#sources.map((dataSource, index) => {
-        if (dataSource.done) return 'done'
-
-        if (dataSource.paginationType === 'offset') {
-          return (counters.get(dataSource) ?? 0) + (this.#query.pagenation[index] ? parseInt(this.#query.pagenation[index] + '') : 0 ?? 0)
-        }
-
-        if (dataSource.paginationType === 'page') {
-          return (Math.max(this.#fetches.get(dataSource)!.length, 0) ?? 0) + (this.#query.pagenation[index] ? parseInt(this.#query.pagenation[index] + '') : 0 ?? 0)
-        }
-
-        if (dataSource.paginationType === 'token')
-          return dataSource.getLastToken()
-
-        throw new Error(`Pagination type: ${dataSource.paginationType} is not yet implemented`)
-      }).join('|')
-      nextUrl.searchParams.set('pagination', paginationString)  
-      nextUrl.searchParams.set('lastIndex', dataSourceIndex.toString())
-    }
-
-    return {
-      items: items,
-      nextUrl
-    }
-  }
-
-  /**
-   * If we are in a second page or further 
-   * it might be that some sources are already done, save that into the current state.
-   */
-  applyPreviousState (query: AbstractQuery) {
-    for (const [index, dataSource] of this.#sources.entries()) {
-      if (query.pagenation[index] === 'done') dataSource.done = true
     }
   }
 
@@ -146,7 +99,7 @@ export class SearchRoute extends BaseRoute {
    * Fetches data for one source.
    * Page sizes may differ.
    */
-  fetch (dataSource: BaseDataSource, query: AbstractQuery, offset: undefined | string | number = undefined) {
+   fetch (dataSource: BaseDataSource, query: AbstractQuery, offset: undefined | string | number = undefined) {
     const dataSourcefetches: Array<DataFetchObject> = this.#fetches.get(dataSource) ?? []
 
     const page = dataSourcefetches.length
@@ -190,7 +143,7 @@ export class SearchRoute extends BaseRoute {
    * This is the second filtering.
    * If the source support full text search / langCode filtering / or type selection we do not repeat that process.
    */
-  filter (dataSource: BaseDataSource, normalizedItems: Array<Thing>, query: AbstractQuery) {
+   filter (dataSource: BaseDataSource, normalizedItems: Array<Thing>, query: AbstractQuery) {
     const filteredItems = normalizedItems
     .filter((item: any) => query.langCode && !dataSource.nativelySupports.langCode ? query.langCode.includes(item.inLanguage) : true)
     .filter((item: any) => query.sources.length ? query.sources.includes(dataSource.identifier()) : true)
@@ -211,6 +164,65 @@ export class SearchRoute extends BaseRoute {
           dataSourcefetches.flatMap(dataSourceFetch => dataSourceFetch.filteredItems) : []).length
   }
 
+  /**
+   * Grabs from each sources an item until we have enough.
+   */
+  aggregateFetchedResults () {
+    const items: Array<Thing> = []
+
+    const correctMax = Math.min(this.max, this.getResultCount())
+    const mergedFilteredItems = new Map()
+
+    for (const [dataSource, dataSourcefetches] of this.#fetches.entries())
+      mergedFilteredItems.set(dataSource, dataSourcefetches.flatMap(dataSourcefetch => dataSourcefetch.filteredItems))
+
+    while (items.length < correctMax) {
+      for (const dataSource of this.#fetches.keys()) {
+        let counter = this.#counters.get(dataSource) ?? 0
+        const sourceMergedFilteredItems = mergedFilteredItems.get(dataSource)
+        if (sourceMergedFilteredItems.length && sourceMergedFilteredItems[counter]) {
+          items.push(sourceMergedFilteredItems[counter])
+          counter++
+          this.#counters.set(dataSource, counter)  
+        }
+      }
+    }
+
+    return items
+  }
+
+  /**
+   * Create the next URL.
+   */
+   createNextUrl () {
+    let nextUrl: false | URL = false
+    
+    if (this.#sources.some(dataSource => !dataSource.done)) {
+      nextUrl = new URL(this.url.toString())
+
+      const paginationString = this.#sources.map((dataSource, index) => {
+        if (dataSource.done) return 'd'
+
+        if (dataSource.paginationType === 'offset') {
+          return (this.#counters.get(dataSource) ?? 0) + (this.#query.pagenation[index] ? parseInt(this.#query.pagenation[index] + '') : 0 ?? 0)
+        }
+
+        if (dataSource.paginationType === 'page') {
+          return (Math.max(this.#fetches.get(dataSource)?.length ?? 0, 0) ?? 0) + (this.#query.pagenation[index] ? parseInt(this.#query.pagenation[index] + '') : 0 ?? 0)
+        }
+
+        if (dataSource.paginationType === 'token')
+          return dataSource.getLastToken()
+
+        throw new Error(`Pagination type: ${dataSource.paginationType} is not yet implemented`)
+      }).join('|')
+      nextUrl.searchParams.set('pagination', paginationString)  
+      nextUrl.searchParams.set('lastIndex', this.#lastIndex.toString())
+    }
+
+    return nextUrl
+  }
+  
   /**
    * The template for the HyperMedia response
    * We handle the HTML clientside.

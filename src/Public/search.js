@@ -50,6 +50,7 @@ const setParameter = (key, value, clearPagination = false) => {
   url.searchParams.set(key, value)
   if (clearPagination) {
     url.searchParams.delete('pagination')
+    url.searchParams.delete('lastIndex')
   }
 
   if (!url.searchParams.get('text')) url.searchParams.delete('text')
