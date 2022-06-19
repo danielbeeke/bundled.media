@@ -5,6 +5,7 @@ import { BaseDataSource } from '../DataSources/BaseDataSource.ts'
 import { Thing } from '../schema.org.ts';
 import { natsort } from '../Helpers/natsort.js'
 import { tryToExtractLanguage } from '../Helpers/tryToExtractLanguage.ts'
+import { baseUrl } from '../../.env.ts'
 
 type DataFetchObject = {
   page: number,
@@ -206,7 +207,8 @@ export class SearchRoute extends BaseRoute {
     let nextUrl: false | URL = false
     
     if (this.#sources.some(dataSource => !dataSource.done)) {
-      nextUrl = new URL(this.url.toString())
+      nextUrl = new URL(baseUrl.toString())
+      nextUrl.pathname = SearchRoute.path
 
       const paginationString = this.#sources.map((dataSource, index) => {
         if (dataSource.done) return 'd'
