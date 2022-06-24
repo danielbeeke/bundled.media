@@ -28,7 +28,7 @@
 
   .image-wrapper {
     position: relative;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 9;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -61,6 +61,8 @@
     display: block;
     max-width: 100%;
     max-height: 100%;
+    width: 100%;
+    object-fit: cover;
   }
 
   &.videoobject {
@@ -71,9 +73,10 @@
 
   &.book:not(.bible) {
     .image {
-      width: 35%;
+      width: 28%;
       height: fit-content;
       box-shadow: rgba(black, .3) 0 3px 10px;
     }
   }
 }
+

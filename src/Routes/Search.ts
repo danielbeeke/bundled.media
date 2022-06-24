@@ -2,7 +2,7 @@ import { BaseRoute } from './BaseRoute.ts'
 import { dataSources as createDataSources } from '../../.env.ts'
 import { AbstractQuery } from '../Core/AbstractQuery.ts'
 import { BaseDataSource } from '../DataSources/BaseDataSource.ts'
-import { Thing } from '../schema.org.ts';
+import { CreativeWork, Organization } from '../schema.org.ts';
 import { natsort } from '../Helpers/natsort.js'
 import { tryToExtractLanguage } from '../Helpers/tryToExtractLanguage.ts'
 import { baseUrl } from '../../.env.ts'
@@ -10,8 +10,7 @@ import { baseUrl } from '../../.env.ts'
 type DataFetchObject = {
   page: number,
   promise: Promise<void>,
-  normalizedItems: Array<Thing>,
-  filteredItems: Array<Thing>,
+  filteredItems: Array<CreativeWork>,
 }
 
 /**
@@ -48,7 +47,7 @@ export class SearchRoute extends BaseRoute {
 
     // Sorting
     const sorter = natsort({ insensitive: true })
-    items.sort((a: any, b: any) => sorter(a.name, b.name))
+    items.sort((a: CreativeWork, b: CreativeWork) => sorter(a.name, b.name))
 
     return {
       items: items,
@@ -108,35 +107,16 @@ export class SearchRoute extends BaseRoute {
    */
    fetch (dataSource: BaseDataSource, query: AbstractQuery, offset: undefined | string | number = undefined) {
     const dataSourcefetches: Array<DataFetchObject> = this.#fetches.get(dataSource) ?? []
-
     const page = dataSourcefetches.length
 
     const dataSourceFetch: DataFetchObject = {
       page,
-      normalizedItems: [], // TODO free from memory.
       filteredItems: [],
       promise: dataSource.fetch(query, page, offset).then((items: Array<any>) => {
-        dataSourceFetch.normalizedItems = items.map((item: any) => {
-          const normalizedItem = dataSource.normalize(item) as any
-
-          if (!normalizedItem.inLanguage) {
-            if (typeof dataSource.options.langCode === 'string')
-              normalizedItem.inLanguage = dataSource.options.langCode
-
-            if (typeof dataSource.options.langCode === 'function')
-              normalizedItem.inLanguage = dataSource.options.langCode(normalizedItem)
-
-            if (!normalizedItem.inLanguage) {
-              normalizedItem.inLanguage = tryToExtractLanguage(normalizedItem.name)
-            }
-          }
-
-          normalizedItem.publisher = dataSource.publisher
-
-          return normalizedItem
-        })
-
-        dataSourceFetch.filteredItems = this.filter(dataSource, dataSourceFetch.normalizedItems, query)
+        const normalizedItems = items
+          .map((item: any) => this.genericNormalizeItem(dataSource.normalize(item) as CreativeWork, dataSource))
+          
+        dataSourceFetch.filteredItems = this.filter(dataSource, normalizedItems, query)
       })
     }
 
@@ -147,18 +127,38 @@ export class SearchRoute extends BaseRoute {
   }
 
   /**
+   * A generic normalization.
+   */
+  genericNormalizeItem (normalizedItem: CreativeWork, dataSource: BaseDataSource) {
+    if (!normalizedItem.inLanguage) {
+      if (typeof dataSource.options.langCode === 'string')
+        normalizedItem.inLanguage = dataSource.options.langCode
+
+      if (typeof dataSource.options.langCode === 'function')
+        normalizedItem.inLanguage = dataSource.options.langCode(normalizedItem)
+
+      if (!normalizedItem.inLanguage && typeof normalizedItem.name === 'string') {
+        normalizedItem.inLanguage = tryToExtractLanguage(normalizedItem.name)
+      }
+    }
+
+    normalizedItem.publisher = dataSource.publisher as unknown as Organization
+    return normalizedItem
+  }
+
+  /**
    * This is the second filtering.
    * If the source support full text search / langCode filtering / or type selection we do not repeat that process.
    */
-   filter (dataSource: BaseDataSource, normalizedItems: Array<Thing>, query: AbstractQuery) {
+   filter (dataSource: BaseDataSource, normalizedItems: Array<CreativeWork>, query: AbstractQuery) {
     return normalizedItems
-    .filter((item: any) => query.langCode && !dataSource.nativelySupports.langCode ? 
-      query.langCode.includes(item.inLanguage) : true)
-    .filter((item: any) => query.sources.length ? 
+    .filter((item: CreativeWork) => query.langCode && !dataSource.nativelySupports.langCode ? 
+      query.langCode.includes(item.inLanguage as string) : true)
+    .filter((_item: CreativeWork) => query.sources.length ? 
       query.sources.includes(dataSource.identifier()) : true)
-    .filter((item: any) => query.text && !dataSource.nativelySupports.text ? 
-      item.name.toLocaleLowerCase().includes(query.text) : true)
-    .filter((item: any) => query.types.length && !dataSource.nativelySupports.types ? 
+    .filter((item: CreativeWork) => query.text && !dataSource.nativelySupports.text ? 
+      (item.name as string).toLocaleLowerCase().includes(query.text) : true)
+    .filter((item: CreativeWork) => query.types.length && !dataSource.nativelySupports.types ? 
       query.types.map(type => type.split('/').pop()).includes(item['@type']) : true)
   }
 
@@ -177,7 +177,7 @@ export class SearchRoute extends BaseRoute {
    * Grabs from each sources an item until we have enough.
    */
   aggregateFetchedResults () {
-    const items: Array<Thing> = []
+    const items: Array<CreativeWork> = []
 
     const correctMax = Math.min(this.max, this.getResultCount())
     const mergedFilteredItems = new Map()
@@ -217,11 +217,13 @@ export class SearchRoute extends BaseRoute {
         if (dataSource.done) return 'd'
 
         if (dataSource.paginationType === 'offset') {
-          return (this.#counters.get(dataSource) ?? 0) + (this.#query.pagenation[index] ? parseInt(this.#query.pagenation[index] + '') : 0 ?? 0)
+          return (this.#counters.get(dataSource) ?? 0) + 
+            (this.#query.pagenation[index] ? parseInt(this.#query.pagenation[index] + '') : 0 ?? 0)
         }
 
         if (dataSource.paginationType === 'page') {
-          return (Math.max(this.#fetches.get(dataSource)?.length ?? 0, 0) ?? 0) + (this.#query.pagenation[index] ? parseInt(this.#query.pagenation[index] + '') : 0 ?? 0)
+          return (Math.max(this.#fetches.get(dataSource)?.length ?? 0, 0) ?? 0) + 
+            (this.#query.pagenation[index] ? parseInt(this.#query.pagenation[index] + '') : 0 ?? 0)
         }
 
         if (dataSource.paginationType === 'token')
@@ -240,7 +242,7 @@ export class SearchRoute extends BaseRoute {
    * The template for the HyperMedia response
    * We handle the HTML clientside.
    */
-  async template (_variables: { [key: string]: any }){ 
+  async template (_variables: { [key: string]: string }){ 
     return await `
       <script src="/search.js" type="module"></script>
     `

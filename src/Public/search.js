@@ -62,6 +62,9 @@ const setParameter = (key, value, clearPagination = false) => {
   if (!url.searchParams.get('sources')) url.searchParams.delete('sources')
 
   history.pushState({}, '', url)
+  isFetchingPrevious = true
+  isFetchingNext = true
+  draw()
   fetchData()
 }
 
