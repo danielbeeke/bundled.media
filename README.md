@@ -1,5 +1,7 @@
 # What is bundled.media?
 
+See a demo at [bundled.media](https://bundled.media)
+
 ## A gateway to Christian media
 
 Bundled.media is a software product that is a gateway / API to the vast landscape of Christian media. It aggregates and normalizes the media meta data. The media itself such as the video or audio files are not touched, this product is only about meta data (so it _does_ contain a link to the source media). It makes it possible to filter by language code (bcp47), a search term, media type and hopefully in the future by category.
