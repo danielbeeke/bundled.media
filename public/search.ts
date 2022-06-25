@@ -99,7 +99,7 @@ const draw = () => {
             <pre>${JSON.stringify(selectedCard, null, 2)}
             </pre>
 
-            <a class="btn btn-primary" href=${selectedCard.url[0]} target="_blank">View</a>
+            <a class="btn btn-primary" href=${Array.isArray(selectedCard.url) ? selectedCard.url[0] : selectedCard.url} target="_blank">View</a>
           </div>
           ` : null}
         </div>
