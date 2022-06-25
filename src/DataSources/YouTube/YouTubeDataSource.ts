@@ -85,4 +85,9 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
   identifier () {
     return `${this.url}c/${this.options.channel}`
   }
+
+  resolveId (id: string) {
+    return id.includes(`https://www.youtube.com/watch?v=`)
+  }
+
 }

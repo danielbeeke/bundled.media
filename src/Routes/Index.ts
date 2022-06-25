@@ -17,7 +17,7 @@ export class IndexRoute extends BaseRoute {
   async template (_variables: { [key: string]: any }): Promise<string> { 
     return await `
       <ul class="list-group">
-      ${routes.map((route) => route.path !== '/' ? `
+      ${routes.filter(route => route.description).map((route) => route.path !== '/' ? `
         <li class="list-group-item">
           <a href="${route.path}">${route.path}</a>
           <br>

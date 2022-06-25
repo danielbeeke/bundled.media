@@ -8,34 +8,58 @@ const port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 8080
 serve(serveHttp, { port });
 console.info(`bundled.media is running locally at: http://localhost:${port}/`)
 
+const toPathRegex = (path: string) => {
+  return path.split('/').map((part: string) => {
+    if (part.substring(0, 2) === ':*') return `(?<${part.substring(2)}>[a-z0-9\/:.\_-]+)`
+    else if (part[0] === ':') return `(?<${part.substring(1)}>[a-z0-9]+)`
+    return part
+  }).join('/') + '$'
+}
+
 async function serveHttp(request: Request) {
   const requestURL = new URL(request.url)
   const urlParams = new URLSearchParams(requestURL.search)
+  const params = {}
 
   const allowsInteractive = !urlParams.has('force-json') && 
     request.headers.get('accept')?.includes('text/html')
 
-  const matchedRoute = routes.find(route => route.path === requestURL.pathname)
+  const matchedRoute = routes.find(route => {
+    const regex = new RegExp(toPathRegex(route.path), 'imsu')
+    const matched = regex.test(requestURL.pathname)
+
+    if (matched) {
+      Object.assign(params, requestURL.pathname.match(regex)?.groups)
+    }
+
+    return matched
+  })
 
   if (matchedRoute) {
-    const initiatedRoute = new matchedRoute(request)
+    const initiatedRoute = new matchedRoute(request, params)
 
     // We allow HTML output when the route exists as an endpoint.
     // This allows for easy learning of the API similar to HyperMedia.
     if (allowsInteractive) {
-      const variables = await initiatedRoute.htmlVariables()
-      const templateResult = await initiatedRoute.template(variables)
-      const body = layout(Object.assign(variables, {
-        body: templateResult
-      }))
+      let body = ''
+      if (request.url.toString().includes('.css')) {
+        body = await initiatedRoute.template({})
+      }
+      else {
+        const variables = await initiatedRoute.htmlVariables()
+        const templateResult = await initiatedRoute.template(variables)
+        body = layout(Object.assign(variables, {
+          body: templateResult
+        }))  
+      }
       return new Response(new TextEncoder().encode(body), { status: 200 })
     }
 
     // This is the JSON output of endpoints.
     try {
-      const json = await initiatedRoute.handle()
-      return new Response(JSON.stringify(json, null, 2), {
-        headers: { 'Content-Type': 'application/json' }
+      const output = await initiatedRoute.handle()
+      return new Response(matchedRoute.mime === 'application/json' ? JSON.stringify(output, null, 2) : output, {
+        headers: { 'Content-Type': matchedRoute.mime }
       })
     }
 
@@ -48,14 +72,12 @@ async function serveHttp(request: Request) {
 
   // Try static resources.
   try {
-    const file = await Deno.readTextFile('./src/Public' + requestURL.pathname)
+    const file = await Deno.readTextFile('./public' + requestURL.pathname)
     if (file) {
-      return await serveFileWithTs(request, './src/Public' + requestURL.pathname)
+      return await serveFileWithTs(request, './public' + requestURL.pathname)
     }  
   }
-  catch (exception) {
-    console.log(exception)
-
+  catch {
     // We continue with a 404.
   }
 

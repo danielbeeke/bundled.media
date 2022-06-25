@@ -41,4 +41,6 @@ export abstract class BaseDataSource<Options = any, RawItem = any, NormalizedIte
   }
 
   boot () {}
+
+  abstract resolveId (id: string): boolean | any
 }

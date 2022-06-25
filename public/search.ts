@@ -125,7 +125,9 @@ const draw = () => {
           setParameter('sources', (event.target as HTMLInputElement).value, true)
         }}>
           <option selected value="">- all sources -</option>
-          ${Object.values(sources).map(source => html`<option ?selected=${(url.searchParams.get('sources') ?? '').split(',').includes(source.uri)} value=${source.uri}>${source.label}</option>`)}
+          ${Object.values(sources).map(source => html`
+            <option ?selected=${(url.searchParams.get('sources') ?? '').split(',').includes(source.uri)} value=${source.uri}>${source.label}</option>
+          `)}
         </select>
 
         <bcp47-picker multiple value=${url.searchParams.get('langCode')} onchange=${(event: InputEvent) => {
@@ -134,7 +136,9 @@ const draw = () => {
       </div>
 
       <div class="pagination mb-3">
-        <a class=${`btn btn-secondary ${isFetchingPrevious || isFetchingNext ? 'disabled' : ''} ${isFetchingPrevious ? 'is-fetching' : ''} ${!prevUrls.get(location.toString()) ? 'disabled' : ''}`} onclick=${(event: InputEvent) => {
+        <a class=${`btn btn-secondary ${isFetchingPrevious || isFetchingNext ? 'disabled' : ''} 
+            ${isFetchingPrevious ? 'is-fetching' : ''} ${!prevUrls.get(location.toString()) ? 'disabled' : ''}`} 
+          onclick=${(event: InputEvent) => {
           event.preventDefault()
           history.pushState({}, '', prevUrls.get(location.toString()))
           isFetchingPrevious = true
@@ -142,7 +146,9 @@ const draw = () => {
           fetchData()
         }} href=${prevUrls.get(location.toString())}>${isFetchingPrevious ? html`Fetching <img src="/images/spin.svg" />` : '< Previous'}</a>
 
-        <a class=${`btn btn-primary ${isFetchingPrevious || isFetchingNext ? 'disabled' : ''} ${isFetchingNext ? 'is-fetching' : ''} float-end ${!nextUrl ? 'disabled' : ''}`} onclick=${(event: InputEvent) => {
+        <a class=${`btn btn-primary 
+            ${isFetchingPrevious || isFetchingNext ? 'disabled' : ''} ${isFetchingNext ? 'is-fetching' : ''} float-end ${!nextUrl ? 'disabled' : ''}`} 
+          onclick=${(event: InputEvent) => {
           event.preventDefault()
           history.pushState({}, '', nextUrl)
           isFetchingNext = true
@@ -164,7 +170,8 @@ const draw = () => {
         return html`<div onclick=${() => {
           selectedCard = item
           draw()
-        }} data-bs-toggle="modal" data-bs-target="#infoModal" class=${`card ${item['@type'].toLowerCase()} ${!item.thumbnail?.url  && item['@type'] === 'Book' ? 'bible' : ''}`}>
+        }} data-bs-toggle="modal" data-bs-target="#infoModal" 
+          class=${`card ${item['@type'].toLowerCase()} ${!item.thumbnail?.url  && item['@type'] === 'Book' ? 'bible' : ''}`}>
           ${image ? html`
             <div class="image-wrapper">
               <div class="type-icon" ref=${async (element: HTMLDivElement) => {
@@ -173,7 +180,18 @@ const draw = () => {
                 element.innerHTML = svgData
               }} src=${`/images/${item['@type'].toLowerCase()}.svg`}></div>
               <span class="badge rounded-pill text-bg-light language-label">${item.inLanguage}</span>   
-              <img src=${`//images.weserv.nl/?url=${image}&h=200${item['@type'] === 'VideoObject' ? '' : ''}`} class="image" alt=${item.name}>            
+              <img ref=${(element: HTMLImageElement) => {
+                const url = `//images.weserv.nl/?url=${image}&h=200${item['@type'] === 'VideoObject' ? '' : ''}`
+                element.classList.add('loading')
+
+                element.src = ''
+                requestAnimationFrame(() => {
+                  element.onload = () => {
+                    element.classList.remove('loading')
+                  }
+                  element.src = url
+                })
+              }} class=${`image loading`} alt=${item.name}>            
             </div>
           ` : null}
           <div class="card-body">

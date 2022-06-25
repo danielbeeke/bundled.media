@@ -1,14 +1,19 @@
 export abstract class BaseRoute {
 
   public url: URL
+  public params: { [key: string]: any} = {}
 
-  constructor (request: Request) {
+  constructor (request: Request, params: { [key: string]: any}) {
     this.url = new URL(request.url)
+    this.params = params
   }
 
   static path: string
+  static description = ''
 
-  public abstract handle (): Promise<any>
+  static mime = 'application/json'
+
+  public abstract handle (): Promise<any> | any
 
   async htmlVariables () {
     return await {

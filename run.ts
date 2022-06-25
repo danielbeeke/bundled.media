@@ -24,12 +24,14 @@ const options: PermissionOptions = {
   read: [
     cache,
     './',
+    './scss',
     './env',
     './src/Public/api.js',
     './src/Public/favicon.ico',
   ],
   write: [
-    cache
+    cache,
+    './src/Public/style.css'
   ],
   hrtime: false,
   run: false,

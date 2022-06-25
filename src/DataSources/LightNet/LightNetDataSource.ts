@@ -47,7 +47,11 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
     }
 
     if (json.total === json.data.length || !json.data.length) this.done = true 
+    this.addSidetracksToData(json)
+    return json.data
+  }
 
+  addSidetracksToData (json: any) {
     for (const item of json.data) {
       item.authorsData = (item.authors ?? []).map((authorUrl: string) => {
         const personTranslations = json.sidetrack.person?.filter((item: any) => item.id === authorUrl.split('/').pop()) ?? []
@@ -60,7 +64,7 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
       })
     }
 
-    return json.data
+    return json
   }
 
   /**
@@ -81,7 +85,7 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
     })
 
     return {
-      '@id': `${this.options.url.toString().replace('data', 'rdf')}/contents/${item.type}/${item.id}`,
+      '@id': `${this.options.url.toString().replace('data', 'rdf')}/contents/${item.type}/${item.id}:${item.langCode}`,
       '@type': LightNetTypeMapping[item.type],
       'name': item.name,
       'url': item.urls ?? item.src,
@@ -102,5 +106,21 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
   types () {
     return this.options.types
     .map(type => `https://schema.org/${LightNetTypeMapping[type]}`)
+  }
+
+  async resolveId (id: string) {
+    const isOurs = id.includes(this.options.url.toString().replace('data', 'rdf'))
+    if (isOurs) {
+      const [lightNetId, langCode] = id.split('/').pop()!.split(':')
+      const fetchUrl = new URL(`${this.options.url}/${this.options.channel}/${this.options.types.join(',')}`)
+      fetchUrl.searchParams.set('filter[id]', lightNetId)
+      fetchUrl.searchParams.set('langCode', langCode)
+      fetchUrl.searchParams.set('sidetrack[0]', 'authors')
+
+      const response = await fetched(fetchUrl)
+      const json: { data: Array<any> } = await response.json()
+      this.addSidetracksToData(json)
+      return json?.data?.[0]
+    }
   }
 }

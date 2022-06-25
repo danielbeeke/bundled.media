@@ -3,11 +3,15 @@ import { SearchRoute } from './Search.ts'
 import { TypesRoute } from './Types.ts'
 import { SourcesRoute } from './Sources.ts'
 import { AboutRoute } from './About.ts'
+import { CssRoute } from './Css.ts'
+import { IdRoute } from './Id.ts'
 
 export default [
   IndexRoute,
   AboutRoute,
   SearchRoute,
   TypesRoute,
-  SourcesRoute
+  SourcesRoute,
+  CssRoute,
+  IdRoute
 ]

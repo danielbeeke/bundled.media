@@ -42,6 +42,7 @@ export class ApiBibleDataSource extends BaseDataSource<ApiBibleOptions, ApiBible
       '@type': 'Book',
       'name': item.name,
       'description': item.description,
+      '@id': `https://api.bible/${item.id}`,
       'url': `https://bibles.org/bible/${item.id}/_`,
       'inLanguage': bcp47Normalize(item.language.id)
     }
@@ -51,5 +52,16 @@ export class ApiBibleDataSource extends BaseDataSource<ApiBibleOptions, ApiBible
 
   types () {
     return ['https://schema.org/Book']
+  }
+
+  async resolveId (id: string) {
+    const isOurs = id.includes('https://api.bible/')
+    if (isOurs) {
+      const bibleId = id.split('/').pop()
+      const fetchUrl = new URL(`${this.url}v1/bibles/${bibleId}`)
+      const response = await fetched(fetchUrl, { headers: { 'api-key': this.options.key }})
+      const json = await response.json()
+      return json.data
+    }
   }
 }
