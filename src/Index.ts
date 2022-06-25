@@ -2,7 +2,7 @@ import { serve } from 'https://deno.land/std@0.125.0/http/server.ts'
 import routes from './Routes/routes.ts'
 import layout from './Templates/layout.ts'
 import { dataSources as createDataSources } from '../.env.ts'
-import { serveFile } from 'https://deno.land/std@0.140.0/http/file_server.ts'
+import { serveFileWithTs } from './Core/ServeTs.ts'
 
 const port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 8080
 serve(serveHttp, { port });
@@ -50,10 +50,12 @@ async function serveHttp(request: Request) {
   try {
     const file = await Deno.readTextFile('./src/Public' + requestURL.pathname)
     if (file) {
-      return await serveFile(request, './src/Public' + requestURL.pathname)
+      return await serveFileWithTs(request, './src/Public' + requestURL.pathname)
     }  
   }
-  catch {
+  catch (exception) {
+    console.log(exception)
+
     // We continue with a 404.
   }
 

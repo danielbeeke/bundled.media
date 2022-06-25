@@ -244,7 +244,7 @@ export class SearchRoute extends BaseRoute {
    */
   async template (_variables: { [key: string]: string }){ 
     return await `
-      <script src="/search.js" type="module"></script>
+      <script src="/search.ts" type="module"></script>
     `
   }
 

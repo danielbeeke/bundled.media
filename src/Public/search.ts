@@ -1,17 +1,27 @@
-import { render, html } from 'https://unpkg.com/uhtml?module'
-import './init-bcp47-picker.js'
+import { render, html } from 'https://unpkg.com/uhtml@3.0.1/esm/index.js?module'
+import './init-bcp47-picker.ts'
 
 let nextUrl = ''
-let searchResults = []
+let searchResults: Array<any> = []
 const prevUrls = new Map()
-const url = new URL(location)
-let types = {}
-let sources = {}
+const url = new URL(location.toString())
+let types: {
+  [key: string]: {
+    uri: string,
+    label: string
+  }
+} = {}
+let sources: {
+  [key: string]: {
+    uri: string,
+    label: string
+  }
+} = {}
 const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 let isFetchingNext = true
 let isFetchingPrevious = false
 
-const fetchOptions = async (endpoint) => {
+const fetchOptions = async (endpoint: string) => {
   const response = await fetch(`/${endpoint}`, { headers: { 'accept': 'application/json' }})
   return await response.json()
 }
@@ -27,7 +37,7 @@ const fetchSources = () => fetchOptions('sources')
 const fetchData = async () => {
   if (!Object.keys(types).length) types = await fetchTypes()
   if (!Object.keys(sources).length) sources = await fetchSources()
-  const url = new URL(location)
+  const url = new URL(location.toString())
   const response = await fetch(url, { headers: { 'accept': 'application/json' }})
   const json = await response.json()
   searchResults = json.items ?? []
@@ -48,8 +58,8 @@ const fetchData = async () => {
 /**
  * Reloads the URL with an extra parameter.
  */
-const setParameter = (key, value, clearPagination = false) => {
-  const url = new URL(location)
+const setParameter = (key: string, value: string, clearPagination = false) => {
+  const url = new URL(location.toString())
   url.searchParams.set(key, value)
   if (clearPagination) {
     url.searchParams.delete('pagination')
@@ -68,7 +78,7 @@ const setParameter = (key, value, clearPagination = false) => {
   fetchData()
 }
 
-let selectedCard = null
+let selectedCard: any = null
 
 /**
  * The template function.
@@ -99,31 +109,32 @@ const draw = () => {
     <div class="top">
 
       <div class="input-group mb-3">
-        <input placeholder="Search for a title" class="form-control" value=${url.searchParams.get('text')} onchange=${(event) => {
-          setParameter('text', event.target.value, true)
+        <input placeholder="Search for a title" class="form-control" value=${url.searchParams.get('text')} onchange=${(event: InputEvent) => {
+          setParameter('text', (event.target as HTMLInputElement).value, true)
         }} type="search" />
 
-        <select class="form-select type-dropdown" onchange=${event => {
-          setParameter('types', event.target.value, true)
+        <select class="form-select type-dropdown" onchange=${(event: InputEvent) => {
+          setParameter('types', (event.target as HTMLInputElement).value, true)
         }}>
           <option selected value="">- all types -</option>
-          ${Object.values(types).map(type => html`<option ?selected=${(url.searchParams.get('types') ?? '').split(',').includes(type.uri)} value=${type.uri}>${type.label}</option>`)}
+          ${Object.values(types).map(type => html`<option ?selected=${(url.searchParams.get('types') ?? '').split(',')
+          .includes(type.uri)} value=${type.uri}>${type.label}</option>`)}
         </select>
 
-        <select class="form-select type-dropdown" onchange=${event => {
-          setParameter('sources', event.target.value, true)
+        <select class="form-select type-dropdown" onchange=${(event: InputEvent) => {
+          setParameter('sources', (event.target as HTMLInputElement).value, true)
         }}>
           <option selected value="">- all sources -</option>
           ${Object.values(sources).map(source => html`<option ?selected=${(url.searchParams.get('sources') ?? '').split(',').includes(source.uri)} value=${source.uri}>${source.label}</option>`)}
         </select>
 
-        <bcp47-picker multiple value=${url.searchParams.get('langCode')} onchange=${event => {
-          setParameter('langCode', event.target.value, true)
+        <bcp47-picker multiple value=${url.searchParams.get('langCode')} onchange=${(event: InputEvent) => {
+          setParameter('langCode', (event.target as HTMLInputElement).value, true)
         }} />
       </div>
 
       <div class="pagination mb-3">
-        <a class=${`btn btn-secondary ${isFetchingPrevious || isFetchingNext ? 'disabled' : ''} ${isFetchingPrevious ? 'is-fetching' : ''} ${!prevUrls.get(location.toString()) ? 'disabled' : ''}`} onclick=${event => {
+        <a class=${`btn btn-secondary ${isFetchingPrevious || isFetchingNext ? 'disabled' : ''} ${isFetchingPrevious ? 'is-fetching' : ''} ${!prevUrls.get(location.toString()) ? 'disabled' : ''}`} onclick=${(event: InputEvent) => {
           event.preventDefault()
           history.pushState({}, '', prevUrls.get(location.toString()))
           isFetchingPrevious = true
@@ -131,7 +142,7 @@ const draw = () => {
           fetchData()
         }} href=${prevUrls.get(location.toString())}>${isFetchingPrevious ? html`Fetching <img src="/images/spin.svg" />` : '< Previous'}</a>
 
-        <a class=${`btn btn-primary ${isFetchingPrevious || isFetchingNext ? 'disabled' : ''} ${isFetchingNext ? 'is-fetching' : ''} float-end ${!nextUrl ? 'disabled' : ''}`} onclick=${event => {
+        <a class=${`btn btn-primary ${isFetchingPrevious || isFetchingNext ? 'disabled' : ''} ${isFetchingNext ? 'is-fetching' : ''} float-end ${!nextUrl ? 'disabled' : ''}`} onclick=${(event: InputEvent) => {
           event.preventDefault()
           history.pushState({}, '', nextUrl)
           isFetchingNext = true
@@ -156,7 +167,7 @@ const draw = () => {
         }} data-bs-toggle="modal" data-bs-target="#infoModal" class=${`card ${item['@type'].toLowerCase()} ${!item.thumbnail?.url  && item['@type'] === 'Book' ? 'bible' : ''}`}>
           ${image ? html`
             <div class="image-wrapper">
-              <div class="type-icon" ref=${async (element) => {
+              <div class="type-icon" ref=${async (element: HTMLDivElement) => {
                 const response = await fetch(`/images/${item['@type'].toLowerCase()}.svg`)
                 const svgData = await response.text()
                 element.innerHTML = svgData
@@ -168,7 +179,7 @@ const draw = () => {
           <div class="card-body">
             <h5 class="card-title">${item.name}</h5>
             ${item.author?.length ? html`
-              <small class="card-sub-title d-block mb-2">${formatter.format(item.author.map(author => author.name))}</small>            
+              <small class="card-sub-title d-block mb-2">${formatter.format(item.author.map((author: { name: string }) => author.name))}</small>            
             ` : null}
             <p class="card-text">${item.description}</p>
           </div>
