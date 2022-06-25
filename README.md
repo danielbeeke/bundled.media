@@ -5,6 +5,7 @@ See a demo at [bundled.media](https://bundled.media)
 <details open>
 <summary><strong>Gateway to Christian media</strong></summary>
 
+<br>
 Bundled.media is a software product that is a gateway / API to the vast landscape of Christian media. It aggregates and normalizes the media meta data. The media itself such as the video or audio files are not touched, this product is only about meta data (so it _does_ contain a link to the source media). It makes it possible to filter by language code (bcp47), a search term, media type and hopefully in the future by category.
 
 The idea is a that each media consumer installs the product for their own usage. With this decentralization consumers are able to add credentials for protected sources. Also when there is heavy usage of it, the consumer pays for the computational costs.
@@ -14,6 +15,7 @@ The idea is a that each media consumer installs the product for their own usage.
 <details>
 <summary><strong>Unique identifiers</strong></summary>
 
+<br>
 To allow for a unified global gateway to Christian media, we need unique identifiers. One of the world its standards for this are URIs / URLs. An URI (uniform resource identifier) is very similar to an URL. A URL is also known as a link. Example link: https://example.com/hello-world. The main difference is that a URI does not need to resolve to a resource. Our ideal is to have resolvable identifiers so URLs are better, but URIs are allowed. 
 
 YouTube URLs can be used as unique identifiers. Some media publishers, publish also to Vimeo, so how will we deal with that? We could have a file inside this repository containing data that tells that one YouTube link is the same as one Vimeo link. The RDF technology allows for such use cases. We would need to have a canonical URL, the primary one. Other URLs can resolve to the same video / media item. This way we would have unique identifiers. 
