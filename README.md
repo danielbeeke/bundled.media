@@ -27,6 +27,7 @@ We can have fallbacks to aliasses if the YouTube one is not available anymore. M
 <details>
 <summary><strong>Usage statistics for media publishers</strong></summary>
 
+<br>
 When media is used, we want to send back usage statistics to the media publisher. One way of implementing this is by having media publisher specific code when a certain URL is called. This would require media consumers who want to use media offline, to call this specific URL when the device is back online. The main target audience for this are the wifi boxes such as ConnectBox and others. Other consumers do not need to do this as they can simply hotlink to the media source, such as YouTube or any other URL. 
 
 This would require usage of special crafted URLs that make the product very dependent on bundled.media, we would prefer a better way. One option would be to have the special URL also contain the source URL. This would be good when a consumer decides to no longer use bundled.media. It would even allow for storing the target source URL in the database and when calling that, prefix it with the URL of their bundled.media instance. A similar trick is used for image resizing services such as images.weserve.nl.
@@ -36,6 +37,7 @@ This would require usage of special crafted URLs that make the product very depe
 <details>
 <summary><strong>Usage statistics for media consumers</strong></summary>
 
+<br>
 What if consumers could see what media is often used? We want to create a way to have insight into the statistics. At this moment we think it might be valuable to also have a way of aggregating the world wide Christian media statistics. It might be an option to opt in for world wide media statistics, and when that mode is used, and consumers do use a specific URL that first calls this product and then redirects to the source URL, that it would send statistics to an aggregating place, a time series database that keeps track of usage. This URL is described in 'Usage statistics for media publishers'.
 
 </details>
@@ -43,6 +45,7 @@ What if consumers could see what media is often used? We want to create a way to
 <details>
 <summary><strong>A global taxonomy to categorize media</strong></summary>
 
+<br>
 With unique identifiers in place we also create categories for an identifier. Imagine searching through the vast landscape of Christian media with categories. The great thing with the proposed solution is that categorization does not need to happen at the media publisher. Initiatives could be created where a taxonomy is created for the top 600 media items from the Christian media landscape. 
 
 Imagine a taxonomy of categories, another taxonomy for keywords, one for target audience, one with ministry categories or a taxonomy that targets the audience where they are in their journey with Christ (see the gray matrix). These taxonomies can al be different initiatives started by different organizations or working groups. At some stage we would only need to support them here in bundled.media.
@@ -56,6 +59,7 @@ This taxonomy will make it possible for ministries to have systems where they se
 <details>
 <summary><strong>Notifications for new media</strong></summary>
 
+<br>
 Would it be possible to subscribe to a search query, so that when new content is found you can get a notification? This would be awesome and ministries / media consumers could subscribe to media that would perfectly fit their audience. This might be a sub product that periodically calls bundled.media.  
 
 </details>
