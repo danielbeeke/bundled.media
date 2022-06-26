@@ -3,18 +3,11 @@ import routes from './Routes/routes.ts'
 import layout from './Templates/layout.ts'
 import { dataSources as createDataSources } from '../.env.ts'
 import { serveFileWithTs } from './Core/ServeTs.ts'
+import { toPathRegex } from './Helpers/toPathRegex.ts'
 
 const port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 8080
 serve(serveHttp, { port });
 console.info(`bundled.media is running locally at: http://localhost:${port}/`)
-
-const toPathRegex = (path: string) => {
-  return path.split('/').map((part: string) => {
-    if (part.substring(0, 2) === ':*') return `(?<${part.substring(2)}>[a-z0-9\/:.\_-]+)`
-    else if (part[0] === ':') return `(?<${part.substring(1)}>[a-z0-9]+)`
-    return part
-  }).join('/') + '$'
-}
 
 async function serveHttp(request: Request) {
   const requestURL = new URL(request.url)
@@ -27,11 +20,7 @@ async function serveHttp(request: Request) {
   const matchedRoute = routes.find(route => {
     const regex = new RegExp(toPathRegex(route.path), 'imsu')
     const matched = regex.test(requestURL.pathname)
-
-    if (matched) {
-      Object.assign(params, requestURL.pathname.match(regex)?.groups)
-    }
-
+    if (matched) Object.assign(params, requestURL.pathname.match(regex)?.groups)
     return matched
   })
 
@@ -88,6 +77,4 @@ async function serveHttp(request: Request) {
 /**
  * Trigger the constructors so sources can cache stuff on startup.
  */
-for (const source of createDataSources()) {
-  source.boot()
-}
+for (const source of createDataSources()) source.boot()

@@ -39,5 +39,5 @@ const options: PermissionOptions = {
 }
 
 const flags = generatePermisions(options)
-const p = Deno.run({ cmd: ['deno', 'run', ...flags, 'src/Index.ts']})
+const p = Deno.run({ cmd: ['deno', 'run', ...flags, 'src/App.ts']})
 await p.status()

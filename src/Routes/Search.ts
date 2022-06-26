@@ -3,7 +3,6 @@ import { dataSources as createDataSources } from '../../.env.ts'
 import { AbstractQuery } from '../Core/AbstractQuery.ts'
 import { BaseDataSource } from '../DataSources/BaseDataSource.ts'
 import { CreativeWork, Organization } from '../schema.org.ts';
-import { natsort } from '../Helpers/natsort.js'
 import { tryToExtractLanguage } from '../Helpers/tryToExtractLanguage.ts'
 import { baseUrl } from '../../.env.ts'
 
@@ -46,8 +45,8 @@ export class SearchRoute extends BaseRoute {
     const items = this.aggregateFetchedResults()
 
     // Sorting
-    const sorter = natsort({ insensitive: true })
-    items.sort((a: CreativeWork, b: CreativeWork) => sorter(a.name, b.name))
+    const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
+    items.sort((a: CreativeWork, b: CreativeWork) => collator.compare(a.name as string, b.name as string))
 
     return {
       items: items,

@@ -54,4 +54,5 @@ export const dataSources = () => [
   })
 ]
 
-export const baseUrl = new URL('https://bundled.media')
+// export const baseUrl = new URL('https://bundled.media')
+export const baseUrl = new URL('http://localhost:8080')
