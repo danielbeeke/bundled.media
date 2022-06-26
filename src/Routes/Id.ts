@@ -28,7 +28,8 @@ export class IdRoute extends BaseRoute {
    async template (_variables: { [key: string]: any }): Promise<string> { 
     const data = await this.handle()
     return `
-    <pre>${JSON.stringify(data, null, 2)}</pre>
+    <script src="/json-viewer.ts" type="module"></script>
+    <json-viewer>${JSON.stringify(data, null, 2)}</json-viewer>
     `
   }
 }

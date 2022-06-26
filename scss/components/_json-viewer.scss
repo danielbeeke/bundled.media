@@ -1,0 +1,28 @@
+json-viewer {
+  /* Background, font and indentation */
+  --background-color: #ffffff;
+  --color: black;
+  --font-family: monaco, Consolas, 'Lucida Console', monospace;
+  --font-size: 1rem;
+  --indent-size: 1.5em;
+  --indentguide-size: 1px;
+  --indentguide-style: solid;
+  --indentguide-color: #333;
+  --indentguide-color-active: #666;
+  --indentguide: var(--indentguide-size) var(--indentguide-style) var(--indentguide-color);
+  --indentguide-active: var(--indentguide-size) var(--indentguide-style) var(--indentguide-color-active);
+
+  /* Types colors */
+  --string-color: black;
+  --link-color: rgb(20, 54, 165);
+  --number-color: black;
+  --boolean-color: black;
+  --null-color: black;
+  --property-color: black;
+
+  /* Collapsed node preview */
+  --preview-color: gray;
+
+  /* Search highlight color */
+  --highlight-color: #263942;
+}

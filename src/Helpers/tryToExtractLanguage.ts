@@ -1,4 +1,4 @@
-import { iso6393 } from 'https://esm.sh/iso-639-3@3'
+import { iso6393 } from 'https://esm.sh/iso-639-3@3.0.1'
 import { bcp47Normalize } from './bcp47Normalize.ts'
 
 const languageNames: { [key: string]: Array<{ code: string, name: string, part: string }> } = {}
@@ -14,6 +14,14 @@ for (const language of iso6393) {
   }
 }
 
+/**
+ * TODO Convert to a method that receives an array of strings such as keywords, title, category etc.
+ * And given that makes a scored array of possible bcp47 tags.
+ * The highest score will be for anything prefixed wth "bcp47:"
+ * 
+ * It would be amazing if organizations that use platforms, use "bcp47:LANGCODE" in on of the keywords / categories or in the title.
+ * TODO propagate this idea to the media publishers.
+ */
 export const tryToExtractLanguage = (text: string) => {
   const parts = text.split(' - ').pop()!.split(' ')
   let langCode = 'und'

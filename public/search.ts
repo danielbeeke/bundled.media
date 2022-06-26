@@ -1,4 +1,5 @@
 import { render, html } from 'https://unpkg.com/uhtml@3.0.1/esm/index.js?module'
+import './json-viewer.ts'
 import './init-bcp47-picker.ts'
 
 let nextUrl = ''
@@ -96,10 +97,7 @@ const draw = () => {
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <pre>${JSON.stringify(selectedCard, null, 2)}
-            </pre>
-
-            <a class="btn btn-primary" href=${Array.isArray(selectedCard.url) ? selectedCard.url[0] : selectedCard.url} target="_blank">View</a>
+            <json-viewer data=${JSON.stringify(selectedCard)}></json-viewer>
           </div>
           ` : null}
         </div>
