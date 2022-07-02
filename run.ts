@@ -21,15 +21,15 @@ const options: PermissionOptions = {
     'yt.lemnoslife.com',
     ...urls,
   ],
-  read: true,
-  // [
-  //   cache,
-  //   './',
-  //   './scss',
-  //   './env',
-  //   './src/Public/api.js',
-  //   './src/Public/favicon.ico',
-  // ],
+  read:
+  [
+    cache,
+    './',
+    './scss',
+    './env',
+    './src/Public/api.js',
+    './src/Public/favicon.ico',
+  ],
   write: [
     cache,
     './src/Public/style.css'
