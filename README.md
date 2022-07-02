@@ -95,3 +95,18 @@ Would it be possible to subscribe to a search query, so that when new content is
 - Install Deno: https://deno.land/
 - Copy .env.default.ts to .env.ts and configure it
 - deno run --allow-run --allow-env run.ts --watch
+
+# Problems and solutions
+
+<details>
+<summary><strong>A YouTube video is uploaded, used and then taken offline and reuploaded</strong></summary>
+<br>
+
+When using the URL scheme as described at 'Usage statistics for media publishers' a failing URL is notices by the statistics component. Technically we would be able to create a component where people could subscribe to a failing URL. When this URL would be propagated qnot by YouTube itself but by an API of a Media Publisher it is even possible to notify the publisher that media consumers are using their broken URL.
+
+The next step would be to add the broken URL to the list of URL aliasses in the media.bundled repository (not yet existing). That file would be read each time a URL is used that is returning a 404. A challenge there is partitioning. It should be a design requirement that the memory of bundled.media is emptied after each request. We should not have too much memory in use while idle because that would not scale very well. This means that the current solution is only a direction and not a full idea for a solution yet.
+
+The reason for this is: A YouTube URL may be from any Media Publisher. To make the link between these two we could have a map but loading maps of hundredth of thousands of links is not good for the memory. A possible solution is to make these on the hard disk in a way that we can easily resolve. We could base64 encode them and see if the file exists for example.
+
+</details>
+
