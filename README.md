@@ -102,7 +102,7 @@ Would it be possible to subscribe to a search query, so that when new content is
 <summary><strong>A YouTube video is uploaded, used and then taken offline and reuploaded</strong></summary>
 <br>
 
-When using the URL scheme as described at 'Usage statistics for media publishers' a failing URL is notices by the statistics component. Technically we would be able to create a component where people could subscribe to a failing URL. When this URL would be propagated qnot by YouTube itself but by an API of a Media Publisher it is even possible to notify the publisher that media consumers are using their broken URL.
+When using the URL scheme as described at 'Usage statistics for media publishers' a failing URL is noticed by the statistics component. Technically we would be able to create a component where people could subscribe to failing URLs in their DataSource. When this URL would be propagated not by YouTube itself but by an API of a Media Publisher it is even possible to notify the publisher that media consumers are using their broken URL.
 
 The next step would be to add the broken URL to the list of URL aliasses in the media.bundled repository (not yet existing). That file would be read each time a URL is used that is returning a 404. A challenge there is partitioning. It should be a design requirement that the memory of bundled.media is emptied after each request. We should not have too much memory in use while idle because that would not scale very well. This means that the current solution is only a direction and not a full idea for a solution yet.
 
