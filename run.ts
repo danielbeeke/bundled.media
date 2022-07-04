@@ -27,6 +27,7 @@ const options: PermissionOptions = {
     './',
     './scss',
     './env',
+    './README.md',
     './src/Public/api.js',
     './src/Public/favicon.ico',
   ],
