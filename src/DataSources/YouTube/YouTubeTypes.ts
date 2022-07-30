@@ -1,5 +1,6 @@
 import { Thing } from '../../schema.org.ts';
 import { Publisher } from '../../Publishers/Publisher.ts'
+import { BaseDataSourceOptions } from '../../Types/BaseDataSourceOptions.ts'
 
 type YouTubeImage = { url: string, width: number, height: number }
 
@@ -23,7 +24,7 @@ export type YouTubeRawItem = {
   }
 }
 
-export type YouTubeOptions = {
+export type YouTubeOptions = BaseDataSourceOptions & {
   label: string,
   langCode?: string | ((item: Thing) => string),
   key: string,

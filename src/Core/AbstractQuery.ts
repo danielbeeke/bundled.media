@@ -23,8 +23,16 @@ export class AbstractQuery extends EventTarget {
     return this.#params.get('pagination')?.split('|') ?? []
   }
 
+  get categories (): Array<string> {
+    return this.#params.get('categories')?.split('|') ?? []
+  }
+
   get types (): Array<string> {
     return this.#params.get('types')?.split('|') ?? []
+  }
+
+  get size (): number {
+    return this.#params.get('size') ? parseInt(this.#params.get('size')!) : 20
   }
 
   get sources (): Array<string> {

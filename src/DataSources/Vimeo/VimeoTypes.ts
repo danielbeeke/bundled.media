@@ -1,5 +1,6 @@
 import { Thing } from '../../schema.org.ts';
 import { Publisher } from '../../Publishers/Publisher.ts'
+import { BaseDataSourceOptions } from '../../Types/BaseDataSourceOptions.ts'
 
 interface Live {
     streaming: boolean;
@@ -368,7 +369,7 @@ export type VimeoRawItem = {
     has_audio: boolean;
 }
 
-export type VimeoOptions = {
+export type VimeoOptions = BaseDataSourceOptions & {
   label: string,
   langCode?: string | ((item: Thing) => string),
   clientId: string,

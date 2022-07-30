@@ -5,6 +5,7 @@ import { SourcesRoute } from './Sources.ts'
 import { AboutRoute } from './About.ts'
 import { CssRoute } from './Css.ts'
 import { IdRoute } from './Id.ts'
+import { CategoriesRoute } from './Categories.ts'
 
 export default [
   IndexRoute,
@@ -13,5 +14,6 @@ export default [
   TypesRoute,
   SourcesRoute,
   CssRoute,
-  IdRoute
+  IdRoute,
+  CategoriesRoute
 ]

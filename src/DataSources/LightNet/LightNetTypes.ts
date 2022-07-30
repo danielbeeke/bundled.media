@@ -1,4 +1,5 @@
 import { Publisher } from '../../Publishers/Publisher.ts'
+import { BaseDataSourceOptions } from '../../Types/BaseDataSourceOptions.ts'
 
 type Image = {
   height: string,
@@ -24,7 +25,7 @@ export type LightNetRawItem = {
   'authorsData': Array<any>
 }
 
-export type LightNetOptions = {
+export type LightNetOptions = BaseDataSourceOptions & {
   label: string,
   url: string,
   channel: string,

@@ -8,7 +8,7 @@
           "cwd": "${workspaceFolder}",
           "runtimeExecutable": "deno",
           "attachSimplePort": 9229,
-          "program": "${workspaceFolder}/src/Index.ts", 
+          "program": "${workspaceFolder}/src/App.ts", 
           "runtimeArgs": ["run", "--inspect-brk", "--allow-all", "--unstable"],
           "outputCapture": "std",
       }

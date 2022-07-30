@@ -18,6 +18,15 @@ let sources: {
     label: string
   }
 } = {}
+let categories: Array<{
+  uri: string,
+  label: string,
+  slug: string
+}> = []
+
+const defaultSize = 20
+const sizes = [10, 20, 40, 80]
+
 const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 let isFetchingNext = true
 let isFetchingPrevious = false
@@ -29,6 +38,7 @@ const fetchOptions = async (endpoint: string) => {
 
 const fetchTypes = () => fetchOptions('types')
 const fetchSources = () => fetchOptions('sources')
+const fetchCategories = () => fetchOptions('categories')
 
 /**
  * The main fetch function
@@ -38,6 +48,8 @@ const fetchSources = () => fetchOptions('sources')
 const fetchData = async () => {
   if (!Object.keys(types).length) types = await fetchTypes()
   if (!Object.keys(sources).length) sources = await fetchSources()
+  if (!categories.length) categories = await fetchCategories()
+
   const url = new URL(location.toString())
   const response = await fetch(url, { headers: { 'accept': 'application/json' }})
   const json = await response.json()
@@ -71,6 +83,7 @@ const setParameter = (key: string, value: string, clearPagination = false) => {
   if (!url.searchParams.get('langCode')) url.searchParams.delete('langCode')
   if (!url.searchParams.get('types')) url.searchParams.delete('types')
   if (!url.searchParams.get('sources')) url.searchParams.delete('sources')
+  if (!url.searchParams.get('categories')) url.searchParams.delete('categories')
 
   history.pushState({}, '', url)
   isFetchingPrevious = true
@@ -120,11 +133,28 @@ const draw = () => {
     </select>
 
     <select class="form-select type-dropdown" onchange=${(event: InputEvent) => {
+      setParameter('categories', (event.target as HTMLInputElement).value, true)
+    }}>
+      <option selected value="">- all categories -</option>
+      ${Object.values(categories).map(category => html`
+        <option ?selected=${(url.searchParams.get('categories') ?? '').split(',').includes(category.slug)} value=${category.slug}>${category.label}</option>
+      `)}
+    </select>
+
+    <select class="form-select type-dropdown" onchange=${(event: InputEvent) => {
       setParameter('sources', (event.target as HTMLInputElement).value, true)
     }}>
       <option selected value="">- all sources -</option>
       ${Object.values(sources).map(source => html`
         <option ?selected=${(url.searchParams.get('sources') ?? '').split(',').includes(source.uri)} value=${source.uri}>${source.label}</option>
+      `)}
+    </select>
+
+    <select class="form-select type-dropdown" onchange=${(event: InputEvent) => {
+      setParameter('size', (event.target as HTMLInputElement).value, true)
+    }}>
+      ${Object.values(sizes).map(size => html`
+        <option ?selected=${parseInt(url.searchParams.get('size') ?? defaultSize.toString()) === size} value=${size}>${size}</option>
       `)}
     </select>
 
@@ -143,6 +173,10 @@ const draw = () => {
       draw()
       fetchData()
     }} href=${prevUrls.get(location.toString())}>${isFetchingPrevious ? html`Fetching <img src="/images/spin.svg" />` : '< Previous'}</a>
+
+    <button class="btn btn-secondary toggle-menu" onclick=${() => {
+      document.body.classList.toggle('show-menu')
+    }}>menu</button>
 
     <a class=${`btn btn-primary 
         ${isFetchingPrevious || isFetchingNext ? 'disabled' : ''} ${isFetchingNext ? 'is-fetching' : ''} float-end ${!nextUrl ? 'disabled' : ''}`} 
@@ -216,3 +250,4 @@ const draw = () => {
 
 fetchData()
 draw()
+console.log(categories)

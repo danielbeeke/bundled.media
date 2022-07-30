@@ -2,9 +2,10 @@ import { BaseRoute } from './BaseRoute.ts'
 import { dataSources as createDataSources } from '../../.env.ts'
 import { AbstractQuery } from '../Core/AbstractQuery.ts'
 import { BaseDataSource } from '../DataSources/BaseDataSource.ts'
-import { CreativeWork, Organization } from '../schema.org.ts';
+import { CreativeWork, Organization, WithContext } from '../schema.org.ts';
 import { tryToExtractLanguage } from '../Helpers/tryToExtractLanguage.ts'
 import { baseUrl } from '../../.env.ts'
+import { lastPart } from '../Helpers/lastPart.ts';
 
 type DataFetchObject = {
   page: number,
@@ -38,7 +39,11 @@ export class SearchRoute extends BaseRoute {
   async handle () {
     this.#query = new AbstractQuery(this.url)
     this.#sources = createDataSources()
+    // For now categories only work if you have a file added in the .env via augmentedCategoryFiles
+    .filter(source => !this.#query.categories.length || source.options.augmentedCategoryFiles?.length)
+    // Static filter on media types.
     .filter(source => !this.#query.types.length || this.#query.types.some(type => source.types().includes(type)))
+
     this.applyPreviousState(this.#query)
 
     await this.fetchDataForResponse()
@@ -70,31 +75,23 @@ export class SearchRoute extends BaseRoute {
    * Fetch all needed data
    */
   async fetchDataForResponse () {
-    while (this.#sources.some(dataSource => !dataSource.done) && this.getResultCount('all') < this.max) {
+    while (this.#sources.some(dataSource => !dataSource.done) && this.getResultCount('all') < this.#query.size) {
       const finishedSourcesItemCount = this.getResultCount('done')
       // TODO average is probably to low. Investigate how to get a better number.
-      const average = (this.max - finishedSourcesItemCount) / this.#sources.filter(dataSource => !dataSource.done).length
+      const average = (this.#query.size - finishedSourcesItemCount) / this.#sources.filter(dataSource => !dataSource.done).length
+
       const promises = []
 
-      // Add a total counter, otherwise the loop would never end if there are less sources left then the rangeSize
-      let totalCounter = 0
-      let dataSourceCount = 0
-      while (dataSourceCount < this.rangeSize && totalCounter < this.#sources.length) {
+      // Run the amount of the range.
+      for (let i = 0; i < this.rangeSize; i++) {
         const dataSource = this.#sources[this.#lastIndex]
-        if(!dataSource.done && this.getResultCount('all', dataSource) < average) {
-          let sourcePagination = this.#query.pagenation[this.#lastIndex]
 
-          if (['page', 'offset'].includes(dataSource.paginationType) && sourcePagination && typeof sourcePagination === 'string')  {
-            sourcePagination = parseInt(sourcePagination)
-          }
-
-          promises.push(this.fetch(dataSource, this.#query, sourcePagination))
-          dataSourceCount++
+        if (!dataSource.done && this.getResultCount('all', dataSource) < average) {
+          promises.push(this.fetch(dataSource, this.#query, this.#query.pagenation[this.#lastIndex]))
         }
 
         this.#lastIndex = this.#lastIndex === this.#sources.length - 1 ? 0 : this.#lastIndex + 1;
-        totalCounter++
-      }
+      } 
 
       await Promise.all(promises)
     }
@@ -104,7 +101,13 @@ export class SearchRoute extends BaseRoute {
    * Fetches data for one source.
    * Page sizes may differ.
    */
-   fetch (dataSource: BaseDataSource, query: AbstractQuery, offset: undefined | string | number = undefined) {
+  fetch (dataSource: BaseDataSource, query: AbstractQuery, offset: undefined | string | number = undefined) {
+
+    // Assign the right data type to the offset variable.
+    if (['page', 'offset'].includes(dataSource.paginationType) && offset && typeof offset === 'string')  {
+      offset = parseInt(offset)
+    }
+
     const dataSourcefetches: Array<DataFetchObject> = this.#fetches.get(dataSource) ?? []
     const page = dataSourcefetches.length
 
@@ -113,8 +116,8 @@ export class SearchRoute extends BaseRoute {
       filteredItems: [],
       promise: dataSource.fetch(query, page, offset).then((items: Array<any>) => {
         const normalizedItems = items
-          .map((item: any) => this.genericNormalizeItem(dataSource.normalize(item) as CreativeWork, dataSource))
-          
+          .map((item: any) => this.genericNormalizeItem(dataSource.normalize(item) as WithContext<CreativeWork>, dataSource))
+
         dataSourceFetch.filteredItems = this.filter(dataSource, normalizedItems, query)
       })
     }
@@ -128,7 +131,7 @@ export class SearchRoute extends BaseRoute {
   /**
    * A generic normalization.
    */
-  genericNormalizeItem (normalizedItem: CreativeWork, dataSource: BaseDataSource) {
+  genericNormalizeItem (normalizedItem: WithContext<CreativeWork>, dataSource: BaseDataSource) {
     if (!normalizedItem.inLanguage) {
       if (typeof dataSource.options.langCode === 'string')
         normalizedItem.inLanguage = dataSource.options.langCode
@@ -141,7 +144,17 @@ export class SearchRoute extends BaseRoute {
       }
     }
 
-    normalizedItem.publisher = dataSource.publisher as unknown as Organization
+    normalizedItem.publisher = Object.assign({}, dataSource.publisher) as unknown as Organization
+    /** @ts-ignore */
+    if (normalizedItem.publisher.url) normalizedItem.publisher.url = normalizedItem.publisher.url.toString()
+    /** @ts-ignore */
+    normalizedItem['@context'] = 'http://schema.org/'
+
+    if (!('cgt:category' in normalizedItem) && dataSource.categoryMap?.[normalizedItem['@id'] as string]) {
+      /** @ts-ignore */
+      normalizedItem['cgt:category'] = dataSource.categoryMap?.[normalizedItem['@id'] as string]
+    }
+
     return normalizedItem
   }
 
@@ -159,6 +172,9 @@ export class SearchRoute extends BaseRoute {
       (item.name as string).toLocaleLowerCase().includes(query.text) : true)
     .filter((item: CreativeWork) => query.types.length && !dataSource.nativelySupports.types ? 
       query.types.map(type => type.split('/').pop()).includes(item['@type']) : true)
+    .filter((item: CreativeWork) => query.categories.length ? 
+      /** @ts-ignore */
+      item['cgt:category']?.some((category: string) => query.categories.includes('cgt:' + lastPart(category))) : true)
   }
 
   /**
@@ -178,7 +194,7 @@ export class SearchRoute extends BaseRoute {
   aggregateFetchedResults () {
     const items: Array<CreativeWork> = []
 
-    const correctMax = Math.min(this.max, this.getResultCount())
+    const correctMax = Math.min(this.#query.size, this.getResultCount())
     const mergedFilteredItems = new Map()
 
     for (const [dataSource, dataSourcefetches] of this.#fetches.entries())

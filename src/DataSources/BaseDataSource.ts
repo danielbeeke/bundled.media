@@ -1,8 +1,10 @@
 import { AbstractQuery } from '../Core/AbstractQuery.ts'
 import { Thing } from '../schema.org.ts';
 import { Publisher } from '../Publishers/Publisher.ts'
+import { BaseDataSourceOptions } from '../Types/BaseDataSourceOptions.ts'
+import { Parser, Quad } from 'https://cdn.skypack.dev/n3'
 
-export abstract class BaseDataSource<Options = any, RawItem = any, NormalizedItem = Thing> {
+export abstract class BaseDataSource<Options = BaseDataSourceOptions, RawItem = any, NormalizedItem = Thing> {
 
   public paginationType = 'offset'
 
@@ -13,11 +15,46 @@ export abstract class BaseDataSource<Options = any, RawItem = any, NormalizedIte
   public url: URL = new URL('https://example.com')
   public options: Options = {} as Options
   public tokens = new Map()
+  public categoryMap: {
+    [key: string]: Array<string>
+  } = {}
 
   public nativelySupports = {
     text: false,
     langCode: false,
     types: false
+  }
+  constructor (options: Options) {
+    this.options = options
+
+    /** @ts-ignore */
+    if (options.augmentedCategoryFiles?.length) {
+      this.indexCategories()
+    }
+  }
+
+  async indexCategories () {
+    /** @ts-ignore */
+    const promises = this.options.augmentedCategoryFiles.map(async (file: string) => {
+      const categories = await Deno.readTextFile(file)
+      const parser = new Parser()
+      return new Promise((resolve) => {
+        parser.parse(categories, (error: Error, quad: Quad, prefixes: any) => {
+          if (quad) {
+            const uri = quad.subject.value
+            const category = quad.object.value
+
+            if (!this.categoryMap[uri]) this.categoryMap[uri] = []
+            this.categoryMap[uri].push(category)
+          }
+          else {
+            resolve(null)
+          }
+        })  
+      })
+    })
+
+    await Promise.all(promises)
   }
 
   // TODO cache time to live.
@@ -27,10 +64,6 @@ export abstract class BaseDataSource<Options = any, RawItem = any, NormalizedIte
   abstract fetch(query: AbstractQuery, page: number, offset: number | string | undefined): Promise<Array<NormalizedItem>>
 
   abstract types(): Array<string>
-
-  constructor (options: Options) {
-    this.options = options
-  }
 
   identifier () {
     return this.url.toString()

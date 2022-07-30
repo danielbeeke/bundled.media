@@ -84,14 +84,17 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
       }
     })
 
+    const languageIndependantId = `${this.options.url.toString().replace('data', 'rdf')}/contents/${item.type}/${item.id}`
+
     return {
-      '@id': `${this.options.url.toString().replace('data', 'rdf')}/contents/${item.type}/${item.id}:${item.langCode}`,
+      '@id': `${languageIndependantId}:${item.langCode}`,
       '@type': LightNetTypeMapping[item.type],
       'name': item.name,
       'url': item.urls ?? item.src,
       'inLanguage': item.langCode,
       'description': item.description,
       'author': authors,
+      'cgt:category': this.categoryMap?.[languageIndependantId],
       'thumbnail': {
         url: image!.url,
         width: image!.width?.toString(),

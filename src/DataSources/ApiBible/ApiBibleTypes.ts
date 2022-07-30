@@ -1,3 +1,5 @@
+import { BaseDataSourceOptions } from '../../Types/BaseDataSourceOptions.ts'
+
 export type ApiBibleRawItem = {
   id: string,
   dblId: string,
@@ -21,6 +23,6 @@ export type ApiBibleRawItem = {
   audioBibles: Array<any>
 }
 
-export type ApiBibleOptions = {
+export type ApiBibleOptions = BaseDataSourceOptions & {
   key: string,
 }
