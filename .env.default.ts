@@ -19,7 +19,8 @@ export const dataSources = () => [
     channel: 'library',
     types: ['ebook', 'video'],
     limit: 40,
-    publisher: MediaWorks
+    publisher: MediaWorks,
+    augmentedCategoryFiles: ['./data/mediaworks.ttl']
   }),
   new ApiBibleDataSource({
     key: apiBibleKey
