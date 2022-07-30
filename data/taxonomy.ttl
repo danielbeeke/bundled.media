@@ -1,0 +1,43 @@
+@prefix cgt: <http://taxonomy.mediaworks.global/>.
+@prefix schema: <https://schema.org/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+
+cgt:bibles-and-bible-storybooks rdf:type rdfs:Class;
+    rdfs:label "Bibles & Bible Storybooks"@en.
+cgt:devotionals rdf:type rdfs:Class;
+    rdfs:label "Devotionals"@en.
+cgt:children rdf:type rdfs:Class;
+    rdfs:label "Children"@en.
+cgt:biblical-studies rdf:type rdfs:Class;
+    rdfs:label "Biblical Studies"@en.
+cgt:spiritual-growth rdf:type rdfs:Class;
+    rdfs:label "Spiritual Growth"@en.
+cgt:novels rdf:type rdfs:Class;
+    rdfs:label "Novels"@en.
+cgt:educational rdf:type rdfs:Class;
+    rdfs:label "Educational"@en.
+cgt:personal-growth rdf:type rdfs:Class;
+    rdfs:label "Personal Growth"@en.
+cgt:comics-and-graphic-novels rdf:type rdfs:Class;
+    rdfs:label "Comics & Graphic Novels"@en.
+cgt:teens-and-young-adults rdf:type rdfs:Class;
+    rdfs:label "Teens & Young Adults"@en.
+cgt:theology rdf:type rdfs:Class;
+    rdfs:label "Theology"@en.
+cgt:biographies-and-memoirs rdf:type rdfs:Class;
+    rdfs:label "Biographies & Memoirs"@en.
+cgt:support-and-counseling rdf:type rdfs:Class;
+    rdfs:label "Support & Counseling"@en.
+cgt:ministry-and-evangelism rdf:type rdfs:Class;
+    rdfs:label "Ministry & Evangelism"@en.
+cgt:study-materials rdf:type rdfs:Class;
+    rdfs:label "Study Materials"@en.
+cgt:biblical-and-church-history rdf:type rdfs:Class;
+    rdfs:label "Biblical & Church History"@en.
+cgt:ethics-and-social-issues rdf:type rdfs:Class;
+    rdfs:label "Ethics & Social Issues"@en.
+cgt:leadership rdf:type rdfs:Class;
+    rdfs:label "Leadership"@en.
+cgt:family-and-relationships rdf:type rdfs:Class;
+    rdfs:label "Family & Relationships"@en.
