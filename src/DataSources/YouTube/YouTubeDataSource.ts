@@ -28,11 +28,13 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
    */
   async fetch (_query: AbstractQuery, page = 0, offset = '') {
     const channelId = await this.channelNameToPlaylistId(this.options.channel)
+
     const fetchUrl = new URL('https://www.googleapis.com/youtube/v3/playlistItems')
     fetchUrl.searchParams.set('part', 'snippet')
     fetchUrl.searchParams.set('playlistId', channelId)
     fetchUrl.searchParams.set('key', this.options.key)
     fetchUrl.searchParams.set('maxResults', '50')
+    fetchUrl.searchParams.set('fields', 'items(id,snippet(title,resourceId,thumbnails.high))')
 
     if (offset && page === 0) fetchUrl.searchParams.set('pageToken', offset)
     else if (this.tokens.get(page)) fetchUrl.searchParams.set('pageToken', this.tokens.get(page))
@@ -48,6 +50,23 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
 
     if (!response.nextPageToken) this.done = true
     if (response.nextPageToken) this.tokens.set(page + 1, response.nextPageToken)
+
+    const ids = response.items.map((item: YouTubeRawItem) => item.snippet.resourceId.videoId)
+    const videosUrl = new URL('https://www.googleapis.com/youtube/v3/videos')
+    videosUrl.searchParams.set('fields', 'items(id,snippet(defaultAudioLanguage,defaultLanguage))')
+    videosUrl.searchParams.set('part', 'snippet')
+    videosUrl.searchParams.set('id', ids.join(','))
+    videosUrl.searchParams.set('key', this.options.key)
+
+    const videosRequest = await fetched(videosUrl)
+    const videosResponse = await videosRequest.json()
+
+    for (const item of (response?.items ?? [])) {
+      const meta = videosResponse.items.find(metaItem => metaItem.id === item.snippet.resourceId.videoId)
+      item.snippet.defaultAudioLanguage = meta.snippet.defaultAudioLanguage
+      item.snippet.defaultLanguage = meta.snippet.defaultLanguage
+    }
+
     return response?.items ?? []
   }
 
@@ -66,6 +85,7 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
       '@id': `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`,
       'name': Html5Entities.decode(item.snippet.title),
       'description': item.snippet.description,
+      'inLanguage': item.defaultAudioLanguage ?? item.defaultLanguage,
       '@type': 'VideoObject',
       'thumbnail': {
         'url': item.snippet.thumbnails.high.url,

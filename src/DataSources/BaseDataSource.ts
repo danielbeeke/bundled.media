@@ -26,6 +26,7 @@ export abstract class BaseDataSource<Options = BaseDataSourceOptions, RawItem = 
   }
   constructor (options: Options) {
     this.options = options
+    this.publisher = options.publisher
 
     /** @ts-ignore */
     if (options.augmentedCategoryFiles?.length) {

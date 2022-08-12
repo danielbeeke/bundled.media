@@ -21,6 +21,8 @@ export type YouTubeRawItem = {
     channelTitle: string,
     liveBroadcastContent: string,
     publishTime: string
+    defaultAudioLanguage: string,
+    defaultLanguage: string
   }
 }
 
