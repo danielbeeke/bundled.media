@@ -11,7 +11,7 @@ import { cachedir } from 'https://deno.land/x/cache@0.2.13/directories.ts'
 const urls = dataSources().map(source => source.url.hostname).filter(Boolean)
 
 const cache = cachedir()
-
+console.log(cache)
 const options: PermissionOptions = {
   env: true,
   net: [
@@ -19,18 +19,10 @@ const options: PermissionOptions = {
     'deno.land',
     'www.googleapis.com',
     'yt.lemnoslife.com',
+    'unpkg.com',
     ...urls,
   ],
-  read:
-  [
-    cache,
-    './',
-    './scss',
-    './env',
-    './README.md',
-    './src/Public/api.js',
-    './src/Public/favicon.ico',
-  ],
+  read: true,
   write: [
     cache,
     './src/Public/style.css'
@@ -41,5 +33,5 @@ const options: PermissionOptions = {
 }
 
 const flags = generatePermisions(options)
-const p = Deno.run({ cmd: ['deno', 'run', ...flags, 'src/App.ts']})
+const p = Deno.run({ cmd: ['deno', 'run', '--unstable', ...flags, 'src/App.ts']})
 await p.status()

@@ -1,6 +1,6 @@
 import { render, html } from 'https://unpkg.com/uhtml@3.0.1/esm/index.js?module'
-import './json-viewer.ts'
-import './init-bcp47-picker.ts'
+// import './json-viewer.ts'
+// import './init-bcp47-picker.ts'
 
 let nextUrl = ''
 let searchResults: Array<any> = []
