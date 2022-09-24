@@ -20,6 +20,7 @@ const options: PermissionOptions = {
     'www.googleapis.com',
     'yt.lemnoslife.com',
     'unpkg.com',
+    'cdn.jsdelivr.net',
     ...urls,
   ],
   read: true,
