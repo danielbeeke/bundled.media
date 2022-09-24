@@ -15,44 +15,68 @@ export async function serveFileWithTs(
   options?: ServeFileOptions,
 ): Promise<Response> {
   const response = await serveFile(request, filePath, options);
-  // if range request, skip
-  if (response.status === 200) {
-    if (filePath.endsWith(".ts")) {
-      return rewriteTsResponse(response!, tsUrl, filePath);
-    }
+  if (filePath.endsWith('.ts')) {
+    return rewriteTsResponse(response, tsUrl, filePath) as unknown as Response
   }
-  return response;
+  else {
+    return response
+  }
 }
 
-async function rewriteTsResponse(response: Response, url: URL, filePath: string) {
-  const tsCode = await response.text();
-  const jsCode = await transpile(tsCode, url);
+function transpiler () {
+  return {
+    name: 'deno-transpiler',
+    resolveId ( source: string ) {
+      if (source === 'https://unpkg.com/@lit/css-tag.js?module') return 'https://unpkg.com/@lit/reactive-element@1.4.1/css-tag.js?module'
+      if (source.startsWith('./') && source.endsWith('.ts')) {
+        return source
+      }
+    },
+    load ( id: string ) {
+      if (id.startsWith('./') && id.endsWith('.ts')) {
+        const filePath = Deno.cwd() + '/public/' + id.replace('./', '')
+        const tsCode = Deno.readTextFileSync(filePath)
+        return transpile(tsCode, new URL(`src://${id}`));
+      }
+    }
+  };
+}
 
+const jsCache = new Map()
+
+export async function rewriteTsResponse(response: Response, url: URL, filePath: string) {
+  if (!jsCache.has(filePath)) {
+    const tsCode = await response.text();
+    const jsCode = await transpile(tsCode, url);
+  
+    const jsPath = cachedir() + '/' + filePath.replace('.ts', '.js').replace('./public/', '')
+    Deno.writeTextFileSync(jsPath, jsCode)
+  
+    try {
+      const bundle = await rollup({
+        input: jsPath,
+        plugins: [
+          transpiler(),
+          urlResolve()
+        ]
+      })
+    
+      const out = await bundle.generate({})
+
+      jsCache.set(filePath, out.output[0].code)    
+    }
+    catch (exception) {
+      console.error(exception)
+    }
+  }
   const { headers } = response;
   headers.set("content-type", jsContentType);
-  headers.delete("content-length");
-  const jsPath = cachedir() + '/' + filePath.replace('.ts', '.js').replace('./public/', '')
-  Deno.writeTextFileSync(jsPath, jsCode)
 
-  try {
-    const bundle = await rollup({
-      input: jsPath,
-      plugins: [
-        urlResolve()
-      ]
-    })
-
-    const out = await bundle.generate({})
-
-    return new Response(out.output[0].code, {
-      status: response.status,
-      statusText: response.statusText,
-      headers,
-    });
-  }
-  catch (exception) {
-    console.error(exception)
-  }
+  return new Response(jsCache.get(filePath), {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
 }
 
 export { type ServeDirOptions, type ServeFileOptions, transpile };

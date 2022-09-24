@@ -1,5 +1,5 @@
 import { JsonViewer } from 'https://unpkg.com/@alenaksu/json-viewer@1.0.1/dist/JsonViewer.js?module'
-import { html as litHtml, unsafeCSS } from 'https://unpkg.com/lit@2.2.6/index.js?module';
+import { html as litHtml, unsafeCSS } from 'https://unpkg.com/lit/index.js?module';
 
 function isNode(obj: any) {
   return !!obj && !!obj.nodeType;
