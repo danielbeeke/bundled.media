@@ -1,4 +1,4 @@
-export default ({ title, body, importMap }: { title: string, body: string, importMap: any }) => `
+export default ({ title, body, preloadModules }: { title: string, body: string, preloadModules: Array<string> }) => `
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -7,12 +7,10 @@ export default ({ title, body, importMap }: { title: string, body: string, impor
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>${title}</title>
 
-      <script type="importmap">
-      ${JSON.stringify(importMap)}
-      </script>
-      
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-      <link href="/styles.css" rel="stylesheet">
+      ${preloadModules.map((module: string) => `<link rel="preload" href="${module}">`).join('\n')}
+
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" defer rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+      <link href="/styles.css" rel="stylesheet" defer>
     </head>
   <body>
     <div class="p-3 mx-auto">
