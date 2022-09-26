@@ -25,6 +25,7 @@ export async function rewriteTsResponse(response: Response, url: URL) {
   const jsCode = await transpile(tsCode, url);
   const { headers } = response;
   headers.set("content-type", jsContentType);
+
   return new Response(jsCode, {
     status: response.status,
     statusText: response.statusText,

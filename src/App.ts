@@ -4,6 +4,7 @@ import layout from './Templates/layout.ts'
 import { dataSources as createDataSources } from '../.env.ts'
 import { serveFileWithTs } from './Core/ServeTs.ts'
 import { toPathRegex } from './Helpers/toPathRegex.ts'
+import { existsSync } from "https://deno.land/std/fs/mod.ts";
 
 const port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 8080
 serve(serveHttp, { port });
@@ -35,10 +36,12 @@ async function serveHttp(request: Request) {
         body = await initiatedRoute.template({})
       }
       else {
+        const importMap = existsSync('./public/vendor/import_map.json') ? JSON.parse(Deno.readTextFileSync('./public/vendor/import_map.json') ?? '{}') : []
         const variables = await initiatedRoute.htmlVariables()
         const templateResult = await initiatedRoute.template(variables)
         body = layout(Object.assign(variables, {
-          body: templateResult
+          body: templateResult,
+          importMap
         }))  
       }
       return new Response(new TextEncoder().encode(body), { status: 200 })
@@ -61,13 +64,17 @@ async function serveHttp(request: Request) {
 
   // Try static resources.
   try {
-    const file = await Deno.readTextFile('./public' + requestURL.pathname)
-    if (file) {
+    if (existsSync('./public' + requestURL.pathname)) {
       return await serveFileWithTs(request, './public' + requestURL.pathname)
-    }  
+    }
+
+    if (existsSync('./public/vendor' + requestURL.pathname)) {
+      return await serveFileWithTs(request, './public/vendor' + requestURL.pathname)
+    }
+
   }
   catch (exception) {
-    // console.log(exception)
+    console.log(exception)
     // We continue with a 404.
   }
 
