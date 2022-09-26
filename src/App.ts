@@ -66,7 +66,8 @@ async function serveHttp(request: Request) {
       return await serveFileWithTs(request, './public' + requestURL.pathname)
     }  
   }
-  catch {
+  catch (exception) {
+    // console.log(exception)
     // We continue with a 404.
   }
 

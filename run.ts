@@ -11,7 +11,7 @@ import { cachedir } from 'https://deno.land/x/cache@0.2.13/directories.ts'
 const urls = dataSources().map(source => source.url.hostname).filter(Boolean)
 
 const cache = cachedir()
-console.log(cache)
+
 const options: PermissionOptions = {
   env: true,
   net: [
