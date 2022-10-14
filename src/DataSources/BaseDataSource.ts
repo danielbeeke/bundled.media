@@ -4,7 +4,7 @@ import { Publisher } from '../Publishers/Publisher.ts'
 import { BaseDataSourceOptions } from '../Types/BaseDataSourceOptions.ts'
 import { Parser, Quad } from 'https://cdn.skypack.dev/n3'
 
-export abstract class BaseDataSource<Options = BaseDataSourceOptions, RawItem = any, NormalizedItem = Thing> {
+export abstract class BaseDataSource<Options extends BaseDataSourceOptions = BaseDataSourceOptions, RawItem = any, NormalizedItem = Thing> {
 
   public paginationType = 'offset'
 
@@ -27,6 +27,7 @@ export abstract class BaseDataSource<Options = BaseDataSourceOptions, RawItem = 
   constructor (options: Options) {
     this.options = options
     this.publisher = options.publisher
+    this.label = options.label
 
     /** @ts-ignore */
     if (options.augmentedCategoryFiles?.length) {
@@ -62,7 +63,7 @@ export abstract class BaseDataSource<Options = BaseDataSourceOptions, RawItem = 
 
   abstract normalize(item: RawItem): NormalizedItem
 
-  abstract fetch(query: AbstractQuery, page: number, offset: number | string | undefined): Promise<Array<NormalizedItem>>
+  abstract fetch(query: AbstractQuery, page: number, offset: number | string | undefined): Promise<Array<any>>
 
   abstract types(): Array<string>
 
