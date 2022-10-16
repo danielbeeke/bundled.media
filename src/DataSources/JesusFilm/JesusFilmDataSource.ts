@@ -24,7 +24,7 @@ export class JesusFilmDataSource extends BaseDataSource<JesusFilmOptions, JesusF
   }
 
   async fetch (query: AbstractQuery, page = 0, offset = 0) {
-    const langCode = query.langCode ?? 'en'
+    const langCode = query.langCode ? query.langCode : 'en'
 
     const languageIds = await this.getLanguageIdsByBcp47(langCode)
 
@@ -127,7 +127,7 @@ export class JesusFilmDataSource extends BaseDataSource<JesusFilmOptions, JesusF
       '@type': 'VideoObject',
       'name': item.title,
       'url': item.urls,
-      'inLanguage': item.bcp47,
+      'inLanguage': item.bcp47 ?? 'en',
       'description': item.longDescription,
       // 'author': authors,
       // 'cgt:category': this.categoryMap?.[languageIndependantId],
