@@ -11,6 +11,10 @@ export class AbstractQuery extends EventTarget {
     // TODO throw a fatal when the URL is invalid.
   }
 
+  get params () {
+    return this.#params
+  }
+
   get text (): string {
     return this.#params.get('text')?.toLocaleLowerCase() ?? ''
   }

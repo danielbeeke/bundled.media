@@ -37,7 +37,7 @@ export class VoiceOfTheMartyrsDataSource extends BaseDataSource<VoiceOfTheMartyr
     const document = new DOMParser().parseFromString(homepage, 'text/html')!
     const languagePicker = document.querySelector('.language-picker')!
     const anchors = languagePicker.querySelectorAll('li a')
-    return [...anchors].map(anchor => anchor.getAttribute('href').replaceAll('/', '')).filter(Boolean)
+    return [...anchors].map(anchor => (anchor as Element)?.getAttribute('href')?.replaceAll('/', ''))?.filter(Boolean)
   }
 
   async getLanguagePage (langCode: string) {
@@ -45,7 +45,8 @@ export class VoiceOfTheMartyrsDataSource extends BaseDataSource<VoiceOfTheMartyr
     const languagePage = await response.text()
     const document = new DOMParser().parseFromString(languagePage, 'text/html')!
     const anchors = document.querySelectorAll('#all-videos .product-title')
-    const links = [...anchors].map(anchor => anchor.getAttribute('href')).filter(Boolean).map((link: string) => `https://www.vm1.tv/watch/${link.split('/').pop()}`)
+    /** @ts-ignore */
+    const links = [...anchors].map(anchor => (anchor as Element).getAttribute('href')).filter(Boolean).map((link: string) => `https://www.vm1.tv/watch/${link.split('/').pop()}`)
 
 
     return links.map(link => () => this.getVideoPage(link, langCode))
@@ -58,7 +59,7 @@ export class VoiceOfTheMartyrsDataSource extends BaseDataSource<VoiceOfTheMartyr
 
     const title = document.querySelector('meta[property="og:title"]')!.getAttribute('content')
     const description = document.querySelector('meta[property="og:description"]')!.getAttribute('content')
-    const downloads = [...document.querySelectorAll('#downloads-modal a')].map(link => link.getAttribute('href'))
+    const downloads = [...document.querySelectorAll('#downloads-modal a')].map(link => (link as Element).getAttribute('href'))
     
     let thumbnail: string = ''
     let sources = []
