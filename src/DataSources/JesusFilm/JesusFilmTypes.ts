@@ -23,6 +23,7 @@ export type JesusFilmRawItem = {
   streamingUrls: {
     m3u8: Array<{ url: string }>
   },
+  id: string, // Added bu us.
   bcp47: string, // Added by us.
   lengthInMilliseconds: number,
   containsCount: number,
@@ -39,14 +40,4 @@ export type JesusFilmRawItem = {
 
 export type JesusFilmOptions = BaseDataSourceOptions & {
   key: string,
-}
-
-export const JesusFilmTypeMapping = {
-  'video': 'VideoObject' as const,
-  'ebook': 'Book' as const
-}
-
-export const JesusFilmSchemaTypeMapping: { [key: string]: string } = {
-  'https://schema.org/VideoObject': 'video',
-  'https://schema.org/Book': 'ebook'
 }

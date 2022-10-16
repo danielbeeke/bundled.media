@@ -7,6 +7,8 @@ type YouTubeImage = { url: string, width: number, height: number }
 export type YouTubeRawItem = {
   kind: string,
   etag: string,
+  defaultAudioLanguage: string,
+  defaultLanguage: string,
   snippet: {
     resourceId: { kind: string, videoId?: string, playlistId?: string },
     publishedAt: string,

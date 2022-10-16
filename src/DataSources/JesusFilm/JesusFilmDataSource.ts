@@ -1,7 +1,7 @@
 import { BaseDataSource } from '../BaseDataSource.ts'
 import { AbstractQuery } from '../../Core/AbstractQuery.ts'
-import { Thing, VideoObject, Book, ImageObject } from '../../schema.org.ts';
-import { JesusFilmTypeMapping, JesusFilmSchemaTypeMapping, JesusFilmOptions, JesusFilmRawItem } from './JesusFilmTypes.ts'
+import { Thing, VideoObject, ImageObject } from '../../schema.org.ts';
+import { JesusFilmOptions, JesusFilmRawItem } from './JesusFilmTypes.ts'
 import { fetched } from '../../Helpers/fetched.ts'
 
 const languagesMap = new Map()
@@ -24,12 +24,9 @@ export class JesusFilmDataSource extends BaseDataSource<JesusFilmOptions, JesusF
   }
 
   async fetch (query: AbstractQuery, page = 0, offset = 0) {
-    if (!query.langCode) {
-      this.done = true
-      return []
-    }
+    const langCode = query.langCode ?? 'en'
 
-    const languageIds = await this.getLanguageIdsByBcp47(query.langCode)
+    const languageIds = await this.getLanguageIdsByBcp47(langCode)
 
     if (!languageIds) {
       this.done = true
@@ -40,10 +37,9 @@ export class JesusFilmDataSource extends BaseDataSource<JesusFilmOptions, JesusF
 
     fetchUrl.searchParams.set('subTypes', 'featureFilm')
     fetchUrl.searchParams.set('filter', 'default')
-    fetchUrl.searchParams.set('metadataLanguageTags', `${query.langCode},en`)    
+    fetchUrl.searchParams.set('metadataLanguageTags', `${langCode},en`)    
     fetchUrl.searchParams.set('apiKey', this.key)
     fetchUrl.searchParams.set('languageIds', languageIds.join(','))
-
     fetchUrl.searchParams.set('page', ((offset / 10) + page + 1).toString())
     fetchUrl.searchParams.set('limit', '10')    
 
@@ -61,11 +57,11 @@ export class JesusFilmDataSource extends BaseDataSource<JesusFilmOptions, JesusF
     }
 
     const promises = items.filter((item: { mediaComponentId: string, downloads: any }) => item.mediaComponentId)
-    .map(async (item: { mediaComponentId: string, subtitles: any, urls: any, bcp47: string }) => {
-      const { urls, subtitles, id } = await this.getLocalizedItem(item.mediaComponentId, languageIds, query.langCode)
+    .map(async (item: { mediaComponentId: string, subtitles: any, urls: any, bcp47: string, id: string }) => {
+      const { urls, subtitles, id } = await this.getLocalizedItem(item.mediaComponentId, languageIds, langCode)
       item.urls = urls
       item.subtitles = subtitles
-      item.bcp47 = query.langCode
+      item.bcp47 = langCode
       item.id = id
       return item
     })

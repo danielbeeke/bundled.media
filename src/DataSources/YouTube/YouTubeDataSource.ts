@@ -34,10 +34,12 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
     fetchUrl.searchParams.set('playlistId', channelId)
     fetchUrl.searchParams.set('key', this.options.key)
     fetchUrl.searchParams.set('maxResults', '50')
-    fetchUrl.searchParams.set('fields', 'items(id,snippet(title,resourceId,thumbnails.high))')
+    fetchUrl.searchParams.set('fields', 'nextPageToken,items(id,snippet(title,resourceId,thumbnails.high))')
 
     if (offset && page === 0) fetchUrl.searchParams.set('pageToken', offset)
     else if (this.tokens.get(page)) fetchUrl.searchParams.set('pageToken', this.tokens.get(page))
+
+    if (page && !this.tokens.get(page)) return []
 
     const request = await fetched(fetchUrl)
     const response = await request.json()
@@ -53,7 +55,7 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
 
     const ids = response.items.map((item: YouTubeRawItem) => item.snippet.resourceId.videoId)
     const videosUrl = new URL('https://www.googleapis.com/youtube/v3/videos')
-    videosUrl.searchParams.set('fields', 'items(id,snippet(defaultAudioLanguage,defaultLanguage))')
+    videosUrl.searchParams.set('fields', 'nextPageToken,items(id,snippet(defaultAudioLanguage,defaultLanguage))')
     videosUrl.searchParams.set('part', 'snippet')
     videosUrl.searchParams.set('id', ids.join(','))
     videosUrl.searchParams.set('key', this.options.key)
@@ -62,7 +64,7 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
     const videosResponse = await videosRequest.json()
 
     for (const item of (response?.items ?? [])) {
-      const meta = videosResponse.items.find(metaItem => metaItem.id === item.snippet.resourceId.videoId)
+      const meta = videosResponse.items.find((metaItem: any) => metaItem.id === item.snippet.resourceId.videoId)
       item.snippet.defaultAudioLanguage = meta.snippet.defaultAudioLanguage
       item.snippet.defaultLanguage = meta.snippet.defaultLanguage
     }

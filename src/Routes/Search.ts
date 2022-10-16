@@ -44,6 +44,8 @@ export class SearchRoute extends BaseRoute {
     // Static filter on media types.
     .filter(source => !this.#query.types.length || this.#query.types.some(type => source.types().includes(type)))
 
+    this.rangeSize = Math.min(this.#sources.length, 3)
+
     this.applyPreviousState(this.#query)
 
     await this.fetchDataForResponse()
