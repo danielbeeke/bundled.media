@@ -28,7 +28,7 @@ export class JesusFilmDataSource extends BaseDataSource<JesusFilmOptions, JesusF
 
     const languageIds = await this.getLanguageIdsByBcp47(langCode)
 
-    if (!languageIds) {
+    if (!languageIds?.length) {
       this.done = true
       return []
     }
@@ -107,15 +107,17 @@ export class JesusFilmDataSource extends BaseDataSource<JesusFilmOptions, JesusF
   
       if (!languagesMap.has(bcp47)) languagesMap.set(bcp47, [])
   
-      for (const language of languages) {
-        const bcp47Matches = languagesMap.get(bcp47)
-        if (!bcp47Matches.includes(language.languageId)) {
-          bcp47Matches.push(language.languageId)
-        }
-      }  
+      if (languages) {
+        for (const language of languages) {
+          const bcp47Matches = languagesMap.get(bcp47)
+          if (!bcp47Matches.includes(language.languageId)) {
+            bcp47Matches.push(language.languageId)
+          }
+        }    
+      }
     }
 
-    return languagesMap.get(bcp47)
+    return languagesMap.get(bcp47) ?? []
   }
 
   /**

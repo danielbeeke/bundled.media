@@ -16,12 +16,16 @@ export class VoiceOfTheMartyrsDataSource extends BaseDataSource<VoiceOfTheMartyr
     types: true
   }
 
-  async fetch (query: AbstractQuery, page = 0, offset = '') {
-    this.done = true
-    const languages = query.langCode ? [query.langCode] : await this.getLanguages()
-    const promises = languages.map(async (langCode) => await this.getLanguagePage(langCode))
-    const results = await Promise.all(promises)
-    return results.flatMap(item => item)
+  async fetch (query: AbstractQuery, page = 0, offset = 0) {
+    const languages = query.langCode ? [query.langCode] : ['en']
+    const languageGetters = (await Promise.all(languages.map(async (langCode) => await this.getLanguagePage(langCode)))).flat()
+    const getters = languageGetters.slice(offset, offset + query.size)
+
+    if (getters.length < query.size) {
+      this.done = true
+    }
+
+    return await Promise.all(getters.map(getter => getter()))
   }
 
   async getLanguages () {
@@ -38,10 +42,10 @@ export class VoiceOfTheMartyrsDataSource extends BaseDataSource<VoiceOfTheMartyr
     const languagePage = await response.text()
     const document = new DOMParser().parseFromString(languagePage, 'text/html')!
     const anchors = document.querySelectorAll('#all-videos .product-title')
-    const links = [...anchors].map(anchor => anchor.getAttribute('href')).filter(Boolean).slice(0, 10)
+    const links = [...anchors].map(anchor => anchor.getAttribute('href')).filter(Boolean).map((link: string) => `https://www.vm1.tv/watch/${link.split('/').pop()}`)
 
-    const results = await Promise.all(links.map(link => this.getVideoPage(link, langCode)))
-    return results.filter(Boolean)
+
+    return links.map(link => () => this.getVideoPage(link, langCode))
   }
 
   async getVideoPage (url: string, langCode: string) {
@@ -66,7 +70,6 @@ export class VoiceOfTheMartyrsDataSource extends BaseDataSource<VoiceOfTheMartyr
       }
     }
     catch (exception) {
-      console.log(exception)
       return null
     }
 
