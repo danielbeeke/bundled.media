@@ -19,11 +19,14 @@ export class VoiceOfTheMartyrsDataSource extends BaseDataSource<VoiceOfTheMartyr
   async fetch (query: AbstractQuery, page = 0, offset = 0) {
     const languages = query.langCode ? [query.langCode] : ['en']
     const languageGetters = (await Promise.all(languages.map(async (langCode) => await this.getLanguagePage(langCode)))).flat()
-    const getters = languageGetters.slice(offset, offset + query.size)
+    const calculatedOffset = (page * query.size) + offset
+    const getters = languageGetters.slice(calculatedOffset, calculatedOffset + query.size)
 
-    if (getters.length < query.size) {
+    if (getters.length < query.size || !getters.length) {
       this.done = true
     }
+
+    console.log(page, offset)
 
     return await Promise.all(getters.map(getter => getter()))
   }
