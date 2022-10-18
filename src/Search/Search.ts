@@ -181,7 +181,7 @@ export class Search {
       query.types.map(type => type.split('/').pop()).includes(item['@type']) : true)
     .filter((item: CreativeWork) => query.categories.length ? 
       /** @ts-ignore */
-      item['http://taxonomy.mediaworks.global/category']?.some((category: string) => query.categories.includes('http://taxonomy.mediaworks.global/' + lastPart(category))) : true)
+      item['http://taxonomy.mediaworks.global/category']?.some((category: string) => query.categories.includes('http://taxonomy.mediaworks.global/' + lastPart(category['@id']))) : true)
   }
 
   /**
