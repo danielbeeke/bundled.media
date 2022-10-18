@@ -86,21 +86,27 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
 
     const languageIndependantId = `${this.options.url.toString().replace('data', 'rdf')}/contents/${item.type}/${item.id}`
 
-    return {
-      '@id': `${languageIndependantId}:${item.langCode}`,
+    const object = {
+      '@id': `${languageIndependantId}/${item.langCode}`,
       '@type': LightNetTypeMapping[item.type],
       'name': item.name,
       'url': item.urls ?? item.src,
       'inLanguage': item.langCode,
       'description': item.description,
       'author': authors,
-      'cgt:category': this.categoryMap?.[languageIndependantId],
       'thumbnail': {
         url: image!.url,
         width: image!.width?.toString(),
         height: image!.height?.toString()
       },
     } as VideoObject | Book
+
+    if (this.categoryMap?.[languageIndependantId]) {
+      /** @ts-ignore */
+      object['http://taxonomy.mediaworks.global/category'] = this.categoryMap?.[languageIndependantId].map(item => ({ '@id': item}))
+    }
+
+    return object
   }
 
   /**
@@ -108,13 +114,13 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
    */
   types () {
     return this.options.types
-    .map(type => `https://schema.org/${LightNetTypeMapping[type]}`)
+    .map(type => `http://schema.org/${LightNetTypeMapping[type]}`)
   }
 
   async resolveId (id: string) {
     const isOurs = id.includes(this.options.url.toString().replace('data', 'rdf'))
     if (isOurs) {
-      const [lightNetId, langCode] = id.split('/').pop()!.split(':')
+      const [lightNetId, langCode] = id.split('/').pop()!.split('|')
       const fetchUrl = new URL(`${this.options.url}/${this.options.channel}/${this.options.types.join(',')}`)
       fetchUrl.searchParams.set('filter[id]', lightNetId)
       fetchUrl.searchParams.set('langCode', langCode)

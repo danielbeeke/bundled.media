@@ -251,4 +251,3 @@ const draw = () => {
 
 fetchData()
 draw()
-console.log(categories)

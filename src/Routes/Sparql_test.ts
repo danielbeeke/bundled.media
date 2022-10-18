@@ -6,22 +6,24 @@ const route = new SparqlRoute(new Request('https://example.com/test'), {})
 
 const testQuery = `
   PREFIX bm: <https://bundled.media#>
-  PREFIX schema: <https://schema.org/>
-  PREFIX cgt: <http://taxonomy.mediaworks.global/>
+  PREFIX schema: <http://schema.org/>
+  PREFIX http://taxonomy.mediaworks.global/ <http://taxonomy.mediaworks.global/>
 
   SELECT * WHERE {
     ?s bm:text "David" .
-    ?s bm:types schema:Book .
-    ?s bm:langCode "az" .
-    ?s bm:categories cgt:biographies-and-memoirs .
+    ?s a schema:Book .
+    FILTER(langMatches(?language, "az"))
+    ?s bm:category http://taxonomy.mediaworks.global/biographies-and-memoirs .
   } LIMIT 10
 `
 
 describe('parse query', () => {
-  it('parses the filters out of a SPARQL query', async () => {
-    const results = await route.execute(testQuery)
-    console.log(results)
-    // assertEquals(quads.length, 14)
+  it('parses the filters out of a SPARQL query', () => {
+    const query = route.parseQuery(testQuery)
+    assertEquals(query.types, [ "http://schema.org/Book" ])
+    assertEquals(query.text, 'david')
+    assertEquals(query.langCode, 'az')
+    assertEquals(query.categories, ['http://taxonomy.mediaworks.global/biographies-and-memoirs'])
   })
 
 })

@@ -66,7 +66,7 @@ export class VimeoDataSource extends BaseDataSource<VimeoOptions, VimeoRawItem, 
   }
 
   types () {
-    return ['https://schema.org/VideoObject']
+    return ['http://schema.org/VideoObject']
   }
 
   resolveId (id: string) {

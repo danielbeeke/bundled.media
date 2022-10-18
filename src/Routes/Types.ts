@@ -2,8 +2,8 @@ import { BaseRoute } from './BaseRoute.ts'
 import { dataSources as createDataSources } from '../../.env.ts'
 
 const typeLabels: { [key: string]: string } = {
-  'https://schema.org/Book': 'Book',
-  'https://schema.org/VideoObject': 'Video',
+  'http://schema.org/Book': 'Book',
+  'http://schema.org/VideoObject': 'Video',
 }
 
 export class TypesRoute extends BaseRoute {

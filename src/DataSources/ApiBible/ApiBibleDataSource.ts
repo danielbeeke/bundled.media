@@ -51,7 +51,7 @@ export class ApiBibleDataSource extends BaseDataSource<ApiBibleOptions, ApiBible
   }
 
   types () {
-    return ['https://schema.org/Book']
+    return ['http://schema.org/Book']
   }
 
   async resolveId (id: string) {

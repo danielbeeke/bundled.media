@@ -22,6 +22,7 @@ const options: PermissionOptions = {
     'yt.lemnoslife.com',
     'unpkg.com',
     'cdn.jsdelivr.net',
+    'schema.org',
     ...urls,
   ],
   read: true,

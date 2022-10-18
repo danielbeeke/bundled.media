@@ -151,11 +151,15 @@ export class Search {
     /** @ts-ignore */
     if (normalizedItem.publisher.url) normalizedItem.publisher.url = normalizedItem.publisher.url.toString()
     /** @ts-ignore */
-    normalizedItem['@context'] = 'http://schema.org/'
+    normalizedItem['@context'] = {
+      '@vocab': 'http://schema.org/',
+      'schema': 'http://schema.org/',
+      'cgt': 'http://taxonomy.mediaworks.global/'
+    }
 
-    if (!('cgt:category' in normalizedItem) && dataSource.categoryMap?.[normalizedItem['@id'] as string]) {
+    if (!('http://taxonomy.mediaworks.global/category' in normalizedItem) && dataSource.categoryMap?.[normalizedItem['@id'] as string]) {
       /** @ts-ignore */
-      normalizedItem['cgt:category'] = dataSource.categoryMap?.[normalizedItem['@id'] as string]
+      normalizedItem['http://taxonomy.mediaworks.global/category'] = dataSource.categoryMap?.[normalizedItem['@id'] as string].map(item => ({ '@id': item}))
     }
 
     return normalizedItem
@@ -177,7 +181,7 @@ export class Search {
       query.types.map(type => type.split('/').pop()).includes(item['@type']) : true)
     .filter((item: CreativeWork) => query.categories.length ? 
       /** @ts-ignore */
-      item['cgt:category']?.some((category: string) => query.categories.includes('cgt:' + lastPart(category))) : true)
+      item['http://taxonomy.mediaworks.global/category']?.some((category: string) => query.categories.includes('http://taxonomy.mediaworks.global/' + lastPart(category))) : true)
   }
 
   /**

@@ -101,7 +101,7 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
   }
 
   types () {
-    return ['https://schema.org/VideoObject']
+    return ['http://schema.org/VideoObject']
   }
 
   identifier () {

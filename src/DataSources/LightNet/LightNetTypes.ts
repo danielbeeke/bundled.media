@@ -40,6 +40,6 @@ export const LightNetTypeMapping = {
 }
 
 export const LightNetSchemaTypeMapping: { [key: string]: string } = {
-  'https://schema.org/VideoObject': 'video',
-  'https://schema.org/Book': 'ebook'
+  'http://schema.org/VideoObject': 'video',
+  'http://schema.org/Book': 'ebook'
 }

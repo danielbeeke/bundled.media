@@ -132,7 +132,7 @@ export class JesusFilmDataSource extends BaseDataSource<JesusFilmOptions, JesusF
       'inLanguage': item.bcp47 ?? 'en',
       'description': item.longDescription,
       // 'author': authors,
-      // 'cgt:category': this.categoryMap?.[languageIndependantId],
+      // 'http://taxonomy.mediaworks.global/category': this.categoryMap?.[languageIndependantId],
       'thumbnail': {
         "@type": "ImageObject",
         url: item.imageUrls!.videoStill ?? item.imageUrls!.mobileCinematicHigh ?? item.imageUrls!.thumbnail,
@@ -144,7 +144,7 @@ export class JesusFilmDataSource extends BaseDataSource<JesusFilmOptions, JesusF
    * Returns schema.org normalized types.
    */
   types () {
-    return ['https://schema.org/VideoObject']
+    return ['http://schema.org/VideoObject']
   }
 
   resolveId (id: string) {

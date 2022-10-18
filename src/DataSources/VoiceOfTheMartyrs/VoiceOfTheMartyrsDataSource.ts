@@ -112,7 +112,7 @@ export class VoiceOfTheMartyrsDataSource extends BaseDataSource<VoiceOfTheMartyr
   }
 
   types () {
-    return ['https://schema.org/VideoObject']
+    return ['http://schema.org/VideoObject']
   }
 
   identifier () {

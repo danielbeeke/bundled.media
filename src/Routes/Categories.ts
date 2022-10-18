@@ -31,7 +31,7 @@ export class CategoriesRoute extends BaseRoute {
       output.push({
         uri,
         label: binding.get('label').value,
-        slug: 'cgt:' + lastPart(uri) // TODO cleanup, use a context to compact the URI.
+        slug: 'http://taxonomy.mediaworks.global/' + lastPart(uri) // TODO cleanup, use a context to compact the URI.
       })
     }
 
