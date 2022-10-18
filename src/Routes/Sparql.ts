@@ -4,7 +4,7 @@ import { Parser as SparqlParser, Generator as SparqlGenerator } from 'https://es
 import { walker } from '../Helpers/walker.ts'
 import { AbstractQuery } from '../Core/AbstractQuery.ts'
 import { Search } from '../Search/Search.ts'
-import { JSONLD } from "https://taisukef.github.io/jsonld-es/JSONLD.js";
+import { JSONLD } from 'https://taisukef.github.io/jsonld-es/JSONLD.js'
 import { QueryEngine } from '../Vendor/comunica-browser.js'
 import { streamToString } from '../Helpers/streamToString.ts'
 
