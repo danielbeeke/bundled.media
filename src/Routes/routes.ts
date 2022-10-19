@@ -7,6 +7,7 @@ import { CssRoute } from './Css.ts'
 import { IdRoute } from './Id.ts'
 import { CategoriesRoute } from './Categories.ts'
 import { SparqlRoute } from './Sparql.ts'
+import { ThumbRoute } from './Thumb.ts'
 
 export default [
   IndexRoute,
@@ -17,5 +18,6 @@ export default [
   CssRoute,
   IdRoute,
   CategoriesRoute,
-  SparqlRoute
+  SparqlRoute,
+  ThumbRoute
 ]

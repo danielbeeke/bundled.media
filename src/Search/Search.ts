@@ -44,6 +44,8 @@ export class Search {
     .filter(source => !this.#query.categories.length || source.options.augmentedCategoryFiles?.length)
     // Static filter on media types.
     .filter(source => !this.#query.types.length || this.#query.types.some(type => source.types().includes(type)))
+    // Source filter
+    .filter(source => this.#query.sources.length ? this.#query.sources.includes(source.identifier()) : true)
 
     this.rangeSize = Math.min(this.#sources.length, 3) // Token based sources can only be used once per range.
 
@@ -173,8 +175,6 @@ export class Search {
     return normalizedItems
     .filter((item: CreativeWork) => query.langCode && !dataSource.nativelySupports.langCode ? 
       query.langCode.includes(item.inLanguage as string) : true)
-    .filter((_item: CreativeWork) => query.sources.length ? 
-      query.sources.includes(dataSource.identifier()) : true)
     .filter((item: CreativeWork) => query.text && !dataSource.nativelySupports.text ? 
       (item.name as string).toLocaleLowerCase().includes(query.text) : true)
     .filter((item: CreativeWork) => query.types.length && !dataSource.nativelySupports.types ? 

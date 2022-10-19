@@ -26,8 +26,6 @@ export class VoiceOfTheMartyrsDataSource extends BaseDataSource<VoiceOfTheMartyr
       this.done = true
     }
 
-    console.log(page, offset)
-
     return await Promise.all(getters.map(getter => getter()))
   }
 

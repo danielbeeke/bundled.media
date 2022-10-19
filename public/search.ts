@@ -200,21 +200,32 @@ const draw = () => {
       image = 'https://images.unsplash.com/photo-1499652848871-1527a310b13a'
     }
 
+    let video = ''
+    if (!image) {
+      video = item['url']?.find((url: { '@id': string }) => url?.['@id']?.endsWith('.mp4'))?.['@id']
+      image = `http://${location.hostname}:${location.port}/thumb/${video}`
+    }
+
+    const mediaIcon = html`<div class="type-icon" ref=${async (element: HTMLDivElement) => {
+      const response = await fetch(`/images/${item['@type'].toLowerCase()}.svg`)
+      const svgData = await response.text()
+      element.innerHTML = svgData
+    }} src=${`/images/${item['@type'].toLowerCase()}.svg`}></div>`
+
+    const languageLabel = html`<span class="badge rounded-pill text-bg-light language-label">${item.inLanguage}</span>   `
+
+    const imageFooter = html`${mediaIcon}${languageLabel}`
+
     return html`<div onclick=${() => {
       selectedCard = item
       draw()
     }} data-bs-toggle="modal" data-bs-target="#infoModal" 
-      class=${`card ${item['@type'].toLowerCase()} ${!item.thumbnail?.url  && item['@type'] === 'Book' ? 'bible' : ''}`}>
+      class=${`card ${item['@type'].toLowerCase()} ${!image && item['@type'] === 'Book' ? 'bible' : ''}`}>
       ${image ? html`
         <div class="image-wrapper">
-          <div class="type-icon" ref=${async (element: HTMLDivElement) => {
-            const response = await fetch(`/images/${item['@type'].toLowerCase()}.svg`)
-            const svgData = await response.text()
-            element.innerHTML = svgData
-          }} src=${`/images/${item['@type'].toLowerCase()}.svg`}></div>
-          <span class="badge rounded-pill text-bg-light language-label">${item.inLanguage}</span>   
+          ${imageFooter}
           <img ref=${(element: HTMLImageElement) => {
-            const url = `//images.weserv.nl/?url=${image}&h=200${item['@type'] === 'VideoObject' ? '' : ''}`
+            const url = image.includes('localhost') ? image : `//images.weserv.nl/?url=${image}&h=200${item['@type'] === 'VideoObject' ? '' : ''}`
             element.classList.add('loading')
 
             element.src = ''
@@ -226,6 +237,18 @@ const draw = () => {
             })
           }} class=${`image loading`} alt=${item.name}>            
         </div>
+      ` : null}
+
+      ${!image && video ? html`
+          <div class="image-wrapper">
+          ${imageFooter}
+
+            <video class="image" onloadeddata=${(event) => {  
+              // event.target.currentTime = 10;
+            }}>
+              <source src=${`${video}#t=10`}>
+            </video>
+          </div>
       ` : null}
       <div class="card-body">
         <h5 class="card-title">${item.name}</h5>

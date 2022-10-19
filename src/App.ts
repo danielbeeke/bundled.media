@@ -50,6 +50,7 @@ async function serveHttp(request: Request) {
     // This is the JSON output of endpoints.
     try {
       const output = await initiatedRoute.handle()
+      console.log(output)
       return new Response(matchedRoute.mime === 'application/json' ? JSON.stringify(output, null, 2) : output, {
         headers: { 'Content-Type': matchedRoute.mime }
       })
