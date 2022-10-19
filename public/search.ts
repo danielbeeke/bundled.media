@@ -203,7 +203,7 @@ const draw = () => {
     let video = ''
     if (!image) {
       video = item['url']?.find((url: { '@id': string }) => url?.['@id']?.endsWith('.mp4'))?.['@id']
-      image = `http://${location.hostname}${location.port ? `:${location.port}` : ''}/thumb/${video}`
+      image = `https://${location.hostname}${location.port ? `:${location.port}` : ''}/thumb/${video}`
     }
 
     const mediaIcon = html`<div class="type-icon" ref=${async (element: HTMLDivElement) => {
