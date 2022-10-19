@@ -18,7 +18,7 @@ export class ThumbRoute extends BaseRoute {
    * We create a fresh set of dataSources and then fetch results.
    */
   async handle () {
-    const thumb = await thumbnailer(this.params.url, null, '600x?', { seek: '00:00:00' })
+    const thumb = await thumbnailer(this.params.url, null, '600x?', { seek: '00:00:01' })
     return nodeToWebStream(thumb)
   }
 
