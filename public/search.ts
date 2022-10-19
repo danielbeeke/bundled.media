@@ -203,7 +203,7 @@ const draw = () => {
     let video = ''
     if (!image) {
       video = item['url']?.find((url: { '@id': string }) => url?.['@id']?.endsWith('.mp4'))?.['@id']
-      image = `https://${location.hostname}${location.port ? `:${location.port}` : ''}/thumb/${video}`
+      image = `${location.protocol}://${location.hostname}${location.port ? `:${location.port}` : ''}/thumb/${video}`
     }
 
     const mediaIcon = html`<div class="type-icon" ref=${async (element: HTMLDivElement) => {
@@ -220,7 +220,7 @@ const draw = () => {
       selectedCard = item
       draw()
     }} data-bs-toggle="modal" data-bs-target="#infoModal" 
-      class=${`card ${item['@type'].toLowerCase()} ${!image && item['@type'] === 'Book' ? 'bible' : ''}`}>
+      class=${`card ${item['@type'].toLowerCase()} ${!item.thumbnail?.url && item['@type'] === 'Book' ? 'bible' : ''}`}>
       ${image ? html`
         <div class="image-wrapper">
           ${imageFooter}

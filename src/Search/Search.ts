@@ -176,7 +176,7 @@ export class Search {
     .filter((item: CreativeWork) => query.langCode && !dataSource.nativelySupports.langCode ? 
       query.langCode.includes(item.inLanguage as string) : true)
     .filter((item: CreativeWork) => query.text && !dataSource.nativelySupports.text ? 
-      (item.name as string).toLocaleLowerCase().includes(query.text) : true)
+      (item.name as string)?.toLocaleLowerCase().includes(query.text) : true)
     .filter((item: CreativeWork) => query.types.length && !dataSource.nativelySupports.types ? 
       query.types.map(type => type.split('/').pop()).includes(item['@type']) : true)
     .filter((item: CreativeWork) => query.categories.length ? 
