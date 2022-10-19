@@ -31,7 +31,7 @@ const options: PermissionOptions = {
     './public/'
   ],
   hrtime: false,
-  run: false,
+  run: true,
   watch: Deno.args.includes('--watch')
 }
 

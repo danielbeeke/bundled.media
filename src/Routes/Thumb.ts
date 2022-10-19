@@ -23,6 +23,6 @@ export class ThumbRoute extends BaseRoute {
   }
 
   async template () {
-    return await this.handle()
+    return `<img src=${`/thumb/${this.params.url}`} />`
   }
 }
