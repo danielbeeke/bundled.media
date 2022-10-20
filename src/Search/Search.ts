@@ -59,6 +59,7 @@ export class Search {
     items.sort((a: CreativeWork, b: CreativeWork) => collator.compare(a.name as string, b.name as string))
 
     return {
+      fetches: [...this.#fetches.entries()].map(([dataSource, fetches]) => [dataSource.url, fetches.length]),
       items: items,
       nextUrl: this.createNextUrl(this.#urlPrefix)
     }
@@ -92,6 +93,7 @@ export class Search {
         const dataSource = this.#sources[this.#lastIndex]
 
         if (!dataSource.done && this.getResultCount('all', dataSource) < average) {
+          if (!dataSource.booted) dataSource.boot()
           promises.push(this.fetch(dataSource, this.#query, this.#query.pagenation[this.#lastIndex]))
         }
 

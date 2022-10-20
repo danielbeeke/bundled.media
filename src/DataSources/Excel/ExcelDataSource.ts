@@ -22,9 +22,13 @@ export class ExcelDataSource extends BaseDataSource<ExcelOptions, ExcelRawItem, 
     super(options)
 
     this.url = new URL(options.url)
-    const data = Deno.readFileSync(`./data/${options.file}`)
+    this.rows = []
+  }
+
+  boot () {
+    const data = Deno.readFileSync(`./data/${this.options.file}`)
     const workbook = xlsx.read(data)
-    const sheetName = options.sheet ?? workbook.SheetNames[0]
+    const sheetName = this.options.sheet ?? workbook.SheetNames[0]
     const sheet = workbook.Sheets[sheetName]
     const rows: any = xlsx.utils.sheet_to_json(sheet)
 
@@ -33,19 +37,20 @@ export class ExcelDataSource extends BaseDataSource<ExcelOptions, ExcelRawItem, 
     for (const row of rows) {
       const normalizedRow: any = {}
 
-      normalizedRow.names = this.getColumn(options.mapping.name, row)
+      normalizedRow.names = this.getColumn(this.options.mapping.name, row)
       normalizedRow.name = normalizedRow.names[0]?.['@value']
 
-      normalizedRow.descriptions = this.getColumn(options.mapping.description, row)
+      normalizedRow.descriptions = this.getColumn(this.options.mapping.description, row)
       normalizedRow.description = normalizedRow.descriptions[0]?.['@value']
 
-      normalizedRow.url = options.mapping.url.map(columnGetter => ({ '@id': row[columnGetter.column] }))
-      normalizedRow.inLanguage = bcp47Normalize(row[options.mapping.inLanguage.column])
-      normalizedRow['@type'] = options.types[0].split('/').pop()
+      normalizedRow.url = this.options.mapping.url.map(columnGetter => ({ '@id': row[columnGetter.column] }))
+      normalizedRow.inLanguage = bcp47Normalize(row[this.options.mapping.inLanguage.column])
+      normalizedRow['@type'] = this.options.types[0].split('/').pop()
       normalized.push(normalizedRow)
     }
 
     this.rows = normalized
+    this.booted = true
   }
 
   getColumn (columnGetters: Array<ColumnGetter>, row: any) {

@@ -11,6 +11,7 @@ export abstract class BaseDataSource<Options extends BaseDataSourceOptions = Bas
   public publisher: Publisher | undefined
   public label: string | undefined
 
+  public booted = false
   public done = false
   public url: URL = new URL('https://example.com')
   public options: Options = {} as Options
@@ -75,7 +76,9 @@ export abstract class BaseDataSource<Options extends BaseDataSourceOptions = Bas
     return [...this.tokens.values()].pop()
   }
 
-  boot () {}
+  boot () {
+    this.booted = true
+  }
 
   abstract resolveId (id: string): boolean | any
 }
