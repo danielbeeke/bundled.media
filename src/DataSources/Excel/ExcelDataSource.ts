@@ -40,13 +40,13 @@ export class ExcelDataSource extends BaseDataSource<ExcelOptions, ExcelRawItem, 
       normalizedRow.names = this.getColumn(this.options.mapping.name, row)
       normalizedRow.name = normalizedRow.names[0]?.['@value']
 
+      normalizedRow['@id'] = normalizedRow.name
       normalizedRow.descriptions = this.getColumn(this.options.mapping.description, row)
       normalizedRow.description = normalizedRow.descriptions[0]?.['@value']
 
       normalizedRow.url = this.options.mapping.url.map(columnGetter => ({ '@id': row[columnGetter.column] }))
       normalizedRow.inLanguage = bcp47Normalize(row[this.options.mapping.inLanguage.column])
       normalizedRow['@type'] = this.options.types[0].split('/').pop()
-      normalized.push(normalizedRow)
     }
 
     this.rows = normalized

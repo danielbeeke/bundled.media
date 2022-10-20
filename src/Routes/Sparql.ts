@@ -1,11 +1,12 @@
 import { BaseRoute } from './BaseRoute.ts'
-import { Store, Parser } from 'https://esm.sh/n3@1.16.2'
+import { Store, Parser } from "npm:n3"
 import { Parser as SparqlParser, Generator as SparqlGenerator } from 'https://esm.sh/sparqljs@3.5.2'
 import { walker } from '../Helpers/walker.ts'
 import { AbstractQuery } from '../Core/AbstractQuery.ts'
 import { Search } from '../Search/Search.ts'
-import { JSONLD } from 'https://taisukef.github.io/jsonld-es/JSONLD.js'
-import { QueryEngine } from '../Vendor/comunica-browser.js'
+// import { JSONLD } from 'https://taisukef.github.io/jsonld-es/JSONLD.js'
+import JSONLD from 'npm:jsonld'
+import { QueryEngine } from 'npm:@comunica/query-sparql'
 import { streamToString } from '../Helpers/streamToString.ts'
 
 const filtersToUri = {
@@ -14,8 +15,6 @@ const filtersToUri = {
   'http://schema.org/inLanguage': 'langCode',
   'http://taxonomy.mediaworks.global/category' : 'categories',
 }
-
-const myEngine = new QueryEngine()
 
 export class SparqlRoute extends BaseRoute {
 
@@ -35,8 +34,17 @@ export class SparqlRoute extends BaseRoute {
     const abstractQuery = this.parseQuery(query)
     const searcher = new Search(abstractQuery, 'http://localhost/')
     const { items } = await searcher.handle()
-    const expandedItems = await JSONLD.expand(items)
-    const quads = await JSONLD.toRDF(expandedItems)
+    const quads = await JSONLD.toRDF({
+      '@graph': items,
+      '@context': {
+        '@vocab': 'http://schema.org/',
+        'schema': 'http://schema.org/',
+      }
+    })
+
+    // console.log(quads)
+    const myEngine = new QueryEngine()
+
     const store = new Store()
     store.addQuads(quads)
     const response = await myEngine.query(query, { sources: [store] })

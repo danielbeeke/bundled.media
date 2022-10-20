@@ -2,6 +2,7 @@ import { render, html } from 'https://unpkg.com/uhtml@3.0.1/esm/index.js?module'
 import './json-viewer.ts'
 import './init-bcp47-picker.ts'
 import 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js';
+import { JSONLD } from 'https://taisukef.github.io/jsonld-es/JSONLD.js'
 
 let nextUrl = ''
 let searchResults: Array<any> = []
@@ -194,38 +195,48 @@ const draw = () => {
 
 <div class="cards">
   ${searchResults.map(item => {
-    let image = item.thumbnail?.url
+    const type: string = item['@type'][0].split(/\/|:|#/g).pop().toLowerCase()
+    const urls = item['http://schema.org/url']?.map((item: any) => item?.['@value'])
+    const names = item['http://schema.org/name']?.map((item: any) => item?.['@value'])
+    const descriptions = item['http://schema.org/description']?.map((item: any) => item?.['@value']) ?? []
+    const authors = item['http://schema.org/author']?.flatMap((item: any) => item['http://schema.org/name']?.map((item: any) => item?.['@value']))
 
-    if (!image && item['@type'] === 'Book') {
+    const thumbnail = item['http://schema.org/thumbnail']?.[0]?.['http://schema.org/url']?.[0]?.['@value']
+    let image = thumbnail
+
+    if (!image && type === 'book') {
       image = 'https://images.unsplash.com/photo-1499652848871-1527a310b13a'
     }
 
     let video = ''
     if (!image) {
-      video = item['url']?.find((url: { '@id': string }) => url?.['@id']?.endsWith('.mp4'))?.['@id']
+      video = urls.find((url: string) => url.endsWith('.mp4'))
       image = `${location.protocol}//${location.hostname}${location.port ? `:${location.port}` : ''}/thumb/${video}`
     }
 
     const mediaIcon = html`<div class="type-icon" ref=${async (element: HTMLDivElement) => {
-      const response = await fetch(`/images/${item['@type'].toLowerCase()}.svg`)
+      const response = await fetch(`/images/${type}.svg`)
       const svgData = await response.text()
       element.innerHTML = svgData
-    }} src=${`/images/${item['@type'].toLowerCase()}.svg`}></div>`
+    }}></div>`
 
     const languageLabel = html`<span class="badge rounded-pill text-bg-light language-label">${item.inLanguage}</span>   `
 
     const imageFooter = html`${mediaIcon}${languageLabel}`
 
-    return html`<div onclick=${() => {
-      selectedCard = item
+    return html`<div onclick=${async () => {
+      selectedCard = await JSONLD.compact(item, {
+        '@vocab': 'http://schema.org/',
+        'schema': 'http://schema.org/'
+      })
       draw()
     }} data-bs-toggle="modal" data-bs-target="#infoModal" 
-      class=${`card ${item['@type'].toLowerCase()} ${!item.thumbnail?.url && item['@type'] === 'Book' ? 'bible' : ''}`}>
+      class=${`card ${type} ${!thumbnail && type === 'book' ? 'bible' : ''}`}>
       ${image ? html`
         <div class="image-wrapper">
           ${imageFooter}
           <img ref=${(element: HTMLImageElement) => {
-            const url = image.includes('localhost') ? image : `//images.mediaworks.global/?url=${image}&h=200${item['@type'] === 'VideoObject' ? '' : ''}`
+            const url = image.includes('localhost') ? image : `//images.mediaworks.global/?url=${image}&h=200${type === 'videoobject' ? '' : ''}`
             element.classList.add('loading')
 
             element.src = ''
@@ -243,19 +254,17 @@ const draw = () => {
           <div class="image-wrapper">
           ${imageFooter}
 
-            <video class="image" onloadeddata=${(event) => {  
-              // event.target.currentTime = 10;
-            }}>
+            <video class="image">
               <source src=${`${video}#t=10`}>
             </video>
           </div>
       ` : null}
       <div class="card-body">
-        <h5 class="card-title">${item.name}</h5>
-        ${item.author?.length ? html`
-          <small class="card-sub-title d-block mb-2">${formatter.format(item.author.map((author: { name: string }) => author.name))}</small>            
+        <h5 class="card-title">${names[0]}</h5>
+        ${authors?.length ? html`
+          <small class="card-sub-title d-block mb-2">${formatter.format(authors.map((author: string) => author))}</small>            
         ` : null}
-        <p class="card-text">${item.description}</p>
+        <p class="card-text">${descriptions[0]}</p>
       </div>
     </div>`
   })}

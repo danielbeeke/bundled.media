@@ -5,6 +5,7 @@ import { CreativeWork, Organization, WithContext } from '../schema.org.ts';
 import { tryToExtractLanguage } from '../Helpers/tryToExtractLanguage.ts'
 import { baseUrl } from '../../.env.ts'
 import { lastPart } from '../Helpers/lastPart.ts';
+import JSONLD from 'npm:jsonld'
 
 type DataFetchObject = {
   page: number,
@@ -121,9 +122,9 @@ export class Search {
     const dataSourceFetch: DataFetchObject = {
       page,
       filteredItems: [],
-      promise: dataSource.fetch(query, page, offset).then((items: Array<any>) => {
-        const normalizedItems = items
-          .map((item: any) => this.genericNormalizeItem(dataSource.normalize(item) as WithContext<CreativeWork>, dataSource))
+      promise: dataSource.fetch(query, page, offset).then(async (items: Array<any>) => {
+        const normalizedItems = await Promise.all(items
+          .map((item: any) => this.genericNormalizeItem(dataSource.normalize(item) as WithContext<CreativeWork>, dataSource)))
 
         dataSourceFetch.filteredItems = this.filter(dataSource, normalizedItems, query)
       })
@@ -166,7 +167,7 @@ export class Search {
       normalizedItem['http://taxonomy.mediaworks.global/category'] = dataSource.categoryMap?.[normalizedItem['@id'] as string].map(item => ({ '@id': item}))
     }
 
-    return normalizedItem
+    return JSONLD.expand(normalizedItem).then(graph => graph[0])
   }
 
   /**
