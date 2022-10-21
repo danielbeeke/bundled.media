@@ -24,7 +24,7 @@ const languages = {
 
 export class GsunGrabDataSource extends BaseDataSource<GsunGrabOptions, GsunGrabRawItem, Thing> {
 
-  public url = new URL('https://gsungrab.org')
+  public url = new URL('https://www.gsungrab.org')
 
   public nativelySupports = {
     text: true,
