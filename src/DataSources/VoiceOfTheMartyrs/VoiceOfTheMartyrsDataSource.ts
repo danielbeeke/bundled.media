@@ -13,7 +13,8 @@ export class VoiceOfTheMartyrsDataSource extends BaseDataSource<VoiceOfTheMartyr
   public nativelySupports = {
     text: false,
     langCode: true,
-    types: true
+    types: true,
+    multilingualItems: false
   }
 
   async fetch (query: AbstractQuery, page = 0, offset = 0) {

@@ -94,7 +94,7 @@ export class Search {
         const dataSource = this.#sources[this.#lastIndex]
 
         if (!dataSource.done && this.getResultCount('all', dataSource) < average) {
-          if (!dataSource.booted) dataSource.boot()
+          if (!dataSource.booted) await dataSource.boot()
           promises.push(this.fetch(dataSource, this.#query, this.#query.pagenation[this.#lastIndex]))
         }
 

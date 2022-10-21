@@ -3,6 +3,7 @@ import './json-viewer.ts'
 import './init-bcp47-picker.ts'
 import 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js';
 import { JSONLD } from 'https://taisukef.github.io/jsonld-es/JSONLD.js'
+import { parse, stringify, Schema } from 'https://cdn.skypack.dev/bcp-47@2?dts'
 
 let nextUrl = ''
 let searchResults: Array<any> = []
@@ -121,6 +122,8 @@ const setParameter = (key: string, value: string, clearPagination = false) => {
 
 let selectedCardCompacted: any = null
 let selectedCardExpanded: any = null
+let bcp47Picker: any = null
+
 /**
  * The template function.
  * This uses uHTML.
@@ -187,7 +190,9 @@ const draw = () => {
       `)}
     </select>
 
-    <bcp47-picker multiple value=${url.searchParams.get('langCode')} onchange=${(event: InputEvent) => {
+    <bcp47-picker ref=${(element: any) => {
+      bcp47Picker = element
+    }} multiple value=${url.searchParams.get('langCode')} onchange=${(event: InputEvent) => {
       setParameter('langCode', (event.target as HTMLInputElement).value, true)
     }} />
   </div>
@@ -245,11 +250,19 @@ const draw = () => {
 
     const shouldShowMultiLingual = !url.searchParams.get('langCode') && item['http://bundled.media/multilingualItems']?.[0]?.['@value']
 
+    const langCodes: Set<string> = new Set(item['http://schema.org/inLanguage']?.[0]?.['@value'].split('-x-mltlngl-'))
+      
+    const languageLabels = [...langCodes].map((langCode: string) => { 
+      const label = bcp47Picker.label(parse(langCode))
+      return label ? label : langCode
+    })
+      .filter(Boolean)
+
     const languageLabel = html`
       <span class="badge rounded-pill text-bg-light language-label">
         ${shouldShowMultiLingual ? 
           html`<div class="icon"  data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="This item is available in a lot of languages. Please filter to a language to see if this item is available." ref=${getIcon(`/images/translate.svg`)}></div>` : 
-          item['http://schema.org/inLanguage']?.[0]?.['@value']
+          languageLabels.join(' & ')
         }
       </span>
     `
