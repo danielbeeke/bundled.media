@@ -6,6 +6,18 @@ import { serveFileWithTs } from 'https://deno.land/x/ts_serve@v1.4.1/mod.ts';
 import { toPathRegex } from './Helpers/toPathRegex.ts'
 import { existsSync } from 'https://deno.land/std@0.157.0/fs/mod.ts';
 
+
+await caches.delete('responses-interactive')
+await caches.delete('responses')
+
+const cacheInteractive = await caches.open('responses-interactive')
+const cache = await caches.open('responses')
+
+const deliverResponse = async (request: Request, response: Response, cache: Cache) => {
+  await cache.put(request, response.clone())
+  return response
+}
+
 const port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 8080
 serve(serveHttp, { port });
 console.info(`bundled.media is running locally at: http://localhost:${port}/`)
@@ -17,6 +29,13 @@ async function serveHttp(request: Request) {
 
   const allowsInteractive = !urlParams.has('force-json') && 
     request.headers.get('accept')?.includes('text/html')
+
+  const cacheMatch = await (allowsInteractive ? cacheInteractive : cache).match(request)
+
+  if (cacheMatch) {
+    cacheMatch.headers.set('x-cache-hit', 'true')
+    return cacheMatch
+  }  
 
   const matchedRoute = routes.find(route => {
     const regex = new RegExp(toPathRegex(route.path), 'imsu')
@@ -44,15 +63,17 @@ async function serveHttp(request: Request) {
           preloadModules
         }))  
       }
-      return new Response(new TextEncoder().encode(body), { status: 200 })
+      const response = new Response(new TextEncoder().encode(body), { status: 200 })
+      return await deliverResponse(request, response, cacheInteractive)
     }
 
     // This is the JSON output of endpoints.
     try {
       const output = await initiatedRoute.handle()
-      return new Response(matchedRoute.mime === 'application/json' ? JSON.stringify(output, null, 2) : output, {
+      const response = new Response(matchedRoute.mime === 'application/json' ? JSON.stringify(output, null, 2) : output, {
         headers: { 'Content-Type': matchedRoute.mime }
       })
+      return await deliverResponse(request, response, cache)
     }
 
     // Fallback to error page.

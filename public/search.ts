@@ -3,6 +3,7 @@ import './json-viewer.ts'
 import './init-bcp47-picker.ts'
 import 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js';
 import { JSONLD } from 'https://taisukef.github.io/jsonld-es/JSONLD.js'
+import { svg } from 'https://unpkg.com/lit-html@^2.3.0?module';
 
 let nextUrl = ''
 let searchResults: Array<any> = []
@@ -41,6 +42,31 @@ const fetchOptions = async (endpoint: string) => {
 const fetchTypes = () => fetchOptions('types')
 const fetchSources = () => fetchOptions('sources')
 const fetchCategories = () => fetchOptions('categories')
+
+const icons: Map<string, string | Promise<string>> = new Map()
+const getIcon = (path: string) => {
+
+  if (!icons.has(path)) {
+    const promise = fetch(path).then(response => response.text()).then(svgData => {
+      icons.set(path, svgData)
+      return svgData
+    })
+
+    icons.set(path, promise)
+  }
+
+  return (element: HTMLElement) => {
+    const icon = icons.get(path)
+    if (icon instanceof Promise) {
+      icon.then((resolvedIcon: string) => {
+        element.innerHTML = resolvedIcon
+      })
+    }
+    else if (typeof icon === 'string') {
+      element.innerHTML = icon
+    }
+  }
+}
 
 /**
  * The main fetch function
@@ -94,8 +120,8 @@ const setParameter = (key: string, value: string, clearPagination = false) => {
   fetchData()
 }
 
-let selectedCard: any = null
-
+let selectedCardCompacted: any = null
+let selectedCardExpanded: any = null
 /**
  * The template function.
  * This uses uHTML.
@@ -106,13 +132,13 @@ const draw = () => {
 <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
-      ${selectedCard ? html`
+      ${selectedCardCompacted ? html`
       <div class="modal-header">
-        <h5 class="modal-title">${selectedCard.name}</h5>
+        <h5 class="modal-title">${selectedCardExpanded['http://schema.org/name'][0]['@value']}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <json-viewer data=${JSON.stringify(selectedCard)}></json-viewer>
+        <json-viewer data=${JSON.stringify(selectedCardCompacted)}></json-viewer>
       </div>
       ` : null}
     </div>
@@ -214,21 +240,19 @@ const draw = () => {
       image = `${location.protocol}//${location.hostname}${location.port ? `:${location.port}` : ''}/thumb/${video}`
     }
 
-    const mediaIcon = html`<div class="type-icon" ref=${async (element: HTMLDivElement) => {
-      const response = await fetch(`/images/${type}.svg`)
-      const svgData = await response.text()
-      element.innerHTML = svgData
-    }}></div>`
+    const mediaIcon = html`<div class="type-icon" ref=${getIcon(`/images/${type}.svg`)}></div>`
 
     const languageLabel = html`<span class="badge rounded-pill text-bg-light language-label">${item.inLanguage}</span>   `
 
     const imageFooter = html`${mediaIcon}${languageLabel}`
 
     return html`<div onclick=${async () => {
-      selectedCard = await JSONLD.compact(item, {
+      selectedCardCompacted = await JSONLD.compact(item, {
         '@vocab': 'http://schema.org/',
         'schema': 'http://schema.org/'
       })
+
+      selectedCardExpanded = item
       draw()
     }} data-bs-toggle="modal" data-bs-target="#infoModal" 
       class=${`card ${type} ${!thumbnail && type === 'book' ? 'bible' : ''}`}>
