@@ -26,6 +26,7 @@ export abstract class BaseDataSource<Options extends BaseDataSourceOptions = Bas
     types: false,
     multilingualItems: false
   }
+  
   constructor (options: Options) {
     this.options = options
     this.publisher = options.publisher

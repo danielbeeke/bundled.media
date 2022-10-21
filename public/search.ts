@@ -3,7 +3,7 @@ import './json-viewer.ts'
 import './init-bcp47-picker.ts'
 import 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js';
 import { JSONLD } from 'https://taisukef.github.io/jsonld-es/JSONLD.js'
-import { parse, stringify, Schema } from 'https://cdn.skypack.dev/bcp-47@2?dts'
+import { parse } from 'https://cdn.skypack.dev/bcp-47@2?dts'
 
 let nextUrl = ''
 let searchResults: Array<any> = []

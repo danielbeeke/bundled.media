@@ -9,7 +9,8 @@ export class LightNetDataSource extends BaseDataSource<LightNetOptions, LightNet
   public nativelySupports = {
     text: true,
     langCode: true,
-    types: true
+    types: true,
+    multilingualItems: false,
   }
 
   constructor (options: LightNetOptions) {

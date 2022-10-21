@@ -17,7 +17,8 @@ export class ApiBibleDataSource extends BaseDataSource<ApiBibleOptions, ApiBible
   public nativelySupports = {
     text: true,
     langCode: true,
-    types: true
+    types: true,
+    multilingualItems: false,
   }
 
   async fetch (query: AbstractQuery, page = 0, offset = 0) {

@@ -10,12 +10,6 @@ xlsx.set_cptable(cptable)
 
 export class ExcelDataSource extends BaseDataSource<ExcelOptions, ExcelRawItem, Thing> {
 
-  public nativelySupports = {
-    text: false,
-    langCode: false,
-    types: false
-  }
-
   public rows: Array<any>
 
   constructor (options: ExcelOptions) {

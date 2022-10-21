@@ -168,9 +168,11 @@ export class Search {
     }
 
     if (dataSource.nativelySupports.multilingualItems) {
+      /** @ts-ignore */
       normalizedItem['http://bundled.media/multilingualItems'] = true
     }
 
+    /** @ts-ignore */
     return JSONLD.expand(normalizedItem).then(graph => graph[0])
   }
 
@@ -181,9 +183,10 @@ export class Search {
    filter (dataSource: BaseDataSource, normalizedItems: Array<CreativeWork>, query: AbstractQuery) {
     return normalizedItems
     .filter((item: CreativeWork) => query.langCode && !dataSource.nativelySupports.langCode ? 
-      query.langCode.includes(item.inLanguage as string) : true)
+      query.langCode.includes(item['http://schema.org/inLanguage'][0]['@value'] as string) : true)
     .filter((item: CreativeWork) => query.text && !dataSource.nativelySupports.text ? 
-      (item.name as string)?.toLocaleLowerCase().includes(query.text) : true)
+      item['http://schema.org/name']?.some((name: string) => name['@value']?.toLocaleLowerCase().includes(query.text)) ||
+      item['http://schema.org/description']?.some((name: string) => name['@value']?.toLocaleLowerCase().includes(query.text)) : true)
     .filter((item: CreativeWork) => query.types.length && !dataSource.nativelySupports.types ? 
       query.types.map(type => type.split('/').pop()).includes(item['@type']) : true)
     .filter((item: CreativeWork) => query.categories.length ? 
