@@ -15,7 +15,8 @@ export class JesusFilmDataSource extends BaseDataSource<JesusFilmOptions, JesusF
   public nativelySupports = {
     text: true,
     langCode: true,
-    types: true
+    types: true,
+    multilingualItems: true
   }
 
   constructor (options: JesusFilmOptions) {

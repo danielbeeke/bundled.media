@@ -23,7 +23,8 @@ export abstract class BaseDataSource<Options extends BaseDataSourceOptions = Bas
   public nativelySupports = {
     text: false,
     langCode: false,
-    types: false
+    types: false,
+    multilingualItems: false
   }
   constructor (options: Options) {
     this.options = options

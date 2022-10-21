@@ -167,6 +167,10 @@ export class Search {
       normalizedItem['http://taxonomy.mediaworks.global/category'] = dataSource.categoryMap?.[normalizedItem['@id'] as string].map(item => ({ '@id': item}))
     }
 
+    if (dataSource.nativelySupports.multilingualItems) {
+      normalizedItem['http://bundled.media/multilingualItems'] = true
+    }
+
     return JSONLD.expand(normalizedItem).then(graph => graph[0])
   }
 

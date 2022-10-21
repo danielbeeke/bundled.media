@@ -3,7 +3,6 @@ import './json-viewer.ts'
 import './init-bcp47-picker.ts'
 import 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js';
 import { JSONLD } from 'https://taisukef.github.io/jsonld-es/JSONLD.js'
-import { svg } from 'https://unpkg.com/lit-html@^2.3.0?module';
 
 let nextUrl = ''
 let searchResults: Array<any> = []
@@ -127,6 +126,8 @@ let selectedCardExpanded: any = null
  * This uses uHTML.
  */
 const draw = () => {
+  const url = new URL(location.toString())
+
   render(document.querySelector('#app'), html`
 
 <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
@@ -242,7 +243,16 @@ const draw = () => {
 
     const mediaIcon = html`<div class="type-icon" ref=${getIcon(`/images/${type}.svg`)}></div>`
 
-    const languageLabel = html`<span class="badge rounded-pill text-bg-light language-label">${item.inLanguage}</span>   `
+    const shouldShowMultiLingual = !url.searchParams.get('langCode') && item['http://bundled.media/multilingualItems']?.[0]?.['@value']
+
+    const languageLabel = html`
+      <span class="badge rounded-pill text-bg-light language-label">
+        ${shouldShowMultiLingual ? 
+          html`<div class="icon"  data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="This item is available in a lot of languages. Please filter to a language to see if this item is available." ref=${getIcon(`/images/translate.svg`)}></div>` : 
+          item['http://schema.org/inLanguage']?.[0]?.['@value']
+        }
+      </span>
+    `
 
     const imageFooter = html`${mediaIcon}${languageLabel}`
 
@@ -303,6 +313,10 @@ const draw = () => {
 </div>
 
   `)
+
+  const tooltipTriggerList: any = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
 }
 
 fetchData()

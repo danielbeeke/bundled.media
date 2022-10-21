@@ -47,7 +47,8 @@ export class ExcelDataSource extends BaseDataSource<ExcelOptions, ExcelRawItem, 
       normalizedRow.inLanguage = bcp47Normalize(row[this.options.mapping.inLanguage.column])
       normalizedRow['@type'] = this.options.types[0].split('/').pop()
 
-      normalized.push(normalizedRow)
+      if (normalizedRow['@id'] && typeof normalizedRow['@id'] === 'string')
+        normalized.push(normalizedRow)
     }
 
     this.rows = normalized
