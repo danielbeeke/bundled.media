@@ -14,7 +14,7 @@ const cacheInteractive = await caches.open('responses-interactive')
 const cache = await caches.open('responses')
 
 const deliverResponse = async (request: Request, response: Response, cache: Cache) => {
-  await cache.put(request, response.clone())
+  if (request.method === 'GET') await cache.put(request, response.clone())
   return response
 }
 
@@ -30,12 +30,14 @@ async function serveHttp(request: Request) {
   const allowsInteractive = !urlParams.has('force-json') && 
     request.headers.get('accept')?.includes('text/html')
 
-  const cacheMatch = await (allowsInteractive ? cacheInteractive : cache).match(request)
+  if (request.method === 'GET') {
+    const cacheMatch = await (allowsInteractive ? cacheInteractive : cache).match(request)
 
-  if (cacheMatch) {
-    cacheMatch.headers.set('x-cache-hit', 'true')
-    return cacheMatch
-  }  
+    if (cacheMatch) {
+      cacheMatch.headers.set('x-cache-hit', 'true')
+      return cacheMatch
+    }    
+  }
 
   const matchedRoute = routes.find(route => {
     const regex = new RegExp(toPathRegex(route.path), 'imsu')
