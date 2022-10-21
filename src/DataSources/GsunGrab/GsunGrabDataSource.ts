@@ -27,9 +27,9 @@ export class GsunGrabDataSource extends BaseDataSource<GsunGrabOptions, GsunGrab
   public url = new URL('https://www.gsungrab.org')
 
   public nativelySupports = {
-    text: true,
-    langCode: true,
-    types: true,
+    text: false,
+    langCode: false,
+    types: false,
     multilingualItems: false
   }
 
