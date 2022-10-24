@@ -190,9 +190,7 @@ const draw = () => {
       `)}
     </select>
 
-    <bcp47-picker ref=${(element: any) => {
-      bcp47Picker = element
-    }} multiple value=${url.searchParams.get('langCode')} onchange=${(event: InputEvent) => {
+    <bcp47-picker multiple value=${url.searchParams.get('langCode')} onchange=${(event: InputEvent) => {
       setParameter('langCode', (event.target as HTMLInputElement).value, true)
     }} />
   </div>
@@ -252,6 +250,8 @@ const draw = () => {
 
     const langCodes: Set<string> = new Set(item['http://schema.org/inLanguage']?.[0]?.['@value'].split('-x-mltlngl-'))
       
+    const bcp47Picker = document.createElement('bcp47-picker')
+
     const languageLabels = [...langCodes].map((langCode: string) => { 
       const label = bcp47Picker.label(parse(langCode))
       return label ? label : langCode
