@@ -253,7 +253,7 @@ const draw = () => {
     const bcp47Picker = document.createElement('bcp47-picker')
 
     const languageLabels = [...langCodes].map((langCode: string) => { 
-      const label = bcp47Picker.label(parse(langCode))
+      const label = bcp47Picker?.label(parse(langCode)) 
       return label ? label : langCode
     })
       .filter(Boolean)

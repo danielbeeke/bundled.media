@@ -13,12 +13,19 @@ const languages = {
     chinese: 'Tibetan & Chinese',
     english: 'Tibetan & English'
   }, 
-  ob: {
+  bo: {
     url: 'https://www.gsungrab.org/bo/resources/',
     download: 'ཕབ་ལེན།',
     tibetan: 'དབྱིན་ཡིག',
     chinese: 'བོད་རྒྱ་ཤན་སྦྱར།',
     english: 'བོད་དབྱིན་ཤན་སྦྱར།',
+  }, 
+  zh: {
+    url: 'https://www.gsungrab.org/zh/resources/',
+    download: '藏文版',
+    tibetan: '藏文版',
+    chinese: '藏汉文对照本',
+    english: '藏英文对照本',
   }
 }
 
@@ -98,8 +105,8 @@ export class GsunGrabDataSource extends BaseDataSource<GsunGrabOptions, GsunGrab
         }
       }
     }
-    
-    const output = merge(...Object.values(pageMetdata))
+   
+    const output = merge.all(Object.values(pageMetdata))
     this.rows = Object.values(output)
   }
 

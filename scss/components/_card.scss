@@ -81,6 +81,8 @@
   &.book:not(.bible) {
     .image {
       width: 28%;
+      min-width: unset;
+      min-height: unset;
       height: fit-content;
       box-shadow: rgba(black, .3) 0 3px 10px;
     }
@@ -94,4 +96,3 @@
     }
   }
 }
-
