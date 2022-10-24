@@ -283,7 +283,7 @@ const draw = () => {
         <div class="image-wrapper">
           ${imageFooter}
           <img ref=${(element: HTMLImageElement) => {
-            const url = image.includes('localhost') ? image : `//images.mediaworks.global/?url=${image}&h=200${type === 'videoobject' ? '' : ''}`
+            const url = ['localhost'].some(noImage => image.includes(noImage)) ? image : `//images.mediaworks.global/?url=${image}&h=200${type === 'videoobject' ? '' : ''}`
             element.classList.add('loading')
 
             element.src = ''

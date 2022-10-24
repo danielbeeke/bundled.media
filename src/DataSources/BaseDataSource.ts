@@ -62,9 +62,12 @@ export abstract class BaseDataSource<Options extends BaseDataSourceOptions = Bas
     await Promise.all(promises)
   }
 
-  // TODO cache time to live.
-
-  abstract normalize(item: RawItem): NormalizedItem
+  /**
+   * The transformation from an API specific item to a schema.org item.
+   */
+   normalize(item: RawItem): NormalizedItem {
+    return item as unknown as NormalizedItem
+  }
 
   abstract fetch(query: AbstractQuery, page: number, offset: number | string | undefined): Promise<Array<any>>
 
@@ -82,5 +85,8 @@ export abstract class BaseDataSource<Options extends BaseDataSourceOptions = Bas
     this.booted = true
   }
 
-  abstract resolveId (id: string): boolean | any
+  resolveId (id: string): boolean | any {
+    return false
+  }
+
 }
