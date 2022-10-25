@@ -116,13 +116,6 @@ export class GsunGrabDataSource extends BaseDataSource<GsunGrabOptions, GsunGrab
   }
 
   /**
-   * The transformation from an API specific item to a schema.org item.
-   */
-  normalize(item: GsunGrabRawItem) {
-    return item as unknown as VideoObject
-  }
-
-  /**
    * Returns schema.org normalized types.
    */
   types () {
