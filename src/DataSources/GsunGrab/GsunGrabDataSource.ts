@@ -111,8 +111,12 @@ export class GsunGrabDataSource extends BaseDataSource<GsunGrabOptions, GsunGrab
   }
 
   async fetch (query: AbstractQuery, page = 0, offset = 0) {
-    this.done = true
-    return await this.rows
+    const calculatedOffset = await (page * query.size) + offset
+    const slicedRows = this.rows.slice(calculatedOffset, calculatedOffset + query.size)
+
+    if (slicedRows.length < query.size) this.done = true
+
+    return slicedRows
   }
 
   /**
