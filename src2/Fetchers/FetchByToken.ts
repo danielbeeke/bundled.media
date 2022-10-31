@@ -1,34 +1,29 @@
-import { AbstractQuery, FetcherInterface, LocalMechanismsInterface, FetcherResult, Thing } from '../types.ts'
+import { AbstractQuery, FetcherInterface, FetcherResult, Thing, LocalMechanismsInterface } from '../types.ts'
 import { filterNormalizedItems } from './filterNormalizedItems.ts'
-import JSONLD from 'npm:jsonld'
+import { FetcherBase } from './FetcherBase.ts'
 
 export type FetchByTokenCallback = (query: AbstractQuery, token: string | null) => Promise<{ items: Array<Thing>, token: string | null }>
 export type NormalizeCallback = (item: any) => Thing
 export type FetchByTokenPagination = { token: string | null, sliceOffset: number }
 
-export class FetchByToken implements FetcherInterface {
+export class FetchByToken extends FetcherBase<FetchByTokenCallback> implements FetcherInterface {
 
-  #fetchCallback: FetchByTokenCallback
-  #normalizeCallback: NormalizeCallback
-  #itemCountToExpect: number
-  #localMechanisms: LocalMechanismsInterface
+  public itemCountToExpect: number
 
-  constructor (fetchCallback: FetchByTokenCallback, normalizeCallback: NormalizeCallback, itemCountToExpect: number, localMechanisms: LocalMechanismsInterface) {
-    this.#fetchCallback = fetchCallback
-    this.#normalizeCallback = normalizeCallback
-    this.#itemCountToExpect = itemCountToExpect
-    this.#localMechanisms = localMechanisms
+  constructor (fetchCallback: FetchByTokenCallback, normalizeCallback: NormalizeCallback, localMechanisms: LocalMechanismsInterface, itemCountToExpect: number) {
+    super(fetchCallback, normalizeCallback, localMechanisms)
+    this.itemCountToExpect = itemCountToExpect
   }
 
   async execute(query: AbstractQuery, pagination: FetchByTokenPagination = { token: null, sliceOffset: 0 }): FetcherResult<FetchByTokenPagination> {
     try {
-      const { items: allItems, token } = await this.#fetchCallback(query, pagination.token)
+      const { items: allItems, token } = await this.fetchCallback(query, pagination.token)
       const normalizedItems = await this.normalizeItems(allItems) 
-      const filteredItems = filterNormalizedItems(query, normalizedItems, this.#localMechanisms)
+      const filteredItems = filterNormalizedItems(query, normalizedItems, this.localMechanisms)
       const slicedItems = filteredItems.slice(pagination.sliceOffset, pagination.sliceOffset + query.limit)
       const filteredItemsStillContainsResults = filteredItems.length > pagination.sliceOffset + query.limit
 
-      const done = allItems.length < this.#itemCountToExpect && !filteredItemsStillContainsResults
+      const done = allItems.length < this.itemCountToExpect && !filteredItemsStillContainsResults
 
       if (slicedItems.length === query.limit || done) {
         return {
@@ -61,20 +56,4 @@ export class FetchByToken implements FetcherInterface {
     }
   }
 
-  /**
-   * Normalizes and expands to JSON-ld items.
-   */
-  async normalizeItems (allItems: Array<Thing>) {
-    return await Promise.all(allItems.map(item => {
-      try {
-        const normalizedItem = this.#normalizeCallback(item)
-        normalizedItem['@context'] = { '@vocab': 'https://schema.org/' }
-        return JSONLD.expand(normalizedItem).then((graph: Array<any>) => graph.pop())
-      }
-      catch (exception) {
-        console.error(item, exception)
-        return null
-      }
-    }).filter(Boolean))
-  }
 }

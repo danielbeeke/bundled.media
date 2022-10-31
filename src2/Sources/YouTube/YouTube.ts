@@ -1,24 +1,26 @@
-import { FetchByToken } from '../Fetchers/FetchByToken.ts'
-import { FetcherInterface, SourceInterface, AbstractQuery, Thing, LocalMechanismsInterface } from '../types.ts'
+import { FetchByToken } from '../../Fetchers/FetchByToken.ts'
+import { FetcherInterface, SourceInterface, AbstractQuery, Thing, LocalMechanismsInterface } from '../../types.ts'
 import { Html5Entities } from 'https://deno.land/x/html_entities@v1.0/mod.js'
 import { RawYouTubeItem, YouTubeOptions } from './YouTubeTypes.ts'
-import { fetched } from '../Helpers/fetched.ts'
+import { fetched } from '../../Helpers/fetched.ts'
 
-// We can not increase this, it is hardcoded max value for the YouTube API.
-const maxResults = 50
-
+/**
+ * YouTube has a token based API. This is great, each time when more results are needed we can fetch it.
+ * YouTube also supports full text search, but that API is expensive so we dont use it, for that reason we just fetch the whole channel.
+ * Because of that way of dealing with YouTube our implementation does not support fulltext search on the source side.
+ * That is why we have localMechanisms.fulltextSearch = true. The abstraction will do it on behalf of us.
+ */
 export class YouTube implements SourceInterface<RawYouTubeItem> {
 
   #options: YouTubeOptions
 
+  // We can not increase this, it is hardcoded max value for the YouTube API.
+  public maxResults = 50
   public fetcher: FetcherInterface
 
   constructor (options: YouTubeOptions) {
     this.#options = options
 
-    // Which properties does our source implementation support?
-    // Every property the source implementation that is not supported is done by the abstraction.
-    // If your source does not support filtering on language, you just give back all the items unfiltered and the abstraction will do the rest.
     const localMechanisms: LocalMechanismsInterface = {
       fulltextSearch: true,
       languageFilter: true
@@ -27,8 +29,8 @@ export class YouTube implements SourceInterface<RawYouTubeItem> {
     this.fetcher = new FetchByToken(
       this.fetch.bind(this), 
       this.normalize.bind(this), 
-      maxResults, 
-      localMechanisms
+      localMechanisms,
+      this.maxResults,
     )
   }
 
@@ -44,9 +46,7 @@ export class YouTube implements SourceInterface<RawYouTubeItem> {
   }
 
   /**
-   * YouTube has a token based API. This is great, each time more results are needed we can fetch it.
-   * YouTube also supports full text search, but that API is expensive so we dont use it, for that reason we just fetch the whole channel.
-   * Because of that way of dealing with YouTube our implementation does not support fulltext search.
+   * The main fetch method. Grabs every thing in one fetch, but it does filter.
    */
   async fetch (_query: AbstractQuery, token: string | null) {
     const channelId = await this.channelNameToPlaylistId(this.#options.channel)
@@ -55,8 +55,9 @@ export class YouTube implements SourceInterface<RawYouTubeItem> {
     fetchUrl.searchParams.set('part', 'snippet')
     fetchUrl.searchParams.set('playlistId', channelId)
     fetchUrl.searchParams.set('key', this.#options.key)
-    fetchUrl.searchParams.set('maxResults', maxResults.toString())
+    fetchUrl.searchParams.set('maxResults', this.maxResults.toString())
     fetchUrl.searchParams.set('fields', 'nextPageToken,items(id,snippet(title,resourceId,thumbnails.high))')
+
     if (token) fetchUrl.searchParams.set('pageToken', token)
 
     const request = await fetched(fetchUrl)
@@ -71,7 +72,7 @@ export class YouTube implements SourceInterface<RawYouTubeItem> {
   /**
    * The transformation from an API specific item to a schema.org item.
    */
-   normalize(item: RawYouTubeItem) {
+   normalize(item: RawYouTubeItem): Thing {
     return {
       '@id': `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`,
       'name': Html5Entities.decode(item.snippet.title),
@@ -84,7 +85,7 @@ export class YouTube implements SourceInterface<RawYouTubeItem> {
         'height': item.snippet.thumbnails.high.height.toString(),
       },
       'url': `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`
-    } as Thing
+    }
   }
 
   /**

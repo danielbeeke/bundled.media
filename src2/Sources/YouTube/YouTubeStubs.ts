@@ -1,4 +1,4 @@
-import { fetched } from '../Helpers/fetched.ts'
+import { fetched } from '../../Helpers/fetched.ts'
 
 fetched.setTest('https://yt.lemnoslife.com/channels?part=snippet&forUsername=BibleProjectDutch', { "kind": "youtube#channelListResponse", "etag": "NotImplemented", "items": [ { "kind": "youtube#channel", "etag": "NotImplemented", "id": "UCGZPnVu9fDGY8I7NWN7gLXQ" } ] })
 

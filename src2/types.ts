@@ -2,7 +2,6 @@ export type AbstractQuery = {
   fulltextSearch?: string
   bcp47?: string
   types?: Array<string>
-  offset: number,
   limit: number
 }
 
@@ -24,8 +23,8 @@ export interface SourceInterface<RawItem> {
 }
 
 export interface LocalMechanismsInterface {
-  fulltextSearch: boolean
-  languageFilter: boolean
+  fulltextSearch?: boolean
+  languageFilter?: boolean
 }
 
 export type FetcherResult<Pagination> = Promise<{
