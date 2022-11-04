@@ -1,15 +1,10 @@
 import { assertEquals } from 'https://deno.land/std@0.161.0/testing/asserts.ts'
-import { AbstractQuery, Thing } from '../../types.ts'
+import { AbstractQuery } from '../../types.ts'
 import { ApiBible } from './ApiBible.ts'
 import './ApiBibleStubs.ts'
+import { ensureNoDuplicates } from '../../Helpers/ensureNoDuplicates.ts'
 
 const testSource = new ApiBible({ key: 'stubbed' })
-
-const ensureNoDuplicates = (...items: Array<Array<Thing>>) => {
-  const all = items.flatMap(nestedItems => nestedItems.map(item => item['@id']))
-  const ids = new Set(all)
-  assertEquals(all.length, ids.size)
-}
 
 Deno.test('Fetching data', async () => {
   const itemsPerRequest = 20

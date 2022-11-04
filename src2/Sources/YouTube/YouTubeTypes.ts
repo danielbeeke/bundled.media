@@ -5,7 +5,7 @@ export type YouTubeOptions = {
 
 type YouTubeImage = { url: string, width: number, height: number }
 
-export type RawYouTubeItem = {
+export type YouTubeRawItem = {
   kind: string,
   etag: string,
   defaultAudioLanguage: string,

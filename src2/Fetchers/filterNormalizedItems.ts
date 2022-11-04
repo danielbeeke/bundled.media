@@ -9,8 +9,8 @@ export const filterNormalizedItems = (query: AbstractQuery, items: Array<Thing>,
     const search = query.fulltextSearch.toLocaleLowerCase()
 
     filteredItems = filteredItems.filter(item => 
-      item['https://schema.org/name']?.some((value: any) => value['@value']?.toLocaleLowerCase().includes(search)) ||
-      item['https://schema.org/description']?.some((value: any) => value['@value']?.toLocaleLowerCase().includes(search))
+      item['http://schema.org/name']?.some((value: any) => value['@value']?.toLocaleLowerCase().includes(search)) ||
+      item['http://schema.org/description']?.some((value: any) => value['@value']?.toLocaleLowerCase().includes(search))
     )
   }
 

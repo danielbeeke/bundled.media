@@ -1,4 +1,4 @@
-export type RawApiBibleItem = {
+export type ApiBibleRawItem = {
   id: string,
   dblId: string,
   relatedDbl: string,

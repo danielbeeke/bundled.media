@@ -1,7 +1,7 @@
 import { FetchByToken } from '../../Fetchers/FetchByToken.ts'
 import { FetcherInterface, SourceInterface, AbstractQuery, Thing, LocalMechanismsInterface } from '../../types.ts'
 import { Html5Entities } from 'https://deno.land/x/html_entities@v1.0/mod.js'
-import { RawYouTubeItem, YouTubeOptions } from './YouTubeTypes.ts'
+import { YouTubeRawItem, YouTubeOptions } from './YouTubeTypes.ts'
 import { fetched } from '../../Helpers/fetched.ts'
 
 /**
@@ -10,9 +10,13 @@ import { fetched } from '../../Helpers/fetched.ts'
  * Because of that way of dealing with YouTube our implementation does not support fulltext search on the source side.
  * That is why we have localMechanisms.fulltextSearch = true. The abstraction will do it on behalf of us.
  */
-export class YouTube implements SourceInterface<RawYouTubeItem> {
+export class YouTube implements SourceInterface<YouTubeRawItem> {
 
   #options: YouTubeOptions
+  public whitelistedDomains: Array<string> = [
+    'www.googleapis.com',
+    'yt.lemnoslife.com'
+  ]
 
   // We can not increase this, it is hardcoded max value for the YouTube API.
   public maxResults = 50
@@ -72,7 +76,7 @@ export class YouTube implements SourceInterface<RawYouTubeItem> {
   /**
    * The transformation from an API specific item to a schema.org item.
    */
-   normalize(item: RawYouTubeItem): Thing {
+   normalize(item: YouTubeRawItem): Thing {
     return {
       '@id': `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`,
       'name': Html5Entities.decode(item.snippet.title),

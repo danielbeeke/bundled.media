@@ -1,7 +1,7 @@
 import { FetchAll } from '../../Fetchers/FetchAll.ts'
 import { FetcherInterface, SourceInterface, AbstractQuery, Thing } from '../../types.ts'
 import { bcp47Normalize } from '../../Helpers/bcp47Normalize.ts'
-import { RawApiBibleItem, ApiBibleOptions } from './ApiBibleTypes.ts'
+import { ApiBibleRawItem, ApiBibleOptions } from './ApiBibleTypes.ts'
 import { fetched } from '../../Helpers/fetched.ts'
 import { ISO639_1_to_ISO639_3 } from '../../Helpers/ISO639_1_to_ISO639_3.ts'
 
@@ -10,9 +10,12 @@ import { ISO639_1_to_ISO639_3 } from '../../Helpers/ISO639_1_to_ISO639_3.ts'
  * You have a fetch and a normalize.
  * It supports searching, filtering on language, but it does not support pagination.
  */
-export class ApiBible implements SourceInterface<RawApiBibleItem> {
+export class ApiBible implements SourceInterface<ApiBibleRawItem> {
 
   #options: ApiBibleOptions
+  public whitelistedDomains: Array<string> = [
+    'api.scripture.api.bible'
+  ]
 
   public fetcher: FetcherInterface
 
@@ -36,7 +39,7 @@ export class ApiBible implements SourceInterface<RawApiBibleItem> {
   /**
    * The transformation from an API specific item to a schema.org item.
    */
-   normalize(item: RawApiBibleItem): Thing {
+   normalize(item: ApiBibleRawItem): Thing {
     return {
       '@type': 'Book',
       'name': item.name,

@@ -21,17 +21,23 @@ export class FetcherBase<FetchCallback> {
    * Normalizes and expands to JSON-ld items.
    */
    async normalizeItems (allItems: Array<Thing>) {
-    return await Promise.all(allItems.map(item => {
+    const normalizedItems = (await Promise.all(allItems.map(item => {
       try {
         const normalizedItem = this.normalizeCallback(item)
-        normalizedItem['@context'] = { '@vocab': 'https://schema.org/' }
+        normalizedItem['@context'] = { '@vocab': 'http://schema.org/' }
+        if (!normalizedItem['@id']) return null
         return JSONLD.expand(normalizedItem).then((graph: Array<any>) => graph.pop())
       }
       catch (exception) {
         console.error(item, exception)
         return null
       }
-    }).filter(Boolean))
+    }))).filter(Boolean)
+
+    // De-duplicate
+    const unique = new Map()
+    for (const item of normalizedItems) unique.set(item['@id'], item)
+    return [...unique.values()]
   }
 
 }

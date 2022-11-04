@@ -3,19 +3,25 @@ const cache = await caches.open('fetched')
 
 const stubs: Map<string, any> = new Map()
 
+const debug = false
+const dumpOutput = false
+
 export async function fetched(
   url: string | URL,
   options: RequestInit = {},
 ): Promise<Response> {
+  if (debug) console.log(url.toString())
+
   if (stubs.has(url.toString())) {
-    return new Response(JSON.stringify(stubs.get(url.toString())))
+    const stub = stubs.get(url.toString())
+    return new Response(typeof stub === 'object' ? JSON.stringify(stub) : stub)
   }
 
   if (options.method === 'POST') return fetch(url, options)
   const request = new Request(url, options)
 
   const cacheMatch = await cache.match(request)
-  if (cacheMatch) {
+  if (cacheMatch && !dumpOutput) {
     cacheMatch.headers.set('x-cache-hit', 'true')
     return cacheMatch
   }
@@ -24,6 +30,12 @@ export async function fetched(
   if (response.status === 200) {
     await cache.put(request, response.clone())
   }
+
+  if (dumpOutput) {
+    const text = await (response.clone()).text()
+    console.log(text)
+  }
+
   return response
 }
 

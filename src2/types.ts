@@ -18,8 +18,9 @@ export interface FetcherInterface {
 }
 
 export interface SourceInterface<RawItem> {
+  whitelistedDomains?: Array<string>
   fetcher: FetcherInterface
-  normalize (item: RawItem): Thing
+  normalize? (item: RawItem): Thing
 }
 
 export interface LocalMechanismsInterface {

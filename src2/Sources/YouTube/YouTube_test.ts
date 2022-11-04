@@ -1,15 +1,10 @@
 import { assertEquals } from 'https://deno.land/std@0.161.0/testing/asserts.ts'
-import { AbstractQuery, Thing } from '../../types.ts'
+import { AbstractQuery } from '../../types.ts'
 import { YouTube } from './YouTube.ts'
 import './YouTubeStubs.ts'
+import { ensureNoDuplicates } from '../../Helpers/ensureNoDuplicates.ts'
 
 const testSource = new YouTube({ channel: 'BibleProjectDutch', key: 'stubbed' })
-
-const ensureNoDuplicates = (...items: Array<Array<Thing>>) => {
-  const all = items.flatMap(nestedItems => nestedItems.map(item => item['@id']))
-  const ids = new Set(all)
-  assertEquals(all.length, ids.size)
-}
 
 // I have got this from: https://www.youtube.com/c/BibleProjectDutch/videos
 // The following snippet I put into the javascript console
