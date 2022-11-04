@@ -1,6 +1,7 @@
 import { AbstractQuery } from '../../types.ts'
 import { LightNet } from './LightNet.ts'
 import { doMultipleRequests } from '../../Helpers/doMultipleRequests.ts'
+import './LightNetStubs.ts'
 
 const testSource = new LightNet({ 
   url: 'https://data.mediaworks.global',

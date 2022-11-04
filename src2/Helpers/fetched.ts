@@ -10,12 +10,12 @@ export async function fetched(
   url: string | URL,
   options: RequestInit = {},
 ): Promise<Response> {
-  if (debug) console.log(url.toString())
-
   if (stubs.has(url.toString())) {
     const stub = stubs.get(url.toString())
     return new Response(typeof stub === 'object' ? JSON.stringify(stub) : stub)
   }
+
+  if (debug) console.log(url.toString())
 
   if (options.method === 'POST') return fetch(url, options)
   const request = new Request(url, options)
