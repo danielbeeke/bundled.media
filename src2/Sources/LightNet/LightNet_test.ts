@@ -1,17 +1,8 @@
-import { AbstractQuery } from '../../types.ts'
-import { LightNet } from './LightNet.ts'
 import { doMultipleRequests } from '../../Helpers/doMultipleRequests.ts'
 import './LightNetStubs.ts'
-
-const testSource = new LightNet({ 
-  url: 'https://data.mediaworks.global',
-  channel: 'library',
-  types: ['ebook', 'video'],
-  limit: 40,
-})
+import { lightNetSource } from './LightNetTestSource.ts'
 
 Deno.test('Fetching data', async () => {
-  const itemsPerRequest = 20
-  const query: AbstractQuery = { limit: itemsPerRequest }
-  await doMultipleRequests(query, testSource.fetcher, 6, 20)
+  await doMultipleRequests({ limit: 20 }, lightNetSource.fetcher, 6, 20)
+  await doMultipleRequests({ limit: 20, fulltextSearch: 'Dorie' }, lightNetSource.fetcher, 1, 10)
 })

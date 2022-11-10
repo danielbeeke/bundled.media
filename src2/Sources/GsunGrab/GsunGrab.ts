@@ -23,7 +23,7 @@ export class GsunGrab implements SourceInterface<GsunGrabRawItem> {
     )
   }
 
-  public languages = {
+  #languages = {
     en: {
       url: 'https://www.gsungrab.org/en/resources/',
       download: 'Download',
@@ -51,7 +51,7 @@ export class GsunGrab implements SourceInterface<GsunGrabRawItem> {
   async fetch (_query: AbstractQuery) {
     const pageMetdata: any = {}
     
-    for (const [langCode, language] of Object.entries(this.languages)) {
+    for (const [langCode, language] of Object.entries(this.#languages)) {
       const response = await fetched(language.url)
       const html = await response.text()
       const document: any = new DOMParser().parseFromString(html, 'text/html')

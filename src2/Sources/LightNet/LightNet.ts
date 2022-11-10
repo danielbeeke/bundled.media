@@ -36,7 +36,6 @@ export class LightNet implements SourceInterface<LightNetRawItem> {
     fetchUrl.searchParams.set('offset', offset.toString())
     fetchUrl.searchParams.set('limit', limit.toString())
     fetchUrl.searchParams.set('sort[name]', 'asc')
-    
     fetchUrl.searchParams.set('sidetrack[0]', 'authors')
 
     if (query.fulltextSearch) fetchUrl.searchParams.set('search', `*${query.fulltextSearch}*`)

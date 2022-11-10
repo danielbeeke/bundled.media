@@ -2,7 +2,7 @@ import { AbstractQuery, FetcherInterface, FetcherResult, Thing, LocalMechanismsI
 import { filterNormalizedItems } from './filterNormalizedItems.ts'
 import { FetcherBase } from './FetcherBase.ts'
 
-export type FetchByPageCallback = (query: AbstractQuery, page: number) => Promise<{ items: Array<Thing>, page: number }>
+export type FetchByPageCallback = (query: AbstractQuery, page: number) => Promise<{ items: Array<Thing> }>
 export type NormalizeCallback = (item: any) => Thing
 export type FetchByPagePagination = { page: number, sliceOffset: number }
 
@@ -17,8 +17,8 @@ export class FetchByPage extends FetcherBase<FetchByPageCallback> implements Fet
 
   async execute(query: AbstractQuery, pagination: FetchByPagePagination = { page: 0, sliceOffset: 0 }): FetcherResult<FetchByPagePagination> {
     try {
-      const { items: allItems, page } = await this.fetchCallback(query, pagination.page)
-      const normalizedItems = await this.normalizeItems(allItems) 
+      const { items: allItems } = await this.fetchCallback(query, pagination.page)
+      const normalizedItems = allItems ? await this.normalizeItems(allItems) : []
       const filteredItems = filterNormalizedItems(query, normalizedItems, this.localMechanisms)
       const slicedItems = filteredItems.slice(pagination.sliceOffset, pagination.sliceOffset + query.limit)
       const filteredItemsStillContainsResults = filteredItems.length > pagination.sliceOffset + query.limit
@@ -30,7 +30,7 @@ export class FetchByPage extends FetcherBase<FetchByPageCallback> implements Fet
           items: slicedItems,
           done,
           pagination: { 
-            page: filteredItemsStillContainsResults ? pagination.page : page,
+            page: filteredItemsStillContainsResults ? pagination.page : pagination.page + 1,
             sliceOffset: filteredItemsStillContainsResults ? pagination.sliceOffset + query.limit : 0
           }
         }
@@ -38,7 +38,7 @@ export class FetchByPage extends FetcherBase<FetchByPageCallback> implements Fet
 
       // Recursion, we want to give the expected amount, when we had an sliceOffset, 
       // we call ourselves again to fill it to the amount expected. 
-      const { done: restDone, items: restItems, pagination: restPagination } = await this.execute(query, { page, sliceOffset: 0 })
+      const { done: restDone, items: restItems, pagination: restPagination } = await this.execute(query, { page: pagination.page, sliceOffset: 0 })
       const slicedRestItems = restItems.slice(0, query.limit - slicedItems.length)
 
       return {

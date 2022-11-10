@@ -1,10 +1,8 @@
 import { assertEquals } from 'https://deno.land/std@0.161.0/testing/asserts.ts'
 import { AbstractQuery } from '../../types.ts'
-import { YouTube } from './YouTube.ts'
 import './YouTubeStubs.ts'
 import { doMultipleRequests } from '../../Helpers/doMultipleRequests.ts'
-
-const testSource = new YouTube({ channel: 'BibleProjectDutch', key: 'stubbed' })
+import { youTubeSource } from './YouTubeTestSource.ts'
 
 // I have got this from: https://www.youtube.com/c/BibleProjectDutch/videos
 // The following snippet I put into the javascript console
@@ -17,7 +15,7 @@ Deno.test('Fetching data', async () => {
     fulltextSearch: 'Overzicht'
   }
 
-  const results = await doMultipleRequests(query, testSource.fetcher, 4, 10)
+  const results = await doMultipleRequests(query, youTubeSource.fetcher, 4, 10)
   const overzichtTitles = titles.filter(title => title.toLocaleLowerCase().includes('overzicht'))
   assertEquals(results.flatMap(result => result.items).length, overzichtTitles.length)
 })

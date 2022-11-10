@@ -18,7 +18,7 @@ export class FetchByToken extends FetcherBase<FetchByTokenCallback> implements F
   async execute(query: AbstractQuery, pagination: FetchByTokenPagination = { token: null, sliceOffset: 0 }): FetcherResult<FetchByTokenPagination> {
     try {
       const { items: allItems, token } = await this.fetchCallback(query, pagination.token)
-      const normalizedItems = await this.normalizeItems(allItems) 
+      const normalizedItems = allItems ? await this.normalizeItems(allItems) : []
       const filteredItems = filterNormalizedItems(query, normalizedItems, this.localMechanisms)
       const slicedItems = filteredItems.slice(pagination.sliceOffset, pagination.sliceOffset + query.limit)
       const filteredItemsStillContainsResults = filteredItems.length > pagination.sliceOffset + query.limit

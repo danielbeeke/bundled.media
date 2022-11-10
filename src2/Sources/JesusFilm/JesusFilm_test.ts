@@ -1,9 +1,7 @@
 import { AbstractQuery } from '../../types.ts'
-import { JesusFilm } from './JesusFilm.ts'
 import './JesusFilmStubs.ts'
 import { doMultipleRequests } from '../../Helpers/doMultipleRequests.ts'
-
-const testSource = new JesusFilm({ key: 'stubbed' })
+import { jesusFilmSource } from './JesusFilmTestSource.ts'
 
 Deno.test('Fetching data', async () => {
   const itemsPerRequest = 20
@@ -12,5 +10,5 @@ Deno.test('Fetching data', async () => {
     limit: itemsPerRequest
   }
 
-  await doMultipleRequests(query, testSource.fetcher, 1, 7)
+  await doMultipleRequests(query, jesusFilmSource.fetcher, 1, 7)
 })

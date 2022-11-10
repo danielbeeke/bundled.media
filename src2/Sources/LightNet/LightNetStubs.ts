@@ -6929,3 +6929,528 @@ fetched.setTest('https://data.mediaworks.global/library/ebook,video?offset=80&li
   "total": 182,
   "sidetrack": {}
 })
+
+fetched.setTest('https://data.mediaworks.global/library/ebook,video?offset=0&limit=40&sort%5Bname%5D=asc&sidetrack%5B0%5D=authors&search=*Dorie*', {
+  "data": [
+    {
+      "language": "Albanian",
+      "langCode": "sq",
+      "id": "dorie-the-girl-nobody-loved",
+      "type": "ebook",
+      "description": "DORI I KA PËRJETUAR T Ë GJITHA KËTO SI NJË JETIME E PËRBUZUR NGA PRINDËRIT E SAJ, E KEQTRAJTUAR NGA NJË JETIMORE NË TJETRËN, AJO KA NJOHUR VETËM MJERIM DHE MIZORI GJATË GJITHË FËMIJËRISË SË SAJ. POR PËRMES TYRE, AJO ZBULOI NJË MIK SHUMË TË VEЗANTË. AI ISHTE NJË MIK QË DO T’I QËNDRONTE AFËR ASAJ NË KOHËT MË TË VËSHTIRA DHE TA MBUSHTE ATË ME SHPRESË NË VEND TË DËSHPËRIMIT.\n\nSOT DORI DO TË NDAJË ME FËMIJËT NË MBARË BOTËN KËTË MESAZH SHPRESE: UNË KAM MËSUAR SE AI MUND T’I MARRË ”ASKUSHËT” DHE T’I KTHEJË ATA NË ”DIKUSH”. NËSE DO TË HARRONI ЗDO GJË TJETËR QË DO T’JU TREGOJ, MOS E HARRONI KURRË KËTË...PERËNDIA JU DO!",
+      "authors": [
+        "https://rdf.mediaworks.global/contents/person/arlene-adams"
+      ],
+      "category": [
+        "https://rdf.mediaworks.global/contents/category/comics"
+      ],
+      "covers": [
+        {
+          "height": "3503",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.sq.cover.front.jpg",
+          "width": "2472"
+        },
+        {
+          "height": "3490",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.sq.cover.back.jpg",
+          "width": "2469"
+        },
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.back.jpg"
+        }
+      ],
+      "keywords": [
+        "https://rdf.mediaworks.global/contents/keyword/kids",
+        "https://rdf.mediaworks.global/contents/keyword/comic"
+      ],
+      "name": "DORI, VAJZA QË NUK E DONTE ASKUSH",
+      "originalTitle": "Dorie The Girl Nobody Loved",
+      "urls": [
+        "https://media.mediaworks.global/files/dorie-the-girl-nobody-loved.sq.pdf"
+      ]
+    },
+    {
+      "language": "Bosnian",
+      "langCode": "bs",
+      "id": "dorie-the-girl-nobody-loved",
+      "type": "ebook",
+      "description": "DORI JE SVE OVO DOŽIVJELA KAO SIROČE. ODBAČENA OD STRANE SVOJIH RODITELJA, ZLOSTAVLJANA OD JEDNOG DO DRUGOG PRIHVATILIŠTA, SVE ŠTO JE POZNAVALA U SVOM DJETINJSTVU BILI SU BIJEDA I OKRUTNOST. MEƉUTIM, USRED SVEGA TOGA ONA JE OTKRILA VEOMA POSEBNOG PRIJATELJA. TO JE PRIJATELJ KOJI JE BIO VJERAN U NAJTEŽIM VREMENIMA I KOJI JE NJEN OČAJ ZAMIJENIO NADOM.\n\nDANAS DORI DIJELI OVU PORUKU NADE SA DJECOM DILJEM SVIJETA: “NAUČILA SAM DA ON MOŽE “NIKOGA” PRETVORITI U “NEKOGA”. A AKO ZABORAVITE SVE ŠTO SAM VAM ISPRIČALA, NE ZABORAVITE OVO...BOG VAS VOLI!”",
+      "authors": [
+        "https://rdf.mediaworks.global/contents/person/arlene-adams"
+      ],
+      "category": [
+        "https://rdf.mediaworks.global/contents/category/comics"
+      ],
+      "covers": [
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.back.jpg"
+        }
+      ],
+      "keywords": [
+        "https://rdf.mediaworks.global/contents/keyword/kids",
+        "https://rdf.mediaworks.global/contents/keyword/comic"
+      ],
+      "name": "DORI: DJEVOJČICA KOJU NIKO NIJE VOLIO",
+      "originalTitle": "Dorie The Girl Nobody Loved",
+      "urls": [
+        "https://media.mediaworks.global/files/dorie-the-girl-nobody-loved.bs.pdf"
+      ]
+    },
+    {
+      "language": "German",
+      "langCode": "de",
+      "id": "dorie-the-girl-nobody-loved",
+      "type": "ebook",
+      "description": "Dorie ungeliebt - ungewollt - ausgenutzt das war Dories Leben als Waise: von den Eltern verstoßen, in einer Pflegefamilie nach der anderen misshandelt, ihre Kindheit bestand nur aus elend und Grausamkeit. Aber in dieser zeit fand sie einen ganz besonderen Freund. Einen Freund, der auch in den schlimmsten Zeiten zu ihr hielt und ihre Verzweiflung durch Hoffnung ersetzte. Heute gibt Dorie diese Botschaft der Hoffnung an Kinder auf der ganzen Welt weiter: «Ich habe gelernt, dass er aus jeder Person etwas machen kann. Auch wenn du alles vergisst, was ich dir je gesagt habe, vergiss das eine nicht ... Gott liebt dich!»",
+      "authors": [
+        "https://rdf.mediaworks.global/contents/person/arlene-adams"
+      ],
+      "category": [
+        "https://rdf.mediaworks.global/contents/category/comics"
+      ],
+      "covers": [
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.de.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.de.cover.back.jpg"
+        },
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.back.jpg"
+        }
+      ],
+      "keywords": [
+        "https://rdf.mediaworks.global/contents/keyword/kids",
+        "https://rdf.mediaworks.global/contents/keyword/comic"
+      ],
+      "name": "DORIE, DAS MÄDCHEN, DAS NIEMAND LIEBTE",
+      "originalTitle": "Dorie The Girl Nobody Loved",
+      "urls": [
+        "https://media.mediaworks.global/files/dorie-the-girl-nobody-loved.de.pdf"
+      ]
+    },
+    {
+      "language": "Ukrainian",
+      "langCode": "uk",
+      "id": "dorie-the-girl-nobody-loved",
+      "type": "ebook",
+      "description": "У ПРИТУЛКУ ДОРI ВСЕ ЦЕ ПЕРЕЖИЛА. ЇЇ ЗАЛИШИЛИ БАТЬКИ, НАД НЕЮ ЗНУЩАЛИСЯ ОПIКУНИ, У ДИТИНСТВI ДIВЧИНКА ЗАЗНАЛА ЛИШЕ ПРИНИЖЕННЯ ТА ЖОРСТОКОСТI. ПОНЕВIРЯЮЧИСЬ, ВОНА ЗНАЙШЛА СПРАВЖНЬОГО ДРУГА, ЯКИЙ НЕ ВIДВЕРНУВСЯ ВIД НЕЇ У НАЙСКРУТНIШI ХВИЛИНИ ЖИТТЯ ТА ЗАМIНИВ ВIДЧАЙ, ЯКИЙ ПАНУВАВ У ЇЇ СЕРЦI, НАДIЄЮ.\nТЕПЕР ДОРI РОЗПОВIДАЄ ДОБРУ НОВИНУ ДIТЯМ ПО ВСЬОМУ СВIТУ:\n„Я ПЕРЕКОНАЛАСЯ, ЩО ВIН МОЖЕ ВЗЯТИ „НIКОГО”, ЯК Я, I ПЕРЕТВОРИТИ НА „КОГОСЬ”. I ЯКЩО ВИ ЗАБУДЕТЕ ВСЕ IНШЕ, ЩО Я ВАМ СКАЗАЛА, ТО ПАМ’ЯТАЙТЕ ЛИШЕ ЦЕ:\nIСУС ЛЮБИТЬ ВАС!”",
+      "authors": [
+        "https://rdf.mediaworks.global/contents/person/arlene-adams"
+      ],
+      "category": [
+        "https://rdf.mediaworks.global/contents/category/comics"
+      ],
+      "covers": [
+        {
+          "height": "3502",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.uk.cover.front.jpg",
+          "width": "2469"
+        },
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.back.jpg"
+        }
+      ],
+      "keywords": [
+        "https://rdf.mediaworks.global/contents/keyword/kids",
+        "https://rdf.mediaworks.global/contents/keyword/comic"
+      ],
+      "name": "ДОРI: ДIВЧИНКА, ЯКУ НIХТО НЕ ЛЮБИВ",
+      "originalTitle": "Dorie The Girl Nobody Loved",
+      "urls": [
+        "https://media.mediaworks.global/files/dorie-the-girl-nobody-loved.uk.pdf"
+      ]
+    },
+    {
+      "language": "Yakut",
+      "langCode": "sah",
+      "id": "dorie-the-girl-nobody-loved",
+      "type": "ebook",
+      "description": "ДОРИ\nАБААҺЫ КӨРҮҮ - КИЭР АННЬЫЫ - ӨҺҮӨННЭЭХ БЫҺЫЫ\nТУЛААЙАХ СЫЛДЬАН, ДОРИ ИТИНИ БАРЫТЫН ОЛОҔОР БИЛБИТЭ. ТӨРӨППҮТТЭРЭ БЫРАХПЫТТАРЫН КЭННЭ, АТЫТТАН АТЫН ТУОРА ЫАЛ ДЬИЭТИГЭР КӨҺӨ СЫЛДЬАН, ОҔО СААҺЫГАР КИНИ АҤАРДАС ЭРЭЙИ-МУҤУ УОННА ДЬОН ТЫЙЫС СЫҺЫАНЫН ЭРЭ КӨРСҮБҮТЭ. ОЛ ЭРЭЭРИ, ЫНЫРЫК ОЛОХ БЫЫҺЫГАР КИНИ ДЬИҤНЭЭХ ДОҔОРУ БУЛБУТА. КИНИ ЫАРАХАН КЭМНЭРИГЭР ДОҔОРО КУРУУК АТТЫГАР БААР БУОЛАРА, УОННА УОЛУЙБУТ КЭМИГЭР ЭРЭЛИ БИЭРЭР ЭТЭ.\nДОРИ БҮГҮН ИТИ ЭРЭЛИНЭН ААН ДОЙДУ ОҔОЛОРУН КЫТТА ҮЛЛЭСТЭР. КИНИ ТУОХ ДА БУОЛБАТАҔЫ ТУОХХА ЭРЭ УЛАРЫТАР КЫАХТААҔЫН МИН ӨЙДӨӨБҮТҮМ. МИН ТУГУ ЭППИППИН ӨЙГҮТҮГЭР ТУППАТАХХЫТЫНА ДАҔАНЫ, БИИРИ ЭРЭ ӨЙДӨӨҤ...\nТАҤАРА ЭҺИГИНИ ТАПТЫЫР!",
+      "authors": [
+        "https://rdf.mediaworks.global/contents/person/arlene-adams"
+      ],
+      "category": [
+        "https://rdf.mediaworks.global/contents/category/comics"
+      ],
+      "covers": [
+        {
+          "height": "3509",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.sah.cover.front.jpg",
+          "width": "2481"
+        },
+        {
+          "height": "3509",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.sah.cover.back.jpg",
+          "width": "2481"
+        },
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.back.jpg"
+        }
+      ],
+      "keywords": [
+        "https://rdf.mediaworks.global/contents/keyword/kids",
+        "https://rdf.mediaworks.global/contents/keyword/comic"
+      ],
+      "name": "ДОРИ, КИМ ДА ТАПТААБАТАХ КЫЫСЧААНА",
+      "originalTitle": "Dorie The Girl Nobody Loved",
+      "urls": [
+        "https://media.mediaworks.global/files/dorie-the-girl-nobody-loved.sah.pdf"
+      ]
+    },
+    {
+      "language": "Khakas",
+      "langCode": "kjh",
+      "id": "dorie-the-girl-nobody-loved",
+      "type": "ebook",
+      "description": "ДОРИ\nХЫРТЫСТАНЫС ХЫЙА ИТКЕНІ ЧАБАЛЛАНЫС\n\nӦКІС ХАЛҒАН ДОРИ ПРАЙ ПУ НИМЕНІ ИРТКЕН. ПАБА–ІҶЕЗІ ТАСТААН, ИБДЕҢ ИБГЕ КӦС ЧӦРГЕН ХЫЗЫҶАХ КІЧІГДЕҢ СЫҒАРА ИРЕЕЛЕНІС ПАЗА КІЗІ ЧАБАЛЫН НА КӦРГЕН.\n\nПУ ХОРҒЫСТЫҒ ЧУРТАСТА ОЛ СЫН НАНҶЫЗЫНА ТОҒАС ПАРҒАН. ДОРИГЕ ААР ПОЛҒАНДА, ОЛ ХОСТИ ПОЛҒАН. ЧОБАЛЫСТА ОЛ ІЗЕНІС СЫЙЛААН. ПӰӰН ДОРИ ОЛ ІЗЕНІСНЕҢ ТИЛЕКЕЙДЕГІ ПРАЙ ПАЛАЛАРНАҢ ӰЛЕСЧЕ.\n\n«МИН ПІЛЧЕМ: ОЛ “ЧОХ“ ТЕЕН НИМЕНІ “ПАР“ ИТЧЕ. СІРЕР МИН ЧООХТААН НИМЕНІ ПРАЙ ДАА УНДУТ САЛЗАР, ПІР НИМЕНІ САҒЫСТА СИИР САЛЫҢАР:\n\nХУДАЙ СІРЕРГЕ ХЫНЧА!»",
+      "authors": [
+        "https://rdf.mediaworks.global/contents/person/arlene-adams"
+      ],
+      "category": [
+        "https://rdf.mediaworks.global/contents/category/comics"
+      ],
+      "covers": [
+        {
+          "height": "3509",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.kjh.cover.front.jpg",
+          "width": "2481"
+        },
+        {
+          "height": "3510",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.kjh.cover.back.jpg",
+          "width": "2481"
+        },
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.back.jpg"
+        }
+      ],
+      "keywords": [
+        "https://rdf.mediaworks.global/contents/keyword/kids",
+        "https://rdf.mediaworks.global/contents/keyword/comic"
+      ],
+      "name": "ДОРИ, ПІРДЕЕЗІ ХЫНМИНЧАТХАН ХЫЗЫҶАХ",
+      "originalTitle": "Dorie The Girl Nobody Loved",
+      "urls": [
+        "https://media.mediaworks.global/files/dorie-the-girl-nobody-loved.kjh.pdf"
+      ]
+    },
+    {
+      "language": "Nenets",
+      "langCode": "yrk",
+      "id": "dorie-the-girl-nobody-loved",
+      "type": "ebook",
+      "description": "ДОРИ СЭХЭДАМБАВЫ, ХАЕВЫ, ПИТАРПАВЫ НЕ ӇАЦЕКЫ ӇЭВЫ ЕВАКО ӇАЦЕКЫДАРЕВ’ ДОРИ НЕНЭСЯ ӇОД” ТАРЕМ’ МАЯНДОРЦЬ ИЛЕВЫ. НЕБЯХАЮДА, НИСЯХАЮДА СИТА ХАЕ”МАХАДАНДИ’ ЕХЭРАНА НЕНЭЦИЕ” МЯДО” ПОМНА САНАРЦЕТЫ. НЮДЯ ӇЭВАНДА МАЛЬӇГАНА САВА ИЛАМ’ МАНЭМАДА ЮӇГУСЬ. НЕНЭЦЯ” ВЭНЗУ ӇЭВАМ’ МАНЭЦЕТЫ. ТАРЕМ’ ӇОД” ТАРЦЯ САӇГОВОТА ИЛӇГАНА ПЫДА САВА НЯДАМДА ХО. ИЛАНДА ТОЕНАВА’ МАЛЬӇГАНА ТИКЫ САВА НЯДА ХЭВХАНАНДА МЭСЕТЫ, ЕНАВАМ’ ТЭВРАСЕТЫ. Я’ ТИӇГЭВНА ТЕДА’ ЛАХАНА ДОРИ ТИКЫ ЕНАВА’ НЯМНА ӇАЦЕКЭХЭ” ВАДЕ”ӇА. «НУМ’ НИСЯВА” ХУСУВЭЙ ӇАМГЭМ’ СЕРТА ПИРМАМ’ МАНЬ ХАМЭДАВАСЬ. ХЭТАВАХАДАНИ ӇАМГЭХЭРТ НИБ”НАНДА” ХАМЭДА”, ӇОПОЙ ТЮКУМ’ НЁРА” ЮРАБЮ”... НУМ’ СИДДА” СЯӇА».",
+      "authors": [
+        "https://rdf.mediaworks.global/contents/person/arlene-adams"
+      ],
+      "category": [
+        "https://rdf.mediaworks.global/contents/category/comics"
+      ],
+      "covers": [
+        {
+          "height": "3509",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.yrk.cover.front.jpg",
+          "width": "2481"
+        },
+        {
+          "height": "3509",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.yrk.cover.back.jpg",
+          "width": "2481"
+        },
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.back.jpg"
+        }
+      ],
+      "keywords": [
+        "https://rdf.mediaworks.global/contents/keyword/kids",
+        "https://rdf.mediaworks.global/contents/keyword/comic"
+      ],
+      "name": "ДОРИ, ХИБЯХАРТ СЯНДА НЕ ӇАЦЕКЫ НИВЫ ӇА”",
+      "originalTitle": "Dorie The Girl Nobody Loved",
+      "urls": [
+        "https://media.mediaworks.global/files/dorie-the-girl-nobody-loved.yrk.pdf"
+      ]
+    },
+    {
+      "language": "Russian",
+      "langCode": "ru",
+      "id": "dorie-the-girl-nobody-loved",
+      "type": "ebook",
+      "description": "БУДУЧИ СИРОТОЙ, ДОРИ ВСЁ ЭТО ПЕРЕЖИЛА. БРОШЕННАЯ РОДИТЕЛЯМИ, ПЕРЕХОДЯЩАЯ ИЗ ОДНОГО ЧУЖОГО ДОМА В ДРУГОЙ, В ДЕТСТВЕ ОНА ВИДЕЛА ЛИШЬ СТРАДАНИЯ И ЖЕСТОКОСТЬ ЛЮДЕЙ.\n\nНО СРЕДИ ВСЕГО ЭТОГО КОШМАРА ОНА ОБРЕЛА НАСТОЯЩЕГО ДРУГА.\n\nЭТОТ ДРУГ БЫЛ РЯДОМ, КОГДА ЕЙ БЫЛО ТЯЖЕЛО, И ДАРИЛ НАДЕЖДУ В МИНУТЫ ОТЧАЯНИЯ. СЕГОДНЯ ДОРИ ДЕЛИТСЯ ЭТОЙ НАДЕЖДОЙ С ДЕТЬМИ ПО ВСЕМУ МИРУ.\n\n'Я ПОНЯЛА, ЧТО ОН МОЖЕТ ПРЕВРАТИТЬ 'НИЧТО' В 'НЕЧТО'. И, ЕСЛИ ВЫ ДАЖЕ ЗАБУДЕТЕ ВСЕ, ЧТО Я ГОВОРИЛА, ЗАПОМНИТЕ ТОЛЬКО ОДНО…БОГ ЛЮБИТ ВАС!'",
+      "authors": [
+        "https://rdf.mediaworks.global/contents/person/arlene-adams"
+      ],
+      "category": [
+        "https://rdf.mediaworks.global/contents/category/comics"
+      ],
+      "covers": [
+        {
+          "height": "3609",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.ru.cover.front.jpg",
+          "width": "2485"
+        },
+        {
+          "height": "3640",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.ru.cover.back.jpg",
+          "width": "2478"
+        },
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.back.jpg"
+        }
+      ],
+      "keywords": [
+        "https://rdf.mediaworks.global/contents/keyword/kids",
+        "https://rdf.mediaworks.global/contents/keyword/comic"
+      ],
+      "name": "ДОРИ: ДЕВОЧКА, КОТОРУЮ НИКТО НЕ ЛЮБИЛ",
+      "originalTitle": "Dorie The Girl Nobody Loved",
+      "urls": [
+        "https://www.youtube.com/watch?v=tya0fu-RxD",
+        "https://media.mediaworks.global/files/dorie-the-girl-nobody-loved.ru.pdf"
+      ]
+    },
+    {
+      "language": "Bulgarian",
+      "langCode": "bg",
+      "id": "dorie-the-girl-nobody-loved",
+      "type": "ebook",
+      "description": "ВСИЧКО ТОВА ПРЕЖИВЯ ДОРИ КАТО СИРАЧЕ. ТЯ БЕ ИЗОСТАВЕНА ОТ СВОИТЕ РОДИТЕЛИ, А В СЕМЕЙСТВАТА, В КОИТО БЕ ПРИЕТА, БЕШЕ ИЗМЪЧВАНА. В СВОЕТО ДЕТСТВО ТЯ ВИДЯ ЖЕСТОКОСТТА И МИЗЕРИЯТА. НО ТЯ ОТКРИ ЕДИН СПЕЦИАЛЕН ПРИЯТЕЛ. ЕДИН ПРИЯТЕЛ, КОЙТО Я ПОДКРЕПЯШЕ, КОЙТО І ДАВАШЕ НАДЕЖДА В НАЙ-ТЕЖКИТЕ МИГОВЕ. ДНЕС ДОРИ ПРЕДАВА ПОСЛАНИЕТО НА ДЕЦАТА ПО ЦЕЛИЯ СВЯТ: „АЗ РАЗБРАХ, ЧЕ ТОЙ МОЖЕ ДА НАПРАВИ ОТ ВСЕКИ „НИКОЙ” — „НЯКОЙ”. ДОРИ ДА ЗАБРАВИШ КАКВО СЪМ РАЗКАЗАЛА, НЕ ЗАБРАВЯЙ НИКОГА, ЧЕ БОГ ТЕ ОБИЧА!”",
+      "authors": [
+        "https://rdf.mediaworks.global/contents/person/arlene-adams"
+      ],
+      "category": [
+        "https://rdf.mediaworks.global/contents/category/comics"
+      ],
+      "covers": [
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bg.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bg.cover.back.jpg",
+          "width": 840
+        },
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.back.jpg"
+        }
+      ],
+      "keywords": [
+        "https://rdf.mediaworks.global/contents/keyword/kids",
+        "https://rdf.mediaworks.global/contents/keyword/comic"
+      ],
+      "name": "ДОРИ: МОМИЧЕТО, КОЕТО НИКОЙ НЕ ОБИЧАШЕ",
+      "originalTitle": "Dorie The Girl Nobody Loved",
+      "urls": [
+        "https://media.mediaworks.global/files/dorie-the-girl-nobody-loved.bg.pdf"
+      ]
+    },
+    {
+      "language": "Georgian",
+      "langCode": "ka",
+      "id": "dorie-the-girl-nobody-loved",
+      "type": "ebook",
+      "description": "დორია\nუსიყვარულო - არასასურველი - დამცირებული\n\nყოველივე გამოსცადა როგორც ობოლმა. მშობლებისგან უარყოფილი, ერთი თავშესაფარიდან მეორეში დადიოდა, სადაც ცუდად ექცეოდნენ და ამცირებდნენ. ის მხოლოდ ტანჯვასა და სისატიკეს იცნობდა ბავშვობაში, მაგრამ ამ მძიმე დღეებში მან მეტად განსა კუთრებული მეგობარი აღმოაჩინა. ეს იყო მეგობარი, რომლიც მუდამ მის გვერდში იდგა გაჭირვების ჟამს და მის უიმედობას იმედით ცვლიდა.\n\nდღეს დორია იმედის ამ სიტყვას მთელ მსოფლიოში უზიარებს ბავშვებს: “მე ვისწავლე, რომ მას შეუძლია არარაობიდან მნიშვნელოვანი ადამიანი შექმნას. თუ ყველაფერი დაგავიწყდება რაც გითხარი, ერთ რამეს ნუ დაივიწყებ…\n\nღმერთს უყვარხარ!”",
+      "authors": [
+        "https://rdf.mediaworks.global/contents/person/arlene-adams"
+      ],
+      "category": [
+        "https://rdf.mediaworks.global/contents/category/comics"
+      ],
+      "covers": [
+        {
+          "height": "3590",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.ka.cover.front.jpg",
+          "width": "2532"
+        },
+        {
+          "height": "3595",
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.ka.cover.back.jpg",
+          "width": "2521"
+        },
+        {
+          "color": "rgb(4,4,4)",
+          "height": 1240,
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.front.jpg",
+          "width": 840
+        },
+        {
+          "url": "https://media.mediaworks.global/covers/dorie-the-girl-nobody-loved.bs.cover.back.jpg"
+        }
+      ],
+      "keywords": [
+        "https://rdf.mediaworks.global/contents/keyword/kids",
+        "https://rdf.mediaworks.global/contents/keyword/comic"
+      ],
+      "name": "დორია რომელიც არავის უყვარდა",
+      "originalTitle": "Dorie The Girl Nobody Loved",
+      "urls": [
+        "https://media.mediaworks.global/files/dorie-the-girl-nobody-loved.ka.pdf"
+      ]
+    }
+  ],
+  "total": 10,
+  "sidetrack": {
+    "person": [
+      {
+        "language": "Bosnian",
+        "langCode": "bs",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "Arlene Adams"
+      },
+      {
+        "language": "English",
+        "langCode": "en",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "Arlene Adams"
+      },
+      {
+        "language": "Russian",
+        "langCode": "ru",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "АРЛИН АДАМС"
+      },
+      {
+        "language": "Tajik",
+        "langCode": "tg",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "АРЛЕН АДАМС"
+      },
+      {
+        "language": "Turkmen Latin",
+        "langCode": "tk-latn",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "ARLIN ADAMS"
+      },
+      {
+        "language": "Azerbaijani Latin",
+        "langCode": "az-latn",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "Arlene Adams"
+      },
+      {
+        "language": "Bulgarian",
+        "langCode": "bg",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "АРЛИЙН АДАМС"
+      },
+      {
+        "language": "German",
+        "langCode": "de",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "Arlene Adams"
+      },
+      {
+        "language": "Georgian",
+        "langCode": "ka",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "არლენ ადამსი"
+      },
+      {
+        "language": "Khakas",
+        "langCode": "kjh",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "АРЛИ АДАМС"
+      },
+      {
+        "language": "Yakut",
+        "langCode": "sah",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "Арлин Адамс"
+      },
+      {
+        "language": "Albanian",
+        "langCode": "sq",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "Arlene Adams"
+      },
+      {
+        "language": "Ukrainian",
+        "langCode": "uk",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "АРЛIН АДАМС"
+      },
+      {
+        "language": "Nenets",
+        "langCode": "yrk",
+        "id": "arlene-adams",
+        "type": "person",
+        "name": "АРЛИН АДАМС"
+      }
+    ]
+  }
+})

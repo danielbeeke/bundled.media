@@ -45,7 +45,7 @@ export class JesusFilm implements SourceInterface<JesusFilmRawItem> {
       return item
     }))
 
-    return { items, page }
+    return { items }
   }
 
   @cache

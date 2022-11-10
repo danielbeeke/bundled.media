@@ -18,7 +18,7 @@ export class FetchByOffsetAndLimit extends FetcherBase<FetchByOffsetAndLimitCall
   async execute(query: AbstractQuery, pagination: FetchByOffsetAndLimitPagination = { offset: 0, sliceOffset: 0 }): FetcherResult<FetchByOffsetAndLimitPagination> {
     try {
       const { items: allItems } = await this.fetchCallback(query, pagination.offset, this.limit)
-      const normalizedItems = await this.normalizeItems(allItems) 
+      const normalizedItems = allItems ? await this.normalizeItems(allItems) : []
       const filteredItems = filterNormalizedItems(query, normalizedItems, this.localMechanisms)
       const slicedItems = filteredItems.slice(pagination.sliceOffset, pagination.sliceOffset + query.limit)
       const filteredItemsStillContainsResults = filteredItems.length > pagination.sliceOffset + query.limit

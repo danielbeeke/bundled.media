@@ -1,15 +1,7 @@
-import { AbstractQuery } from '../../types.ts'
-import { ApiBible } from './ApiBible.ts'
 import './ApiBibleStubs.ts'
 import { doMultipleRequests } from '../../Helpers/doMultipleRequests.ts'
-
-const testSource = new ApiBible({ key: 'stubbed' })
+import { apiBibleSource } from './ApiBibleTestSource.ts'
 
 Deno.test('Fetching data', async () => {
-  const query: AbstractQuery = {
-    limit: 20,
-    fulltextSearch: 'Bible'
-  }
-
-  await doMultipleRequests(query, testSource.fetcher, 5, 5)
+  await doMultipleRequests({ limit: 20, fulltextSearch: 'Bible' }, apiBibleSource.fetcher, 5, 5)
 })

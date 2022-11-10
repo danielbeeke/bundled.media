@@ -11,7 +11,7 @@ export class FetchAll extends FetcherBase<FetchAllCallback> implements FetcherIn
   async execute(query: AbstractQuery, pagination: FetchAllPagination = { sliceOffset: 0 }): FetcherResult<FetchAllPagination> {
     try {
       const { items: allItems } = await this.fetchCallback(query)
-      const normalizedItems = await this.normalizeItems(allItems) 
+      const normalizedItems = allItems ? await this.normalizeItems(allItems) : []
       const filteredItems = filterNormalizedItems(query, normalizedItems, this.localMechanisms)
       const slicedItems = filteredItems.slice(pagination.sliceOffset, pagination.sliceOffset + query.limit)
       const filteredItemsStillContainsResults = filteredItems.length > pagination.sliceOffset + query.limit
