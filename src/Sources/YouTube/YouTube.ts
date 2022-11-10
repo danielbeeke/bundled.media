@@ -43,7 +43,7 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
    * This third party API provides this service.
    */
   async channelNameToPlaylistId (channel: string) {
-    const fetchUrl = new URL(`https://yt.lemnoslife.com/channels?part=snippet&forUsername=${channel}`)
+    const fetchUrl = new URL(`https://yt.lemnoslife.com/channels?forUsername=${channel}`)
     const request = await fetched(fetchUrl)
     const response = await request.json()
     return `UU${response.items[0]['id'].substring(2)}`

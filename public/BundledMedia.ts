@@ -1,5 +1,5 @@
 import { Observable, bufferCount } from 'https://esm.sh/rxjs@7.5.7'
-import { stream } from 'https://esm.sh/ndjson-rxjs';
+import ndjsonStream from 'https://esm.sh/can-ndjson-stream'
 
 export class BundledMedia {
 
@@ -9,8 +9,21 @@ export class BundledMedia {
     this.#host = host    
   }
 
-  search (filters: {}) {
-    console.log(filters)
-    return stream(this.#host)
+  async search (filters: {}) {
+    const response = await fetch(this.#host)
+    const stream = await ndjsonStream(response.body)
+    const reader = stream.getReader()
+    
+    const observable = new Observable((subscriber: any) => {
+      const processChunk = ({ value, done }: { value: any, done: boolean }) => {
+        if (value) subscriber.next(value)
+        if (done) subscriber.complete()
+        else reader.read().then(processChunk)
+      }
+      
+      reader.read().then(processChunk)
+    })
+    
+    return observable.pipe(bufferCount(20))
   }
 }

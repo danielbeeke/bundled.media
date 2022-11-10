@@ -1,12 +1,12 @@
 import { BaseRoute } from './BaseRoute.ts'
-import { Search } from '../../src2/Search/Search.ts'
 
-import { excelSource } from '../../src2/Sources/Excel/ExcelTestSource.ts'
-import { apiBibleSource } from '../../src2/Sources/ApiBible/ApiBibleTestSource.ts'
-import { gsunGrabSource } from '../../src2/Sources/GsunGrab/GsunGrabTestSource.ts'
-import { jesusFilmSource } from '../../src2/Sources/JesusFilm/JesusFilmTestSource.ts'
-import { lightNetSource } from '../../src2/Sources/LightNet/LightNetTestSource.ts'
-import { youTubeSource } from '../../src2/Sources/YouTube/YouTubeTestSource.ts'
+import { Stream } from '../Stream/Stream.ts'
+import { excelSource } from '../Sources/Excel/ExcelTestSource.ts'
+import { apiBibleSource } from '../Sources/ApiBible/ApiBibleTestSource.ts'
+import { gsunGrabSource } from '../Sources/GsunGrab/GsunGrabTestSource.ts'
+import { jesusFilmSource } from '../Sources/JesusFilm/JesusFilmTestSource.ts'
+import { lightNetSource } from '../Sources/LightNet/LightNetTestSource.ts'
+import { youTubeSource } from '../Sources/YouTube/YouTubeTestSource.ts'
 
 
 /**
@@ -36,12 +36,8 @@ export class StreamRoute extends BaseRoute {
       youTubeSource
     ]
     
-    const searcher = new Search(sources)
-
-    const stream = searcher.execute({
-      limit: 20
-    })
-    return stream
+    const streamer = new Stream(sources)
+    return streamer.execute({ limit: 20 })
   }
 
   /**

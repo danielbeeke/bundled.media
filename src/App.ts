@@ -1,6 +1,5 @@
 import routes from './Routes/routes.ts'
 import layout from './Templates/layout.ts'
-import { dataSources as createDataSources } from '../.env.ts'
 import { serveFileWithTs } from 'https://deno.land/x/ts_serve@v1.4.1/mod.ts';
 import { toPathRegex } from './Helpers/toPathRegex.ts'
 import { existsSync } from 'https://deno.land/std@0.157.0/fs/mod.ts';
@@ -14,13 +13,12 @@ const cacheInteractive = await caches.open('responses-interactive')
 const cache = await caches.open('responses')
 
 const deliverResponse = async (request: Request, response: Response, cache: Cache) => {
-  // if (request.method === 'GET') await cache.put(request, response.clone())
+  if (request.method === 'GET') await cache.put(request, response.clone())
   return response
 }
 
 const port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 8080
 serve(serveHttp, { port });
-console.info(`bundled.media is running locally at: http://localhost:${port}/`)
 
 async function serveHttp(request: Request) {
   const requestURL = new URL(request.url)
@@ -100,8 +98,3 @@ async function serveHttp(request: Request) {
   // Fallback to not found page.
   return new Response(`Page not found`, { status: 404 })
 }
-
-/**
- * Trigger the constructors so sources can cache stuff on startup.
- */
-for (const source of createDataSources()) source.boot()

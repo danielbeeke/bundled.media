@@ -22,13 +22,11 @@ const results = combineLatest([
   sourcesStream,
   langCodeStream
 ]).pipe(
-  switchMap(([search, types, categories, sources, langCodes]) => {
+  switchMap(([search, types, categories, sources, langCodes]: 
+    [string, Array<string>, Array<string>, Array<string>, Array<string>]) => {
     data = []
-
-    return bundledMedia.search({
-      search, types, categories, sources, langCodes
-    }).pipe(bufferCount(20))}
-  )
+    return bundledMedia.search({ search, types, categories, sources, langCodes })
+  })
 )
 
 const template = () => html`
@@ -43,11 +41,11 @@ const template = () => html`
   `)}
 `
 
-// const results = bundledMedia.search({})
-
-/** @ts-ignore */
-results.subscribe((newItems: Array<any>) => {
+results
+.pipe(bufferCount(20))
+.subscribe((newItems: Array<any>) => {
   data.push(...newItems)
+  console.log('woop')
   render(document.querySelector('#app')!, template)
 })
 

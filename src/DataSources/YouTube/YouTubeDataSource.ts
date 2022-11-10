@@ -73,7 +73,7 @@ export class YouTubeDataSource extends BaseDataSource<YouTubeOptions, YouTubeRaw
   }
 
   async channelNameToPlaylistId (channelName: string) {
-    const fetchUrl = new URL(`https://yt.lemnoslife.com/channels?part=snippet&forUsername=${channelName}`)
+    const fetchUrl = new URL(`https://yt.lemnoslife.com/channels?forUsername=${channelName}`)
     const request = await fetched(fetchUrl)
     const response = await request.json()
     return 'UU' + response.items[0]['id'].substring(2)
