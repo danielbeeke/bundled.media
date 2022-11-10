@@ -3,7 +3,7 @@ import { JsonStringifyStream } from 'https://deno.land/std@0.163.0/encoding/json
 import { readableStreamFromIterable, mergeReadableStreams } from 'https://deno.land/std@0.163.0/streams/mod.ts'
 import { fetcherGenerator } from '../Fetchers/fetcherGenerator.ts'
 
-export class Search {
+export class Stream {
 
   #sources: Array<SourceInterface<any>>
 

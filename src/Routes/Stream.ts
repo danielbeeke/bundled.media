@@ -16,6 +16,8 @@ import { youTubeSource } from '../../src2/Sources/YouTube/YouTubeTestSource.ts'
  */
 export class StreamRoute extends BaseRoute {
 
+  static mime = 'application/json-stream; charset=utf-8'
+
   static path = '/stream'
   static description = `Search and filter through all the enabled sources in a streaming way.`
 

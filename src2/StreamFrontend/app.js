@@ -19,4 +19,4 @@ const createSelectStream = async (url) => {
 
 // results.subscribe(console.log)
 
-const types = createSelectStream('https://bundled.media/types')
+const { select, stream } = createSelectStream('https://bundled.media/types')
