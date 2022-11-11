@@ -47,6 +47,10 @@ export class GsunGrab implements SourceInterface<GsunGrabRawItem> {
     }
   }
 
+  get identifier () {
+    return 'gsungrab'
+  }
+
   @cache
   async fetch (_query: AbstractQuery) {
     const pageMetdata: any = {}

@@ -2,11 +2,9 @@ import { BaseRoute } from './BaseRoute.ts'
 import { Store, Parser } from "npm:n3"
 import { Parser as SparqlParser, Generator as SparqlGenerator } from 'https://esm.sh/sparqljs@3.5.2'
 import { walker } from '../Helpers/walker.ts'
-import { AbstractQuery } from '../Core/AbstractQuery.ts'
 import { Search } from '../Search/Search.ts'
-// import { JSONLD } from 'https://taisukef.github.io/jsonld-es/JSONLD.js'
 import JSONLD from 'npm:jsonld'
-import { QueryEngine } from 'npm:@comunica/query-sparql'
+import { queryEngine } from '../Core/QueryEngine.ts'
 import { streamToString } from '../Helpers/streamToString.ts'
 
 const filtersToUri = {
@@ -42,13 +40,10 @@ export class SparqlRoute extends BaseRoute {
       }
     })
 
-    // console.log(quads)
-    const myEngine = new QueryEngine()
-
     const store = new Store()
     store.addQuads(quads)
-    const response = await myEngine.query(query, { sources: [store] })
-    const { data } = await myEngine.resultToString(response, 'application/sparql-results+json')
+    const response = await queryEngine.query(query, { sources: [store] })
+    const { data } = await queryEngine.resultToString(response, 'application/sparql-results+json')
     const output = await streamToString(data)
     return JSON.parse(output)
   }

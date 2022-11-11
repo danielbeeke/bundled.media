@@ -12,14 +12,14 @@ export async function * fetcherGenerator (source: SourceInterface<any>, query: A
       const { items, done, pagination: newPagination } = await source.fetcher.execute(query, pagination)
       pagination = newPagination
       if (!done) {
-        console.log(pagination, source.constructor.name, items.length)
+        console.log(pagination, source.identifier, items.length)
       }
       for (const item of items) {
         yield item
         await wait(10)
       }
       if (done) {
-        console.log(`Done with ${source.constructor.name}`)
+        console.log(`Done with ${source.identifier}`)
         break
       }
     }  

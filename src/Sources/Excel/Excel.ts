@@ -3,6 +3,7 @@ import { bcp47Normalize } from '../../Helpers/bcp47Normalize.ts'
 import { FetcherInterface, SourceInterface, AbstractQuery, Thing, LocalMechanismsInterface } from '../../types.ts'
 import { FetchAll } from '../../Fetchers/FetchAll.ts'
 import { cache } from '../../Helpers/CacheDecorator.ts'
+
 import * as xlsx from 'https://deno.land/x/sheetjs@v0.18.3/xlsx.mjs'
 import * as cptable from 'https://deno.land/x/sheetjs@v0.18.3/dist/cpexcel.full.mjs'
 xlsx.set_cptable(cptable)
@@ -25,6 +26,10 @@ export class Excel implements SourceInterface<ExcelRawItem> {
       this.normalize.bind(this), 
       localMechanisms
     )
+  }
+
+  get identifier () {
+    return `excel:${this.#options.file}`
   }
 
   @cache

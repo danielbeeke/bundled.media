@@ -24,6 +24,10 @@ export class ApiBible implements SourceInterface<ApiBibleRawItem> {
     this.fetcher = new FetchAll(this.fetch.bind(this), this.normalize.bind(this))
   }
 
+  get identifier () {
+    return 'apibible'
+  }
+
   /**
    * API Bible is quite simple.
    */

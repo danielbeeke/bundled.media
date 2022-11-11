@@ -1,25 +1,44 @@
-import { CacheEntry } from 'https://deno.land/x/fromdeno_cache@v0.1.10/src/entry.ts'
+// await caches.delete('fetched')
+const cache = await caches.open('fetched')
 
-/**
- * If `Response` isn't cached, performs the request and caches `Response`.
- * @permissions `--allow-net --allow-write --allow-read --allow-env`
- */
+const stubs: Map<string, any> = new Map()
+
+const debug = true
+const dumpOutput = false
+
 export async function fetched(
   url: string | URL,
   options: RequestInit = {},
 ): Promise<Response> {
-
-  if (options.method === 'POST') return fetch(url, options)
-
-  const signal = options?.signal ?? undefined
-  const entry = new CacheEntry(url);
-  try {
-    return await entry.read({ signal });
-  } catch (error: unknown) {
-    if (!(error instanceof Deno.errors.NotFound)) throw error;
+  if (stubs.has(url.toString())) {
+    const stub = stubs.get(url.toString())
+    return new Response(typeof stub === 'object' ? JSON.stringify(stub) : stub)
   }
 
-  const res = await fetch(url, options);
-  if (res.status === 200) await entry.write(res.clone());
-  return res;
+  if (debug) console.log(url.toString())
+
+  if (options.method === 'POST') return fetch(url, options)
+  const request = new Request(url, options)
+
+  const cacheMatch = await cache.match(request)
+  if (cacheMatch && !dumpOutput) {
+    cacheMatch.headers.set('x-cache-hit', 'true')
+    return cacheMatch
+  }
+
+  const response = await fetch(url, options);
+  if (response.status === 200) {
+    await cache.put(request, response.clone())
+  }
+
+  if (dumpOutput) {
+    const text = await (response.clone()).text()
+    console.log(text)
+  }
+
+  return response
+}
+
+fetched.setTest = (url: string, jsonResponse: any) => {
+  stubs.set(url, jsonResponse)
 }

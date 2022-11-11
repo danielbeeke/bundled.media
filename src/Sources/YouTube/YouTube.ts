@@ -38,15 +38,21 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
     )
   }
 
+  get identifier () {
+    return `youtube:${this.#options.channel}`
+  }
+
   /**
    * It seemed difficult to get a channel ID from a channel name.
    * This third party API provides this service.
    */
   async channelNameToPlaylistId (channel: string) {
-    const fetchUrl = new URL(`https://yt.lemnoslife.com/channels?part=snippet&forUsername=${channel}`)
-    const request = await fetched(fetchUrl)
-    const response = await request.json()
-    return `UU${response.items[0]['id'].substring(2)}`
+    const fetchUrl = new URL(`https://www.youtube.com/c/${channel}`)
+    const response = await fetched(fetchUrl)
+    const page = await response.text()
+    const regex = /<meta itemprop="channelId" content="UC([a-zA-Z0-9_]*)">/g
+    const matches = regex.exec(page)
+    return `UU${matches?.[1]}`
   }
 
   /**

@@ -5,9 +5,8 @@ import { TypesRoute } from './Types.ts'
 import { SourcesRoute } from './Sources.ts'
 import { AboutRoute } from './About.ts'
 import { CssRoute } from './Css.ts'
-import { IdRoute } from './Id.ts'
 import { CategoriesRoute } from './Categories.ts'
-import { SparqlRoute } from './Sparql.ts'
+// import { SparqlRoute } from './Sparql.ts'
 import { ThumbRoute } from './Thumb.ts'
 
 export default [
@@ -18,8 +17,7 @@ export default [
   TypesRoute,
   SourcesRoute,
   CssRoute,
-  IdRoute,
   CategoriesRoute,
-  SparqlRoute,
+  // SparqlRoute,
   ThumbRoute,
 ]

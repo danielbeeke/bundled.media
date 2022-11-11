@@ -23,6 +23,10 @@ export class LightNet implements SourceInterface<LightNetRawItem> {
     this.fetcher = new FetchByOffsetAndLimit(this.fetch.bind(this), this.normalize.bind(this), {}, options.limit)
   }
 
+  get identifier () {
+    return `lightnet:${this.#options.url.split('://').pop()}/${this.#options.channel}`
+  }
+
   @cache
   async fetch (query: AbstractQuery, offset: number, limit: number) {
     const types = this.#options.types.join(',')

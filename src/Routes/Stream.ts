@@ -1,13 +1,7 @@
 import { BaseRoute } from './BaseRoute.ts'
-import { Search } from '../../src2/Search/Search.ts'
-
-import { excelSource } from '../../src2/Sources/Excel/ExcelTestSource.ts'
-import { apiBibleSource } from '../../src2/Sources/ApiBible/ApiBibleTestSource.ts'
-import { gsunGrabSource } from '../../src2/Sources/GsunGrab/GsunGrabTestSource.ts'
-import { jesusFilmSource } from '../../src2/Sources/JesusFilm/JesusFilmTestSource.ts'
-import { lightNetSource } from '../../src2/Sources/LightNet/LightNetTestSource.ts'
-import { youTubeSource } from '../../src2/Sources/YouTube/YouTubeTestSource.ts'
-
+// import { Search } from '../../src2/Search/Search.ts'
+import { Stream } from '../Stream/Stream.ts'
+import { sources } from '../../.env.ts'
 
 /**
  * A route with a sync response. 
@@ -27,21 +21,8 @@ export class StreamRoute extends BaseRoute {
    * We create a fresh set of dataSources and then fetch results.
    */
   handle () {
-    const sources = [
-      excelSource,
-      apiBibleSource,
-      gsunGrabSource,
-      jesusFilmSource,
-      lightNetSource,
-      youTubeSource
-    ]
-    
-    const searcher = new Search(sources)
-
-    const stream = searcher.execute({
-      limit: 20
-    })
-    return stream
+    const searcher = new Stream(sources)
+    return searcher.execute({ limit: 20 })
   }
 
   /**

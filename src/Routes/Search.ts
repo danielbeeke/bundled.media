@@ -1,5 +1,4 @@
 import { BaseRoute } from './BaseRoute.ts'
-import { AbstractQuery } from '../Core/AbstractQuery.ts'
 import { Search } from '../Search/Search.ts'
 
 /**
@@ -18,8 +17,8 @@ export class SearchRoute extends BaseRoute {
    * We create a fresh set of dataSources and then fetch results.
    */
   async handle () {
-    const query = new AbstractQuery(this.url)
-    const searcher = new Search(query, this.url.toString())
+    console.log(this.url)
+    const searcher = new Search({ limit: 20 })
     return await searcher.handle()
   }
 

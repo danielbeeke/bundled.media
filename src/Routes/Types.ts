@@ -1,5 +1,5 @@
 import { BaseRoute } from './BaseRoute.ts'
-import { dataSources as createDataSources } from '../../.env.ts'
+import { sources } from '../../.env.ts'
 
 const typeLabels: { [key: string]: string } = {
   'http://schema.org/Book': 'Book',
@@ -13,11 +13,10 @@ export class TypesRoute extends BaseRoute {
   static description = `A list of all the types from the enabled sources`
 
   async handle () {
-    const sources = await createDataSources()
     const types: { [key: string]: {
       label: string,
       uri: string
-      sources: Array<URL>
+      sources: Array<string>
     } } = {}
 
     for (const source of sources) {
@@ -26,11 +25,11 @@ export class TypesRoute extends BaseRoute {
           types[type] = {
             label: typeLabels[type] ?? type.split('/').pop()!,
             uri: type,
-            sources: [source.url]
+            sources: [source.identifier]
           }  
         }
         else {
-          types[type].sources.push(source.url)
+          types[type].sources.push(source.identifier)
         }
       }  
     }

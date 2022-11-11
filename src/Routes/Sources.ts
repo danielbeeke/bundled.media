@@ -1,6 +1,5 @@
 import { BaseRoute } from './BaseRoute.ts'
-import { dataSources as createDataSources } from '../../.env.ts'
-import { BaseDataSource } from '../DataSources/BaseDataSource.ts'
+import { sources } from '../../.env.ts'
 
 export class SourcesRoute extends BaseRoute {
 
@@ -8,12 +7,10 @@ export class SourcesRoute extends BaseRoute {
 
   static description = `A list of all enabled sources`
 
-  async handle () {
-    const sources = await createDataSources()
-
-    return sources.map((source: BaseDataSource) => ({
-      uri: source.identifier(),
-      label: source.label,
+  handle () {
+    return sources.map((source) => ({
+      uri: source.identifier,
+      label: source.identifier,
       types: source.types()
     }))
   }
@@ -22,7 +19,7 @@ export class SourcesRoute extends BaseRoute {
    * The template for the HyperMedia response
    */
   async template (_variables: { [key: string]: any }): Promise<string> { 
-    const sources = await this.handle()
+    const sources = this.handle()
 
     return `
       <ul class="list-group">
