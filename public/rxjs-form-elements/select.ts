@@ -1,7 +1,7 @@
 import { html, render } from 'https://esm.sh/uhtml'
 import { fromEvent, map, startWith } from 'https://esm.sh/rxjs@7.5.7'
 
-export const createSelectStream = async (url: string) => {
+export const select = async (url: string) => {
   const wrapper = document.createElement('div')
   
   const response = await fetch(url)

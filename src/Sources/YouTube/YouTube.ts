@@ -14,8 +14,7 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
 
   #options: YouTubeOptions
   public whitelistedDomains: Array<string> = [
-    'www.googleapis.com',
-    'yt.lemnoslife.com'
+    'www.googleapis.com'
   ]
 
   // We can not increase this, it is hardcoded max value for the YouTube API.
@@ -43,8 +42,7 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
   }
 
   /**
-   * It seemed difficult to get a channel ID from a channel name.
-   * This third party API provides this service.
+   * It seemed difficult to get a channel ID from a channel name by the API.
    */
   async channelNameToPlaylistId (channel: string) {
     const fetchUrl = new URL(`https://www.youtube.com/c/${channel}`)

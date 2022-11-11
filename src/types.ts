@@ -1,7 +1,8 @@
 export type AbstractQuery = {
   fulltextSearch?: string
-  bcp47?: string
+  bcp47?: Array<string>
   types?: Array<string>
+  categories?: Array<string>
   limit: number
 }
 

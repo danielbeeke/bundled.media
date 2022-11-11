@@ -1,5 +1,6 @@
 import { BaseRoute } from './BaseRoute.ts'
 import { Search } from '../Search/Search.ts'
+import { AbstractQuery } from '../types.ts'
 
 /**
  * A route with a sync response. 
@@ -17,8 +18,17 @@ export class SearchRoute extends BaseRoute {
    * We create a fresh set of dataSources and then fetch results.
    */
   async handle () {
-    console.log(this.url)
-    const searcher = new Search({ limit: 20 })
+    const url = new URL(this.url)
+
+    const query: AbstractQuery = {
+      limit: 20,
+      fulltextSearch: url.searchParams.get('fulltextSearch') ?? undefined,
+      bcp47: url.searchParams.get('bcp47')?.split(',') ?? undefined,
+      categories: url.searchParams.get('categories')?.split(',') ?? undefined,
+      types: url.searchParams.get('types')?.split(',') ?? undefined
+    }
+
+    const searcher = new Search(query, 5)
     return await searcher.handle()
   }
 

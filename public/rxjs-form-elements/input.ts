@@ -1,7 +1,7 @@
 import { html, render } from 'https://esm.sh/uhtml'
 import { fromEvent, map, startWith, debounceTime } from 'https://esm.sh/rxjs@7.5.7'
 
-export const createInputStream = () => {
+export const input = () => {
   const wrapper = document.createElement('div')
   let element: HTMLInputElement | undefined = undefined
 

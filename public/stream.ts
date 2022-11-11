@@ -1,53 +1,38 @@
 import { BundledMedia } from './BundledMedia.ts'
-import { createSelectStream } from './createSelectStream.ts'
-import { createInputStream } from './createInputStream.ts'
-import { createLangCodeStream } from './createLangCodeStream.ts'
-import { combineLatest, switchMap, bufferCount } from 'https://esm.sh/rxjs@7.5.7'
+import type { Filters } from './BundledMedia.ts'
+import { bufferCount, Observable } from 'https://esm.sh/rxjs@7.5.7'
 import { html, render } from 'https://esm.sh/uhtml'
+import { card } from './card.ts'
+import { pagination } from './rxjs-form-elements/pagination.ts'
+import { waitFor } from './misc/waitFor.ts'
+
+const data: Array<Array<any>> = []
 
 const bundledMedia = new BundledMedia(location.toString())
 
-const { element: searchFilter, stream: searchStream } = createInputStream()
-const { element: typesFilter, stream: typesStream } = await createSelectStream('/types')
-const { element: categoriesFilter, stream: categoriesStream } = await createSelectStream('/categories')
-const { element: sourcesFilter, stream: sourcesStream } = await createSelectStream('/sources')
-const { element: langCodeFilter, stream: langCodeStream } = createLangCodeStream()
-
-let data: Array<any> = []
-
-const results = combineLatest([
-  searchStream,
-  typesStream,
-  categoriesStream,
-  sourcesStream,
-  langCodeStream
-]).pipe(
-  switchMap(([search, types, categories, sources, langCodes]) => {
-    data = []
-
-    return bundledMedia.search({
-      search, types, categories, sources, langCodes
-    }).pipe(bufferCount(20))}
-  )
-)
-
-const template = () => html`
-  ${searchFilter}
-  ${typesFilter}
-  ${categoriesFilter}
-  ${sourcesFilter}
-  ${langCodeFilter}
-
-  ${data.map(item => html`
-    <div>${item['http://schema.org/name'][0]['@value']}</div>
-  `)}
-`
-
-// const results = bundledMedia.search({})
-
-/** @ts-ignore */
-results.subscribe((newItems: Array<any>) => {
-  data.push(...newItems)
-  render(document.querySelector('#app')!, template)
+const { stream: results, filters } = await bundledMedia.filterUI((filters: Filters): Observable => {
+  data.splice(0, data.length)
+  return bundledMedia.stream(filters).pipe(bufferCount(12))
 })
 
+const { element: paginationButtons, stream: paginationStream } = pagination(data, results)
+
+results.subscribe((newItems: Array<any>) => {
+  data.push(newItems)
+})
+
+paginationStream
+.pipe(waitFor(results))
+.subscribe((currentPage: number) => {
+  render(document.querySelector('#app')!, html`
+    <div class="input-group mb-3">
+      ${filters}
+    </div>
+
+    <div class="cards mb-3">
+      ${data[currentPage]?.map(item => card(item))}
+    </div>
+
+    ${paginationButtons}
+  `)
+})

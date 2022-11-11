@@ -1,8 +1,5 @@
-import { tryToExtractLanguage } from '../Helpers/tryToExtractLanguage.ts'
-import { baseUrl } from '../../.env.ts'
-import { lastPart } from '../Helpers/lastPart.ts';
-import JSONLD from 'npm:jsonld'
 import { AbstractQuery } from '../types.ts'
+import { sources } from '../../.env.ts';
 
 /**
  * A route with a sync response. 
@@ -12,9 +9,11 @@ import { AbstractQuery } from '../types.ts'
 export class Search {
 
   #query: AbstractQuery
+  #chunkSize: number
 
-  constructor (query: AbstractQuery) {
+  constructor (query: AbstractQuery, chunkSize: number) {
     this.#query = query
+    this.#chunkSize = chunkSize
   }
 
   /**
@@ -23,7 +22,7 @@ export class Search {
    */
   async handle () {
 
-    console.log(this.#query)
+    console.log(sources)
 
     return {
     }
