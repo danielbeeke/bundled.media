@@ -7,10 +7,10 @@ import { html, render } from 'https://esm.sh/uhtml'
 
 export type Filters = {
   fulltextSearch: string, 
-  type: Array<string>, 
-  category: Array<string>, 
-  source: Array<string>, 
-  langCode: Array<string>
+  type: string, 
+  category: string, 
+  source: string, 
+  bcp47: string
 }
 
 export type ApiResponse = {
@@ -133,7 +133,7 @@ export class BundledMedia {
     const { element: typesFilter, stream: typesStream } = await select('/types', url.searchParams.get('type') ?? '')
     const { element: categoriesFilter, stream: categoriesStream } = await select('/categories', url.searchParams.get('category') ?? '')
     const { element: sourcesFilter, stream: sourcesStream } = await select('/sources', url.searchParams.get('source') ?? '')
-    const { element: langCodeFilter, stream: langCodeStream } = langcode(url.searchParams.get('langcode') ?? '')
+    const { element: langCodeFilter, stream: langCodeStream } = langcode(url.searchParams.get('bcp47') ?? '')
 
     const filtersStream = searchStream.pipe(combineLatestWith(
       typesStream,
@@ -141,7 +141,7 @@ export class BundledMedia {
       sourcesStream,
       langCodeStream,
     )).pipe (
-      map(([fulltextSearch, type, category, source, langCode]) => ({ fulltextSearch, type, category, source, langCode })),
+      map(([fulltextSearch, type, category, source, bcp47]) => ({ fulltextSearch, type, category, source, bcp47 })),
     )
 
     const template = html`
