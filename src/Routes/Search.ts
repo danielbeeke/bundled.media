@@ -33,11 +33,12 @@ export class SearchRoute extends BaseRoute {
     const url = new URL(this.url)
 
     const query: AbstractQuery = {
-      limit: 20,
+      limit: url.searchParams.get('limit') ? parseInt(url.searchParams.get('limit')!) : 20,
       fulltextSearch: url.searchParams.get('fulltextSearch') ?? undefined,
       bcp47: url.searchParams.get('bcp47') ?? undefined,
       category: url.searchParams.get('category') ?? undefined,
-      type: url.searchParams.get('type') ?? undefined
+      type: url.searchParams.get('type') ?? undefined,
+      source: url.searchParams.get('source') ?? undefined
     }
 
     const paginationRaw = url.searchParams.get('pagination')

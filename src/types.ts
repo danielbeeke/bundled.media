@@ -35,6 +35,7 @@ export interface SourceInterface<RawItem> {
 export interface LocalMechanismsInterface {
   fulltextSearch?: boolean
   languageFilter?: boolean
+  typeFilter?: boolean
 }
 
 export type FetcherResult<Pagination> = Promise<{

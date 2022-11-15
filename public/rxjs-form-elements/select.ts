@@ -18,7 +18,7 @@ export const select = async (input: string | Items, startWithValue: any = '') =>
 
   const template = html`
     <select ref=${(e: HTMLSelectElement) => element = e} class="form-select type-dropdown">
-      ${startWithValue === '' ? html`<option selected value="">- all -</option>` : null}
+      ${html`<option selected value="">- all -</option>`}
       ${Object.values(items).map(item => html`
         <option selected=${startWithValue === item?.value ?? item?.uri ? true : null} value=${item?.value ?? item?.uri}>${item.label}</option>
       `)}

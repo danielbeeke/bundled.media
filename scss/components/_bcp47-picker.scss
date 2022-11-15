@@ -6,13 +6,7 @@ bcp47-picker {
     display: none;
   }
 
-  .bcp47-value-wrapper {
-    border-radius: 0;
-  }
-
   .bcp47-search.form-control {
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
     border-top-right-radius: .375rem !important;
     border-bottom-right-radius: .375rem !important;
     min-width: 330px !important;

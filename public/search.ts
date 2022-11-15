@@ -1,5 +1,5 @@
 import { BundledMedia, ApiResponse, Filters } from './BundledMedia.ts'
-import { fromEvent, startWith, map, exhaustMap, tap, filter, combineLatest } from 'https://esm.sh/rxjs@7.5.7'
+import { fromEvent, startWith, map, exhaustMap, tap } from 'https://esm.sh/rxjs@7.5.7'
 import { html, render } from "https://esm.sh/uhtml@3.1.0"
 import { card } from './card.ts'
 
@@ -36,6 +36,11 @@ filters.stream.subscribe((filters: Filters) => {
   const newUrl = new URL(location.toString().split('?')[0])
   for (const [key, value] of Object.entries(filters))
     value ? newUrl.searchParams.set(key, value.toString()) : newUrl.searchParams.delete(key)
+
+  const maxVertical = Math.floor(document.body.clientHeight / 370)
+  const limit = Math.floor(document.querySelector('#app')!.clientWidth / 230) * maxVertical
+  newUrl.searchParams.set('limit', limit.toString())
+
   history.pushState(null, '', newUrl)
 })
 
@@ -57,7 +62,9 @@ results.subscribe(({ items, loading }) => {
 
     <div class="cards mb-3">
       ${loading ? html`
-        <span>Loading</span>
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       ` : html`
         ${items?.map(card)}
       `}

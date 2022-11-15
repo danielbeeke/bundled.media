@@ -1,8 +1,8 @@
 import { BaseRoute } from './BaseRoute.ts'
-// import { Search } from '../../src2/Search/Search.ts'
 import { Stream } from '../Stream/Stream.ts'
 import { sources } from '../../.env.ts'
 import { AbstractQuery } from '../types.ts'
+import { filterSourcesStatically } from '../Helpers/filterSourcesStatically.ts'
 
 /**
  * A route with a sync response. 
@@ -22,8 +22,6 @@ export class StreamRoute extends BaseRoute {
    * We create a fresh set of dataSources and then fetch results.
    */
   handle () {
-    const searcher = new Stream(sources)
-
     const url = new URL(this.url)
 
     const query: AbstractQuery = {
@@ -31,8 +29,11 @@ export class StreamRoute extends BaseRoute {
       fulltextSearch: url.searchParams.get('fulltextSearch') ?? undefined,
       bcp47: url.searchParams.get('bcp47') ?? undefined,
       category: url.searchParams.get('category') ?? undefined,
-      type: url.searchParams.get('type') ?? undefined
+      type: url.searchParams.get('type') ?? undefined,
+      source: url.searchParams.get('source') ?? undefined
     }
+
+    const searcher = new Stream(filterSourcesStatically(sources, query))
 
     return searcher.execute(query)
   }

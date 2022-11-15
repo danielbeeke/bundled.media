@@ -51,8 +51,7 @@ export const card = (item: any) => {
 
   const imageFooter = html`${mediaIcon}${languageLabel}`
 
-  return html`<div onclick=${async () => {
-  }} data-bs-toggle="modal" data-bs-target="#infoModal" 
+  return html`<div onclick=${async () => {}} 
     class=${`card ${type} ${!thumbnail && type === 'book' ? 'bible' : ''}`}>
     ${image ? html`
       <div class="image-wrapper">

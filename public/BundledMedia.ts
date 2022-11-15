@@ -11,7 +11,6 @@ export type Filters = {
   category: Array<string>, 
   source: Array<string>, 
   langCode: Array<string>
-  limit: number
 }
 
 export type ApiResponse = {
@@ -47,10 +46,8 @@ export class BundledMedia {
     return url
   }
 
-  stream (url: string, pageSize = 12): Observable<Array<any>> {
-    return stream(url).pipe(
-      bufferCount(pageSize)
-    )
+  stream (url: string): Observable<Array<any>> {
+    return stream(url)
   }
 
   search (url: string) {
@@ -105,7 +102,7 @@ export class BundledMedia {
 
 
     const template = html`
-      <ul class="d-flex pagination justify-content-center">
+      <ul class="d-flex pagination justify-content-start">
       ${button(0, keys[0], '«')}
       ${button(activeIndex - 1, keys[activeIndex - 1], '‹')}
       ${[...buttons.values()].map(index => button(index, keys[index], (index + 1).toString()))}
@@ -132,26 +129,19 @@ export class BundledMedia {
   async filters () {
     const url = new URL(this.#host)
 
-    const limitOptions = [
-      { value: 20, label: '20' },
-      { value: 40, label: '40' }
-    ]
-
     const { element: searchFilter, stream: searchStream } = input(url.searchParams.get('fulltextSearch') ?? '')
     const { element: typesFilter, stream: typesStream } = await select('/types', url.searchParams.get('type') ?? '')
     const { element: categoriesFilter, stream: categoriesStream } = await select('/categories', url.searchParams.get('category') ?? '')
     const { element: sourcesFilter, stream: sourcesStream } = await select('/sources', url.searchParams.get('source') ?? '')
-    const { element: limitFilter, stream: limitStream } = await select(limitOptions, url.searchParams.get('limit') ?? 20)
     const { element: langCodeFilter, stream: langCodeStream } = langcode(url.searchParams.get('langcode') ?? '')
 
     const filtersStream = searchStream.pipe(combineLatestWith(
       typesStream,
       categoriesStream,
       sourcesStream,
-      limitStream,
       langCodeStream,
     )).pipe (
-      map(([fulltextSearch, type, category, source, limit, langCode]) => ({ fulltextSearch, type, category, source, limit, langCode })),
+      map(([fulltextSearch, type, category, source, langCode]) => ({ fulltextSearch, type, category, source, langCode })),
     )
 
     const template = html`
@@ -176,11 +166,6 @@ export class BundledMedia {
       </div>
 
       <div class="col">
-        <label class="form-label">Limit</label>
-        ${limitFilter}
-      </div>
-
-      <div class="col">
         <label class="form-label">Language</label>
         ${langCodeFilter}
       </div>
@@ -189,6 +174,7 @@ export class BundledMedia {
     const element = document.createElement('div') as HTMLDivElement & { stream: Observable<Filters> }
     element.classList.add('input-group')
     element.classList.add('mb-3')
+    element.classList.add('gap-2')
     element.stream = filtersStream
     render(element, template)
 
