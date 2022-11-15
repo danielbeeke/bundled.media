@@ -28,8 +28,12 @@ export class Excel implements SourceInterface<ExcelRawItem> {
     )
   }
 
+  get label () {
+    return this.#options.label
+  }
+
   get identifier () {
-    return `excel:${this.#options.file}`
+    return `excel/${this.#options.file}`
   }
 
   @cache

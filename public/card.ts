@@ -35,7 +35,7 @@ export const card = (item: any) => {
 
   const languageLabels = [...langCodes].map((langCode: string) => { 
     /** @ts-ignore */
-    const label = bcp47Picker?.label(parse(langCode)) 
+    const label = bcp47Picker?.label && bcp47Picker?.label(parse(langCode)) 
     return label ? label : langCode
   })
     .filter(Boolean)

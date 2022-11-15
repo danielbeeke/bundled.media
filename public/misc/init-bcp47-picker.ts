@@ -1,4 +1,4 @@
-import { init as initBcp47Picker } from 'https://unpkg.com/bcp47-picker@1.0.8/dist/init.modern.js';
+import { init as initBcp47Picker } from 'https://unpkg.com/bcp47-picker@1.0.9/dist/init.modern.js';
 
 initBcp47Picker({
   get sources () {

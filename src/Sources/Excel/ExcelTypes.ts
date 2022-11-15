@@ -16,6 +16,7 @@ export type ExcelOptions = {
     url: Array<ColumnGetter>,
     inLanguage: ColumnGetter,
   },
+  label: string,
   url: string,
   sheet?: string,
   file: string,

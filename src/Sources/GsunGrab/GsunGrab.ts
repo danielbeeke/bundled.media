@@ -47,6 +47,10 @@ export class GsunGrab implements SourceInterface<GsunGrabRawItem> {
     }
   }
 
+  get label () {
+    return 'GsunGrab'
+  }
+
   get identifier () {
     return 'gsungrab'
   }

@@ -20,7 +20,11 @@ export class TypesRoute extends BaseRoute {
     } } = {}
 
     for (const source of sources) {
-      for (const type of source.types()) {
+      for (let type of source.types()) {
+        if (!type.includes('http')) {
+          type = `http://schema.org/${type}`
+        }
+
         if (!types[type]) {
           types[type] = {
             label: typeLabels[type] ?? type.split('/').pop()!,

@@ -37,8 +37,12 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
     )
   }
 
+  get label () {
+    return this.#options.channel.charAt(0).toUpperCase() + this.#options.channel.slice(1)
+  }
+
   get identifier () {
-    return `youtube:${this.#options.channel}`
+    return `youtube/${this.#options.channel}`
   }
 
   /**

@@ -17,6 +17,10 @@ export class JesusFilm implements SourceInterface<JesusFilmRawItem> {
     this.#options = options
     this.fetcher = new FetchByPage(this.fetch.bind(this), this.normalize.bind(this), {}, 10)
   }
+
+  get label () {
+    return 'JesusFilm'
+  }
   
   get identifier () {
     return 'jesusfilm'

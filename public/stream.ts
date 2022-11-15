@@ -1,38 +1,59 @@
 import { BundledMedia } from './BundledMedia.ts'
 import type { Filters } from './BundledMedia.ts'
-import { bufferCount, Observable } from 'https://esm.sh/rxjs@7.5.7'
+import { bufferCount, switchMap, startWith } from 'https://esm.sh/rxjs@7.5.7'
 import { html, render } from 'https://esm.sh/uhtml'
 import { card } from './card.ts'
-import { pagination } from './rxjs-form-elements/pagination.ts'
-import { waitFor } from './misc/waitFor.ts'
-
-const data: Array<Array<any>> = []
 
 const bundledMedia = new BundledMedia(location.toString())
 
-const { stream: results, filters } = await bundledMedia.filterUI((filters: Filters): Observable => {
-  data.splice(0, data.length)
-  return bundledMedia.stream(filters).pipe(bufferCount(12))
-})
+const { 
+  stream: filtersStream, 
+  element: filters 
+} = await bundledMedia.filterUI()
 
-const { element: paginationButtons, stream: paginationStream } = pagination(data, results)
+const results = filtersStream.pipe(
+  switchMap(() => bundledMedia.stream(location.toString())),
+)
 
-results.subscribe((newItems: Array<any>) => {
-  data.push(newItems)
-})
+// results.subscribe(console.log)
 
-paginationStream
-.pipe(waitFor(results))
-.subscribe((currentPage: number) => {
+console.log(bundledMedia)
+
+// let currentPage = 0
+
+
+// const renderCards = () => {
+//   render(cards, html`
+//     <div class="cards mb-3">
+//       ${data[currentPage]?.map(item => card(item))}
+//     </div>
+//   `)
+// }
+
+// // paginationStream.subscribe((page: number) => {
+// //   currentPage = page
+// //   if (data.length > 0) renderCards()
+// //   renderPagination()
+// // })
+
+// results.subscribe((newItems: Array<any>) => {
+//   if (data.length === 1) renderCards()
+//   data.push(newItems)
+//   renderPagination()
+// })
+const cards = document.createElement('div')
+
+results.subscribe((items) => {
   render(document.querySelector('#app')!, html`
-    <div class="input-group mb-3">
-      ${filters}
-    </div>
+  
+  <div class="input-group mb-3">
+    ${filters}
+  </div>
 
-    <div class="cards mb-3">
-      ${data[currentPage]?.map(item => card(item))}
-    </div>
+  <div class="cards mb-3">
+    ${cards}
+  </div>
 
-    ${paginationButtons}
-  `)
+  ${bundledMedia.pagination()}
+`)
 })

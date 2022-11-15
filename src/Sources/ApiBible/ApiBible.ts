@@ -24,6 +24,10 @@ export class ApiBible implements SourceInterface<ApiBibleRawItem> {
     this.fetcher = new FetchAll(this.fetch.bind(this), this.normalize.bind(this))
   }
 
+  get label () {
+    return 'API.bible'
+  }
+
   get identifier () {
     return 'apibible'
   }

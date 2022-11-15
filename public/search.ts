@@ -1,38 +1,44 @@
 import { BundledMedia } from './BundledMedia.ts'
-import type { Filters } from './BundledMedia.ts'
-import { bufferCount, Observable } from 'https://esm.sh/rxjs@7.5.7'
-import { html, render } from 'https://esm.sh/uhtml'
+import { switchMap, startWith, map, fromEvent, tap, filter, combineLatest } from 'https://esm.sh/rxjs@7.5.7'
+import { html, render } from "https://esm.sh/uhtml@3.1.0"
 import { card } from './card.ts'
-import { pagination } from './rxjs-form-elements/pagination.ts'
-import { waitFor } from './misc/waitFor.ts'
-
-const data: Array<Array<any>> = []
 
 const bundledMedia = new BundledMedia(location.toString())
 
-const { stream: results, filters } = await bundledMedia.filterUI((filters: Filters): Observable => {
-  data.splice(0, data.length)
-  return bundledMedia.search(filters)
+const filters = await bundledMedia.filters()
+
+const data: Map<string, Array<any>> = new Map()
+
+let currentIndex = 0
+
+const pagination = bundledMedia.paginationStream()
+
+pagination.subscribe(([index, url]: [number, string]) => {
+  currentIndex = index
+  history.pushState(null, '', url)
 })
 
-const { element: paginationButtons, stream: paginationStream } = pagination(data, results)
+const results = combineLatest([
+  filters.stream,
+  pagination
+]).pipe(
+  switchMap(() => bundledMedia.search(location.toString())),
+  tap(({ items, nextUrl }: { items: Array<any>, nextUrl: string }) => {
+    data.set(location.toString(), items)
+    data.set(nextUrl, [])
+    return items
+  }),
+  startWith({ items: [], nextUrl: '' })
+)
 
-results.subscribe((newItems: Array<any>) => {
-  data.push(newItems)
-})
-
-paginationStream
-.pipe(waitFor(results))
-.subscribe((currentPage: number) => {
+results.subscribe(({ items }) => {
   render(document.querySelector('#app')!, html`
-    <div class="input-group mb-3">
-      ${filters}
-    </div>
+    ${filters}
 
     <div class="cards mb-3">
-      ${data[currentPage]?.map(item => card(item))}
+      ${items?.map(card)}
     </div>
 
-    ${paginationButtons}
-  `)
+    ${bundledMedia.pagination(data, currentIndex)}
+`)
 })

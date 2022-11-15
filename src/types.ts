@@ -1,8 +1,9 @@
 export type AbstractQuery = {
   fulltextSearch?: string
-  bcp47?: Array<string>
-  types?: Array<string>
-  categories?: Array<string>
+  bcp47?: string,
+  type?: string
+  source?: string
+  category?: string
   limit: number
 }
 
@@ -18,11 +19,17 @@ export interface FetcherInterface {
   }> 
 }
 
+export type Paginations = {
+  [key: string]:  { [key: string]: any }
+}
+
 export interface SourceInterface<RawItem> {
   whitelistedDomains?: Array<string>
   fetcher: FetcherInterface
   normalize? (item: RawItem): Thing
   identifier: string
+  label: string
+  types: () => Array<string>
 }
 
 export interface LocalMechanismsInterface {

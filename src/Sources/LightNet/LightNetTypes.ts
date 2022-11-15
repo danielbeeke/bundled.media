@@ -23,6 +23,7 @@ export type LightNetRawItem = {
 }
 
 export type LightNetOptions = {
+  label: string,
   url: string,
   channel: string,
   limit: number,

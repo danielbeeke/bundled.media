@@ -23,8 +23,12 @@ export class LightNet implements SourceInterface<LightNetRawItem> {
     this.fetcher = new FetchByOffsetAndLimit(this.fetch.bind(this), this.normalize.bind(this), {}, options.limit)
   }
 
+  get label () {
+    return this.#options.label
+  }
+
   get identifier () {
-    return `lightnet:${this.#options.url.split('://').pop()}/${this.#options.channel}`
+    return `lightnet/${this.#options.url.split('://').pop()}/${this.#options.channel}`
   }
 
   @cache

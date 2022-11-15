@@ -9,8 +9,8 @@ export class SourcesRoute extends BaseRoute {
 
   handle () {
     return sources.map((source) => ({
-      uri: source.identifier,
-      label: source.identifier,
+      uri: `http://bundled.media/source/${source.identifier}`,
+      label: source.label,
       types: source.types()
     }))
   }
