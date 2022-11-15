@@ -2,12 +2,11 @@ import { stream } from 'https://esm.sh/ndjson-rxjs';
 import { select } from './rxjs-form-elements/select.ts'
 import { input } from './rxjs-form-elements/input.ts'
 import { langcode } from './rxjs-form-elements/langcode.ts'
-import { ajax } from 'https://esm.sh/rxjs@7.5.7/ajax'
-import { map, combineLatestWith, fromEvent, filter, from, tap, bufferCount, startWith, Observable } from 'https://esm.sh/rxjs@7.5.7'
+import { map, combineLatestWith, fromEvent, filter, from, tap, bufferCount, startWith, Observable, EMPTY } from 'https://esm.sh/rxjs@7.5.7'
 import { html, render } from 'https://esm.sh/uhtml'
 
 export type Filters = {
-  search: string, 
+  fulltextSearch: string, 
   type: Array<string>, 
   category: Array<string>, 
   source: Array<string>, 
@@ -15,10 +14,18 @@ export type Filters = {
   limit: number
 }
 
+export type ApiResponse = {
+  items: Array<any>, 
+  nextUrl?: string, 
+  pagination?: string, 
+  lastIndex?: number,
+  loading?: boolean
+}
+
 export class BundledMedia {
 
   #host: string
-  data: Map<string | number, { items: Array<any>, nextUrl: string }> = new Map()
+  data: Map<string | number, ApiResponse> = new Map()
 
   constructor (host: string) {
     this.#host = host    
@@ -40,7 +47,7 @@ export class BundledMedia {
     return url
   }
 
-  stream (url: string, pageSize = 12) {
+  stream (url: string, pageSize = 12): Observable<Array<any>> {
     return stream(url).pipe(
       bufferCount(pageSize)
     )
@@ -51,12 +58,14 @@ export class BundledMedia {
       return from([this.data.get(url)!])
     }
 
-    return ajax(url).pipe(
-      map((ajaxResponse: any) => {
-        const { items, nextUrl } = ajaxResponse.response
-        this.data.set(url, ajaxResponse.response)
-        return { items, nextUrl }
-      })
+    // Prepareation for POSTing the pagination instead of GETting.
+    // We need this in the future so we are able to do 300 sources at once.
+    return from(fetch(url, {
+      method: 'POST',
+    }).then(response => response.json())).pipe(
+      tap((response: ApiResponse) => this.data.set(url, response))
+    ).pipe(
+      startWith({ items: [], loading: true })
     )
   }
 
@@ -110,8 +119,8 @@ export class BundledMedia {
 
   paginationStream () {
     return fromEvent(document.body, 'click').pipe(
-      tap((e: any) => e.preventDefault()),
       filter((e: any) => e.target.closest('.pagination') && e.target.classList.contains('page-link')),
+      tap((e: any) => e.preventDefault()),
       map((e: any) => e.target.value),
       startWith([0, location.toString()])
     )
@@ -128,7 +137,7 @@ export class BundledMedia {
       { value: 40, label: '40' }
     ]
 
-    const { element: searchFilter, stream: searchStream } = input(url.searchParams.get('search') ?? '')
+    const { element: searchFilter, stream: searchStream } = input(url.searchParams.get('fulltextSearch') ?? '')
     const { element: typesFilter, stream: typesStream } = await select('/types', url.searchParams.get('type') ?? '')
     const { element: categoriesFilter, stream: categoriesStream } = await select('/categories', url.searchParams.get('category') ?? '')
     const { element: sourcesFilter, stream: sourcesStream } = await select('/sources', url.searchParams.get('source') ?? '')
@@ -142,23 +151,8 @@ export class BundledMedia {
       limitStream,
       langCodeStream,
     )).pipe (
-      map(([search, type, category, source, limit, langCode]) => ({ search, type, category, source, limit, langCode })),
+      map(([fulltextSearch, type, category, source, limit, langCode]) => ({ fulltextSearch, type, category, source, limit, langCode })),
     )
-    
-    filtersStream.subscribe((filters: Filters) => {
-      const url = new URL(location.toString().split('?')[0])
-
-      for (const [key, value] of Object.entries(filters)) {
-        if (value) {
-          url.searchParams.set(key, value.toString())
-        }
-        else {
-          url.searchParams.delete(key)
-        }
-      }
-
-      history.pushState(null, '', url.toString())
-    })
 
     const template = html`
       <div class="col">

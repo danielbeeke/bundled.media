@@ -26,45 +26,41 @@ export class Search {
    * We create a fresh set of dataSources and then fetch results.
    */
   async handle () {
-    const filteredSources = filterSourcesStatically(sources, this.#query)
-    
-    // Token based sources can only be used once per range.
-    const correctedChunkSize = Math.min(filteredSources.length, this.#chunkSize) 
-    const slicedSources = this.sliceSources(filteredSources, correctedChunkSize)
-
-    const promises = slicedSources.map(source => source.fetcher.execute(this.#query, this.#paginations?.[source.identifier]))
-
-    const resultSets = await Promise.all(promises)
-
     const items: Array<any> = []
-
     let lastIndex = this.#lastIndex
 
-    for (const [index, resultSet] of resultSets.entries()) {
-      const source = slicedSources[index]
-      if (items.length < this.#query.limit) {
-        const numberOfItems = Math.min(resultSet.items.length, this.#query.limit - items.length)
-        
-        // console.log(
-        //   numberOfItems, 
-        //   resultSet.items.length, 
-        //   this.#query.limit, 
-        //   items.length
-        // )
+    const filteredSources = filterSourcesStatically(sources, this.#query)
+    
+    let counter = 0
 
-        items.push(...resultSet.items.slice(0, numberOfItems))
+    while (items.length < this.#query.limit && !this.allSourcesAreDone(filteredSources, this.#paginations)) {
+      // Token based sources can only be used once per range.
+      const correctedChunkSize = Math.min(filteredSources.length, this.#chunkSize) 
+      const slicedSources = this.sliceSources(filteredSources, correctedChunkSize, lastIndex, this.#paginations)
 
-        if (resultSet.pagination.sliceOffset > numberOfItems) {
-          resultSet.pagination.sliceOffset = resultSet.pagination.sliceOffset - numberOfItems
+      const promises = slicedSources.map(source => source.fetcher.execute(this.#query, this.#paginations?.[source.identifier]))
+      const resultSets = await Promise.all(promises)
+
+      for (const [index, resultSet] of resultSets.entries()) {
+        const source = slicedSources[index]
+        if (items.length < this.#query.limit && !this.allSourcesAreDone(filteredSources, this.#paginations)) {
+          const numberOfItems = Math.min(resultSet.items.length, this.#query.limit - items.length)
+
+          items.push(...resultSet.items.slice(0, numberOfItems))
+
+          if (resultSet.items.length > numberOfItems) {
+            resultSet.pagination.sliceOffset = resultSet.pagination.sliceOffset - numberOfItems
+          }
+
+          this.#paginations[source.identifier] = resultSet.done ? { done: true } : resultSet.pagination
+          const sourceIndex = filteredSources.indexOf(source)
+          lastIndex = sourceIndex
         }
-
-        // console.log(resultSet.pagination)
-
-        this.#paginations[source.identifier] = resultSet.pagination
-        const sourceIndex = filteredSources.indexOf(source)
-        console.log(sourceIndex, source.identifier)
-        lastIndex = sourceIndex
       }
+
+      counter++
+
+      if (counter === 5) break
     }
 
     lastIndex++
@@ -73,15 +69,22 @@ export class Search {
       items,
       paginations: this.#paginations,
       filteredSources,
-      lastIndex
+      lastIndex,
+      done: this.allSourcesAreDone(filteredSources, this.#paginations)
     }
+  }
+
+  allSourcesAreDone (sources: Array<SourceInterface<any>>, paginations: Paginations) {
+    return sources.every(source => paginations[source.identifier]?.done === true)
   }
 
   /**
    * Slice sources for our request, these are the ones that we will use.
    */
-  sliceSources (filteredSources: Array<SourceInterface<any>>, chunkSize: number) {
-    const slicedSources = filteredSources.slice(this.#lastIndex, this.#lastIndex + chunkSize)
+  sliceSources (sources: Array<SourceInterface<any>>, chunkSize: number, lastIndex: number, paginations: Paginations) {
+    const filteredSources = sources.filter(source => paginations[source.identifier]?.done !== true)
+
+    const slicedSources = filteredSources.slice(lastIndex, lastIndex + chunkSize)
 
     // If we take from the end of the sources array, we need to fill from the start.
     let additionIndex = 0
@@ -90,6 +93,6 @@ export class Search {
       additionIndex++
     }
 
-    return slicedSources
+    return slicedSources.filter(Boolean)
   }
 }

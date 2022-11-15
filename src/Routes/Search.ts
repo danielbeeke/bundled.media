@@ -47,16 +47,22 @@ export class SearchRoute extends BaseRoute {
 
     const searcher = new Search(query, 3, previousPaginations, lastIndex)
 
-    const { paginations, items, lastIndex: newLastIndex } = await searcher.handle()
-    const paginationsCompressed = this.compressPaginations(paginations, filteredSources)
+    const { paginations, items, lastIndex: newLastIndex, done } = await searcher.handle()
 
-    console.log(paginationsCompressed, paginations)
+    if (done) return { items }
+
+    const paginationsCompressed = this.compressPaginations(paginations, filteredSources)
 
     const nextUrl = new URL(this.url)
     nextUrl.searchParams.set('pagination', paginationsCompressed)
     nextUrl.searchParams.set('lastIndex', newLastIndex.toString())
 
-    return { items, nextUrl }
+    return { 
+      items, 
+      nextUrl, 
+      pagination: paginationsCompressed, 
+      lastIndex: newLastIndex 
+    }
   }
 
   /**
@@ -69,9 +75,13 @@ export class SearchRoute extends BaseRoute {
 
       return Object.entries(paginations[source.identifier]).map(([key, value]: [string, string]) => {
         if (key === 'done') return paginationTerms.done
-        if (value !== null)
+        if (value !== null) {
           return (paginationTerms[key as keyof typeof paginationTerms] ?? key) + value
-      }).join('.')
+        }
+        else {
+          return (paginationTerms[key as keyof typeof paginationTerms] ?? key) + 'n'
+        }
+      }).filter(Boolean).join('.')
     }).join('|')
   }
 
@@ -87,16 +97,18 @@ export class SearchRoute extends BaseRoute {
 
       for (const part of rawPagination.split('.')) {
         const [letter, ...characters] = part
+        let value: any = characters.join('')
+        if (value === 'n') value = null
         const key = paginationTermsInverted[letter]
 
         if (key === 'done') {
           pagination.done = true
         }
         else if (key === 'token') {
-          pagination[key] = characters.join('')
+          pagination[key] = value ? value : null
         }
         else if (key) {
-          pagination[key] = parseInt(characters.join(''))
+          pagination[key] = parseInt(value)
         }
       }
 

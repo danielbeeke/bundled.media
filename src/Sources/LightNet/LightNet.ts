@@ -33,11 +33,11 @@ export class LightNet implements SourceInterface<LightNetRawItem> {
 
   @cache
   async fetch (query: AbstractQuery, offset: number, limit: number) {
-    const types = this.#options.types.join(',')
+    let types = this.#options.types.join(',')
     
-    // if (query.types.length) {
-    //   types = query.types.map((type: string) => LightNetSchemaTypeMapping[type]).join(',')
-    // }
+    if (query.type) {
+      types = LightNetSchemaTypeMapping[query.type]
+    }
 
     const fetchUrl = new URL(`${this.#options.url}/${this.#options.channel}/${types}`)
 

@@ -23,7 +23,7 @@ export class FetchByToken extends FetcherBase<FetchByTokenCallback> implements F
       const slicedItems = filteredItems.slice(pagination.sliceOffset, pagination.sliceOffset + query.limit)
       const filteredItemsStillContainsResults = filteredItems.length > pagination.sliceOffset + query.limit
 
-      const done = allItems.length < this.itemCountToExpect && !filteredItemsStillContainsResults
+      const done = slicedItems.length < this.itemCountToExpect && !filteredItemsStillContainsResults
 
       if (slicedItems.length === query.limit || done) {
         return {

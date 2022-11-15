@@ -2,6 +2,7 @@ import { BaseRoute } from './BaseRoute.ts'
 // import { Search } from '../../src2/Search/Search.ts'
 import { Stream } from '../Stream/Stream.ts'
 import { sources } from '../../.env.ts'
+import { AbstractQuery } from '../types.ts'
 
 /**
  * A route with a sync response. 
@@ -22,7 +23,18 @@ export class StreamRoute extends BaseRoute {
    */
   handle () {
     const searcher = new Stream(sources)
-    return searcher.execute({ limit: 20 })
+
+    const url = new URL(this.url)
+
+    const query: AbstractQuery = {
+      limit: 20,
+      fulltextSearch: url.searchParams.get('fulltextSearch') ?? undefined,
+      bcp47: url.searchParams.get('bcp47') ?? undefined,
+      category: url.searchParams.get('category') ?? undefined,
+      type: url.searchParams.get('type') ?? undefined
+    }
+
+    return searcher.execute(query)
   }
 
   /**

@@ -1,59 +1,56 @@
-import { BundledMedia } from './BundledMedia.ts'
-import type { Filters } from './BundledMedia.ts'
-import { bufferCount, switchMap, startWith } from 'https://esm.sh/rxjs@7.5.7'
+import { BundledMedia, Filters } from './BundledMedia.ts'
+import { switchMap, tap } from 'https://esm.sh/rxjs@7.5.7'
 import { html, render } from 'https://esm.sh/uhtml'
 import { card } from './card.ts'
 
 const bundledMedia = new BundledMedia(location.toString())
 
-const { 
-  stream: filtersStream, 
-  element: filters 
-} = await bundledMedia.filterUI()
+const filters = await bundledMedia.filters()
+const data: Map<number, Array<any>> = new Map()
+let currentIndex = 0
 
-const results = filtersStream.pipe(
-  switchMap(() => bundledMedia.stream(location.toString())),
+const results = filters.stream.pipe(
+  tap((filters: Filters) => {
+    data.clear()
+    const newUrl = new URL(location.toString().split('?')[0])
+    for (const [key, value] of Object.entries(filters))
+      value ? newUrl.searchParams.set(key, value.toString()) : newUrl.searchParams.delete(key)
+    
+    history.pushState(null, '', newUrl)
+  }),
+  switchMap(() => bundledMedia.stream(location.toString(), 20)),
+  tap((chunk: Array<any>) => {
+    data.set(data.size, chunk)
+    if (data.size === 1) renderCards()
+  })
 )
 
-// results.subscribe(console.log)
+const pagination = document.createElement('div')
+const renderPagination = () => {
+  render(pagination, bundledMedia.pagination(data, currentIndex))
+}
 
-console.log(bundledMedia)
+results.subscribe(() => renderPagination())
 
-// let currentPage = 0
+const paginationStream = bundledMedia.paginationStream()
 
-
-// const renderCards = () => {
-//   render(cards, html`
-//     <div class="cards mb-3">
-//       ${data[currentPage]?.map(item => card(item))}
-//     </div>
-//   `)
-// }
-
-// // paginationStream.subscribe((page: number) => {
-// //   currentPage = page
-// //   if (data.length > 0) renderCards()
-// //   renderPagination()
-// // })
-
-// results.subscribe((newItems: Array<any>) => {
-//   if (data.length === 1) renderCards()
-//   data.push(newItems)
-//   renderPagination()
-// })
 const cards = document.createElement('div')
+const renderCards = () => {
+  render(cards, html`
+    <div class="cards mb-3">
+      ${data.get(currentIndex)?.map(item => card(item))}
+    </div>
+  `)
+}
 
-results.subscribe((items) => {
-  render(document.querySelector('#app')!, html`
-  
-  <div class="input-group mb-3">
-    ${filters}
-  </div>
-
-  <div class="cards mb-3">
-    ${cards}
-  </div>
-
-  ${bundledMedia.pagination()}
-`)
+paginationStream.subscribe(([index]: [number]) => {
+  currentIndex = index
+  renderCards()
+  renderPagination()
 })
+
+render(document.querySelector('#app')!,  html`
+  ${filters}
+  ${cards}
+  ${pagination}
+`)
