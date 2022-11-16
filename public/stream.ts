@@ -1,7 +1,8 @@
 import { BundledMedia, Filters } from './BundledMedia.ts'
-import { switchMap, tap, bufferWhen, interval, filter, bufferCount, Observable } from 'https://esm.sh/rxjs@7.5.7'
+import { switchMap, tap, bufferWhen, interval, filter, bufferCount, fromEvent } from 'https://esm.sh/rxjs@7.5.7'
 import { html, render } from 'https://esm.sh/uhtml'
 import { card } from './card.ts'
+import { getIcon } from './getIcon.ts'
 
 const bundledMedia = new BundledMedia(location.toString())
 
@@ -20,9 +21,23 @@ const renderCards = () => {
   render(cards, html`
     <div class="cards mb-3">
       ${data.get(currentIndex)?.map(item => card(item))}
+      <div class="card empty"></div>
+      <div class="card empty"></div>
+      <div class="card empty"></div>
+      <div class="card empty"></div>
+      <div class="card empty"></div>
+      <div class="card empty"></div>
+      <div class="card empty"></div>
+      <div class="card empty"></div>
+      <div class="card empty"></div>
+      <div class="card empty"></div>
+      <div class="card empty"></div>
     </div>
   `)
 }
+
+let aborted = false
+let abortMethod = () => {}
 
 const results = filters.stream.pipe(
   tap((filters: Filters) => {
@@ -37,7 +52,10 @@ const results = filters.stream.pipe(
     history.pushState(null, '', newUrl)
   }),
   switchMap(() => {
-    const results = bundledMedia.stream(location.toString())
+    abortMethod()
+
+    const { abort, stream: results } = bundledMedia.stream(location.toString())
+    abortMethod = abort
     statuses.splice(0, statuses.length)
 
     return results.pipe(
@@ -68,12 +86,28 @@ const results = filters.stream.pipe(
 const pagination = document.createElement('div')
 const renderPagination = () => {
   render(pagination, html`
-    ${bundledMedia.pagination(data, currentIndex)}
-    ${isLoading ? html`
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    ` : null}
+    ${bundledMedia.pagination(data, currentIndex, html`
+      ${isLoading ? html`
+      <div class="p-2">
+        <div class="spinner-border spinner-border-sm" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <button onclick=${() => {
+        aborted = true
+        abortMethod()
+        isLoading = false
+        renderPagination()
+      }} class="btn btn-secondary"><div ref=${getIcon(`/images/stop.svg`)}></div></button>
+      ` : null}
+
+      ${aborted ? html`
+      <button onclick=${() => {
+        window.dispatchEvent(new CustomEvent('restartStream'))
+        aborted = false
+      }} class="btn btn-secondary"><div ref=${getIcon(`/images/restart.svg`)}></div></button>
+      ` : null}    
+    `)}
   `)
 }
 

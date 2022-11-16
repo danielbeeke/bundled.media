@@ -51,7 +51,7 @@ export const card = (item: any) => {
 
   const imageFooter = html`${mediaIcon}${languageLabel}`
 
-  return html`<div onclick=${async () => {}} 
+  return html`<div onclick=${async () => {console.log(item)}} 
     class=${`card ${type} ${!thumbnail && type === 'book' ? 'bible' : ''}`}>
     ${image ? html`
       <div class="image-wrapper">

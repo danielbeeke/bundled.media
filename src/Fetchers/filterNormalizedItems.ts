@@ -14,5 +14,23 @@ export const filterNormalizedItems = (query: AbstractQuery, items: Array<Thing>,
     )
   }
 
+  if (query.bcp47 && languageFilter) {
+    filteredItems = filteredItems.filter(item => 
+      item['http://schema.org/inLanguage']?.some((value: any) => value['@value'].includes(query.bcp47))
+    )
+  }
+
+  if (query.type) {
+    filteredItems = filteredItems.filter(item => item['@type']?.includes(query.type))
+  }
+
+
+  if (query.category) {
+    filteredItems = filteredItems.filter(item => 
+      item['http://schema.org/genre']?.some((value: any) => value['@value'] === query.category) ||
+      item['http://taxonomy.mediaworks.global/category']?.some((value: any) => value['@value'] === query.category)
+    )
+  }
+  
   return filteredItems
 }

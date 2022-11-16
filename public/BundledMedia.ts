@@ -3,7 +3,7 @@ import { select } from './rxjs-form-elements/select.ts'
 import { input } from './rxjs-form-elements/input.ts'
 import { langcode } from './rxjs-form-elements/langcode.ts'
 import { map, combineLatestWith, fromEvent, filter, from, tap, bufferCount, startWith, Observable, EMPTY } from 'https://esm.sh/rxjs@7.5.7'
-import { html, render } from 'https://esm.sh/uhtml'
+import { html, render, Hole } from 'https://esm.sh/uhtml'
 
 export type Filters = {
   fulltextSearch: string, 
@@ -46,8 +46,18 @@ export class BundledMedia {
     return url
   }
 
-  stream (url: string): Observable<Array<any>> {
-    return stream(url)
+  stream (url: string): { stream: Observable<Array<any>>, abort: () => void } {
+    let abort: () => void = () => null
+
+    const resultStream = stream(url, {
+      xhrFactory: (url: string, options: { [key: string]: any }) => {
+        const request = new XMLHttpRequest ()
+        abort = () => request.abort()
+        return request
+      }
+    })
+
+    return { stream: resultStream, abort }
   }
 
   search (url: string) {
@@ -66,7 +76,7 @@ export class BundledMedia {
     )
   }
 
-  pagination (data: Map<string | number, Array<any>>, activeIndex: number) {
+  pagination (data: Map<string | number, Array<any>>, activeIndex: number, after: Hole | null = null) {
     const keys = [...data.keys()]
 
     const isValid = (page: number) => page > -1 && page <= max
@@ -108,6 +118,7 @@ export class BundledMedia {
       ${[...buttons.values()].map(index => button(index, keys[index], (index + 1).toString()))}
       ${button(activeIndex + 1, keys[activeIndex + 1], '›')}
       ${button(max, keys[max], '»')}
+      ${after}
       </ul>
     `
 
@@ -129,6 +140,10 @@ export class BundledMedia {
   async filters () {
     const url = new URL(this.#host)
 
+    const restartStream = fromEvent(window, 'restartStream').pipe(
+      startWith('')
+    )
+
     const { element: searchFilter, stream: searchStream } = input(url.searchParams.get('fulltextSearch') ?? '')
     const { element: typesFilter, stream: typesStream } = await select('/types', url.searchParams.get('type') ?? '')
     const { element: categoriesFilter, stream: categoriesStream } = await select('/categories', url.searchParams.get('category') ?? '')
@@ -140,6 +155,7 @@ export class BundledMedia {
       categoriesStream,
       sourcesStream,
       langCodeStream,
+      restartStream
     )).pipe (
       map(([fulltextSearch, type, category, source, bcp47]) => ({ fulltextSearch, type, category, source, bcp47 })),
     )

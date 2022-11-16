@@ -11,8 +11,3 @@ export const streamToString = async (stream: any): Promise<string> => {
 
   return chunks.join('')
 }
-
-// its probably  not in the handling.
-// import toString from 'npm:stream-to-string'
-// console.log(toString)
-// export const streamToString = toString

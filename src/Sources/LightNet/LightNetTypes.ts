@@ -1,3 +1,5 @@
+import { sourceOptions } from '../../types.ts'
+
 type Image = {
   height: string,
   width: string,
@@ -22,7 +24,7 @@ export type LightNetRawItem = {
   'authorsData': Array<any>
 }
 
-export type LightNetOptions = {
+export type LightNetOptions = sourceOptions & {
   label: string,
   url: string,
   channel: string,

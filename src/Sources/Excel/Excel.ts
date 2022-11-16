@@ -10,11 +10,11 @@ xlsx.set_cptable(cptable)
 
 export class Excel implements SourceInterface<ExcelRawItem> {
 
-  #options: ExcelOptions
+  options: ExcelOptions
   public fetcher: FetcherInterface
 
   constructor (options: ExcelOptions) {
-    this.#options = options
+    this.options = options
     
     const localMechanisms: LocalMechanismsInterface = {
       fulltextSearch: true,
@@ -29,18 +29,18 @@ export class Excel implements SourceInterface<ExcelRawItem> {
   }
 
   get label () {
-    return this.#options.label
+    return this.options.label
   }
 
   get identifier () {
-    return `excel/${this.#options.file}`
+    return `excel/${this.options.file}`
   }
 
   @cache
   async fetch (_query: AbstractQuery) {
-    const data = await Deno.readFile(`./data/${this.#options.file}`)
+    const data = await Deno.readFile(`./data/${this.options.file}`)
     const workbook = xlsx.read(data)
-    const sheetName = this.#options.sheet ?? workbook.SheetNames[0]
+    const sheetName = this.options.sheet ?? workbook.SheetNames[0]
     const sheet = workbook.Sheets[sheetName]
     const items: Array<ExcelRawItem> = xlsx.utils.sheet_to_json(sheet)
     return { items }
@@ -63,14 +63,14 @@ export class Excel implements SourceInterface<ExcelRawItem> {
    * The transformation from an API specific item to a schema.org item.
    */
   normalize(item: ExcelRawItem): Thing {
-    const urls = this.#options.mapping.url.map(columnGetter => item[columnGetter.column])
+    const urls = this.options.mapping.url.map(columnGetter => item[columnGetter.column])
     return {
       '@id': urls[0],
-      '@type': this.#options.types[0].split('/').pop(),
-      name: this.getColumn(this.#options.mapping.name, item),
-      description: this.getColumn(this.#options.mapping.description, item),
+      '@type': this.options.types[0].split('/').pop(),
+      name: this.getColumn(this.options.mapping.name, item),
+      description: this.getColumn(this.options.mapping.description, item),
       url: urls,
-      inLanguage: bcp47Normalize(item[this.#options.mapping.inLanguage.column]),  
+      inLanguage: bcp47Normalize(item[this.options.mapping.inLanguage.column]),  
     }
   }
 
@@ -78,6 +78,6 @@ export class Excel implements SourceInterface<ExcelRawItem> {
    * Returns schema.org normalized types.
    */
   types () {
-    return this.#options.types
+    return this.options.types
   }
 }

@@ -2,15 +2,15 @@ import { AbstractQuery, FetcherInterface, FetcherResult, Thing } from '../types.
 import { filterNormalizedItems } from './filterNormalizedItems.ts'
 import { FetcherBase } from './FetcherBase.ts'
 
-export type FetchAllCallback = (query: AbstractQuery) => Promise<{ items: Array<Thing> }>
+export type FetchAllCallback = (fetched: typeof globalThis.fetch, query: AbstractQuery) => Promise<{ items: Array<Thing> }>
 export type NormalizeCallback = (item: any) => Thing
 export type FetchAllPagination = { sliceOffset: number }
 
 export class FetchAll extends FetcherBase<FetchAllCallback> implements FetcherInterface {
 
-  async execute(query: AbstractQuery, pagination: FetchAllPagination = { sliceOffset: 0 }): FetcherResult<FetchAllPagination> {
+  async execute(fetched: typeof globalThis.fetch, query: AbstractQuery, pagination: FetchAllPagination = { sliceOffset: 0 }): FetcherResult<FetchAllPagination> {
     try {
-      const { items: allItems } = await this.fetchCallback(query)
+      const { items: allItems } = await this.fetchCallback(fetched, query)
       const normalizedItems = allItems ? await this.normalizeItems(allItems) : []
       const filteredItems = filterNormalizedItems(query, normalizedItems, this.localMechanisms)
       const slicedItems = filteredItems.slice(pagination.sliceOffset, pagination.sliceOffset + query.limit)

@@ -1,5 +1,5 @@
 import { html, render } from 'https://esm.sh/uhtml'
-import { fromEvent, map, startWith, debounceTime } from 'https://esm.sh/rxjs@7.5.7'
+import { fromEvent, map, startWith, debounceTime, filter } from 'https://esm.sh/rxjs@7.5.7'
 
 export const input = (defaultValue: string) => {
   const wrapper = document.createElement('div')
@@ -14,6 +14,7 @@ export const input = (defaultValue: string) => {
   const stream = fromEvent(element!, 'input').pipe(
     map((e: any) => e.target.value),
     debounceTime(1000),
+    filter((search: string) =>  search.length === 0 || search.length > 4),
     startWith(defaultValue)
   )
   

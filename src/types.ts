@@ -12,7 +12,7 @@ export type Thing = {
 }
 
 export interface FetcherInterface {
-  execute (query: AbstractQuery, pagination?: { [key: string]: any }): Promise<{
+  execute (fetched: typeof globalThis.fetch, query: AbstractQuery, pagination?: { [key: string]: any }): Promise<{
     items: Array<Thing>,
     done: boolean,
     pagination: any
@@ -24,6 +24,7 @@ export type Paginations = {
 }
 
 export interface SourceInterface<RawItem> {
+  options?: sourceOptions & any,
   whitelistedDomains?: Array<string>
   fetcher: FetcherInterface
   normalize? (item: RawItem): Thing
@@ -43,3 +44,7 @@ export type FetcherResult<Pagination> = Promise<{
   done: boolean,
   pagination: Pagination
 }>
+
+export type sourceOptions = {
+  augmentedCategoryFiles: Array<string>
+}

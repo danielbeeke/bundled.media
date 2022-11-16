@@ -2,7 +2,7 @@ import { FetchByToken } from '../../Fetchers/FetchByToken.ts'
 import { FetcherInterface, SourceInterface, AbstractQuery, Thing, LocalMechanismsInterface } from '../../types.ts'
 import { Html5Entities } from 'https://deno.land/x/html_entities@v1.0/mod.js'
 import { YouTubeRawItem, YouTubeOptions } from './YouTubeTypes.ts'
-import { fetched } from '../../Helpers/fetched.ts'
+import { cache } from '../../Helpers/CacheDecorator.ts'
 
 /**
  * YouTube has a token based API. This is great, each time when more results are needed we can fetch it.
@@ -12,7 +12,7 @@ import { fetched } from '../../Helpers/fetched.ts'
  */
 export class YouTube implements SourceInterface<YouTubeRawItem> {
 
-  #options: YouTubeOptions
+  options: YouTubeOptions
   public whitelistedDomains: Array<string> = [
     'www.googleapis.com'
   ]
@@ -22,7 +22,7 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
   public fetcher: FetcherInterface
 
   constructor (options: YouTubeOptions) {
-    this.#options = options
+    this.options = options
 
     const localMechanisms: LocalMechanismsInterface = {
       fulltextSearch: true,
@@ -38,17 +38,18 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
   }
 
   get label () {
-    return this.#options.channel.charAt(0).toUpperCase() + this.#options.channel.slice(1)
+    return this.options.channel.charAt(0).toUpperCase() + this.options.channel.slice(1)
   }
 
   get identifier () {
-    return `youtube/${this.#options.channel}`
+    return `youtube/${this.options.channel}`
   }
 
   /**
    * It seemed difficult to get a channel ID from a channel name by the API.
    */
-  async channelNameToPlaylistId (channel: string) {
+  @cache
+  async channelNameToPlaylistId (fetched: typeof globalThis.fetch, channel: string) {
     const fetchUrl = new URL(`https://www.youtube.com/c/${channel}`)
     const response = await fetched(fetchUrl)
     const page = await response.text()
@@ -60,13 +61,14 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
   /**
    * The main fetch method. Grabs every thing in one fetch, but it does filter.
    */
-  async fetch (_query: AbstractQuery, token: string | null) {
-    const channelId = await this.channelNameToPlaylistId(this.#options.channel)
+  @cache
+  async fetch (fetched: typeof globalThis.fetch, _query: AbstractQuery, token: string | null) {
+    const channelId = await this.channelNameToPlaylistId(fetched, this.options.channel)
 
     const fetchUrl = new URL('https://www.googleapis.com/youtube/v3/playlistItems')
     fetchUrl.searchParams.set('part', 'snippet')
     fetchUrl.searchParams.set('playlistId', channelId)
-    fetchUrl.searchParams.set('key', this.#options.key)
+    fetchUrl.searchParams.set('key', this.options.key)
     fetchUrl.searchParams.set('maxResults', this.maxResults.toString())
     fetchUrl.searchParams.set('fields', 'nextPageToken,items(id,snippet(title,resourceId,thumbnails.high))')
 
@@ -74,6 +76,22 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
 
     const request = await fetched(fetchUrl)
     const response = await request.json()
+
+    const ids = response.items.map((item: YouTubeRawItem) => item.snippet.resourceId.videoId)
+    const videosUrl = new URL('https://www.googleapis.com/youtube/v3/videos')
+    videosUrl.searchParams.set('fields', 'nextPageToken,items(id,snippet(defaultAudioLanguage,defaultLanguage))')
+    videosUrl.searchParams.set('part', 'snippet')
+    videosUrl.searchParams.set('id', ids.join(','))
+    videosUrl.searchParams.set('key', this.options.key)
+
+    const videosRequest = await fetched(videosUrl)
+    const videosResponse = await videosRequest.json()
+
+    for (const item of (response?.items ?? [])) {
+      const meta = videosResponse.items.find((metaItem: any) => metaItem.id === item.snippet.resourceId.videoId)
+      item.defaultAudioLanguage = meta.snippet.defaultAudioLanguage
+      item.defaultLanguage = meta.snippet.defaultLanguage
+    }
 
     return {
       items: response.items,

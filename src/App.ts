@@ -1,14 +1,15 @@
 import routes from './Routes/routes.ts'
 import layout from './Templates/layout.ts'
-import { serveFileWithTs } from 'https://deno.land/x/ts_serve@v1.4.1/mod.ts';
+import { serveFileWithTs } from 'https://deno.land/x/ts_serve@v1.4.1/mod.ts'
 import { toPathRegex } from './Helpers/toPathRegex.ts'
-import { existsSync } from 'https://deno.land/std@0.157.0/fs/mod.ts';
+import { existsSync } from 'https://deno.land/std@0.157.0/fs/mod.ts'
+import { sources } from '../.env.ts'
+import { AugmentedCategories } from './Core/AugmentedCategories.ts'
 
 import { serve } from 'https://deno.land/std@0.163.0/http/server.ts'
 
 const port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 8080
-serve(serveHttp, { port });
-console.info(`bundled.media is running locally at: http://localhost:${port}/`)
+serve(serveHttp, { port })
 
 async function serveHttp(request: Request) {
   const requestURL = new URL(request.url)
@@ -51,6 +52,9 @@ async function serveHttp(request: Request) {
     // This is the JSON output of endpoints.
     try {
       const output = await initiatedRoute.handle()
+
+      if (output instanceof Response) return output
+
       const response = new Response(matchedRoute.mime === 'application/json' ? JSON.stringify(output, null, 2) : output, {
         headers: { 'Content-Type': matchedRoute.mime }
       })
@@ -59,7 +63,6 @@ async function serveHttp(request: Request) {
 
     // Fallback to error page.
     catch (exception) {
-      console.log(exception)
       return new Response(`Something went wrong: ${exception}`, { status: 500 })
     }
   }
@@ -72,10 +75,12 @@ async function serveHttp(request: Request) {
     }  
   }
   catch (exception) {
-    console.log(exception)
+    console.log('exception', exception)
     // We continue with a 404.
   }
 
   // Fallback to not found page.
   return new Response(`Page not found`, { status: 404 })
 }
+
+AugmentedCategories.index(sources)

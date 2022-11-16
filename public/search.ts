@@ -67,6 +67,17 @@ results.subscribe(({ items, loading }) => {
         </div>
       ` : html`
         ${items?.map(card)}
+        <div class="card empty"></div>
+        <div class="card empty"></div>
+        <div class="card empty"></div>
+        <div class="card empty"></div>
+        <div class="card empty"></div>
+        <div class="card empty"></div>
+        <div class="card empty"></div>
+        <div class="card empty"></div>
+        <div class="card empty"></div>
+        <div class="card empty"></div>
+        <div class="card empty"></div>
       `}
     </div>
 

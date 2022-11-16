@@ -1,6 +1,7 @@
 import { AbstractQuery, SourceInterface, Paginations } from '../types.ts'
 import { sources } from '../../.env.ts';
 import { filterSourcesStatically } from '../Helpers/filterSourcesStatically.ts'
+import { abortableFetched } from '../Helpers/abortableFetch.ts'
 
 /**
  * A route with a sync response. 
@@ -28,17 +29,16 @@ export class Search {
   async handle () {
     const items: Array<any> = []
     let lastIndex = this.#lastIndex
+    const { fetched } = abortableFetched()
 
     const filteredSources = filterSourcesStatically(sources, this.#query)
-    
-    let counter = 0
 
     while (items.length < this.#query.limit && !this.allSourcesAreDone(filteredSources, this.#paginations)) {
       // Token based sources can only be used once per range.
       const correctedChunkSize = Math.min(filteredSources.length, this.#chunkSize) 
       const slicedSources = this.sliceSources(filteredSources, correctedChunkSize, lastIndex, this.#paginations)
 
-      const promises = slicedSources.map(source => source.fetcher.execute(this.#query, this.#paginations?.[source.identifier]))
+      const promises = slicedSources.map(source => source.fetcher.execute(fetched, this.#query, this.#paginations?.[source.identifier]))
       const resultSets = await Promise.all(promises)
 
       for (const [index, resultSet] of resultSets.entries()) {
@@ -57,10 +57,6 @@ export class Search {
           lastIndex = sourceIndex
         }
       }
-
-      counter++
-
-      if (counter === 5) break
     }
 
     lastIndex++

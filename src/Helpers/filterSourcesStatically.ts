@@ -7,7 +7,7 @@ import { AbstractQuery, SourceInterface } from '../types.ts'
 export const filterSourcesStatically = (sources: Array<SourceInterface<any>>, query: AbstractQuery) => {
  return sources
  // Static filter on media types.
- .filter(source => !query.type || source.types().includes(query.type))
+ .filter(source => !query.type || source.types().map(type => type.includes('http') ? type : `http://schema.org/${type}`).includes(query.type))
  // Source filter
  .filter(source => query.source ? `http://bundled.media/source/${source.identifier}` === query.source : true)
 }

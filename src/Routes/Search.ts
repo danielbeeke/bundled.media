@@ -43,6 +43,7 @@ export class SearchRoute extends BaseRoute {
 
     const paginationRaw = url.searchParams.get('pagination')
     const filteredSources = filterSourcesStatically(sources, query)
+
     const previousPaginations = paginationRaw ? this.decompressPaginations(paginationRaw, filteredSources) : undefined
     const lastIndex = parseInt(url.searchParams.get('lastIndex') ?? '')
 

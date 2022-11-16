@@ -33,9 +33,11 @@ export class StreamRoute extends BaseRoute {
       source: url.searchParams.get('source') ?? undefined
     }
 
-    const searcher = new Stream(filterSourcesStatically(sources, query))
+    const streamer = new Stream(filterSourcesStatically(sources, query))
 
-    return searcher.execute(query)
+    return new Response(streamer.execute(query), {
+      headers: { 'Content-Type': 'application/json-stream; charset=utf-8' }
+    })
   }
 
   /**

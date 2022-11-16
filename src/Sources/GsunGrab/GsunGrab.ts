@@ -4,7 +4,6 @@ import { DOMParser, Element } from 'https://deno.land/x/deno_dom/deno-dom-wasm.t
 import { FetcherInterface, SourceInterface, AbstractQuery, Thing, LocalMechanismsInterface } from '../../types.ts'
 import { FetchAll } from '../../Fetchers/FetchAll.ts'
 import { cache } from '../../Helpers/CacheDecorator.ts'
-import { fetched } from '../../Helpers/fetched.ts'
 
 export class GsunGrab implements SourceInterface<GsunGrabRawItem> {
 
@@ -56,7 +55,7 @@ export class GsunGrab implements SourceInterface<GsunGrabRawItem> {
   }
 
   @cache
-  async fetch (_query: AbstractQuery) {
+  async fetch (fetched: typeof globalThis.fetch, _query: AbstractQuery) {
     const pageMetdata: any = {}
     
     for (const [langCode, language] of Object.entries(this.#languages)) {

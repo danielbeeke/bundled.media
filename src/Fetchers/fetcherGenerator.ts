@@ -7,24 +7,17 @@ const wait = (delay: number) => {
 }
 
 export async function * fetcherGenerator (source: SourceInterface<any>, query: AbstractQuery, pagination: any, fetched: typeof fetch) {
-  try {
-    while (true) {
-      const { items, done, pagination: newPagination } = await source.fetcher.execute(query, pagination)
-      pagination = newPagination
-      for (const item of items) {
-        yield item
-        await wait(0)
-      }
-      if (done) {
-        yield { '@type': 'http://bundled.media/StreamStatus', done, source: source.identifier }
-        console.log(`Done with ${source.identifier}`)
-        break
-      }
-    }  
-  }
-  catch (exception) {
-    console.log(exception)
-  }
-
-  return true
+  while (true) {
+    const { items, done, pagination: newPagination } = await source.fetcher.execute(fetched, query, pagination)
+    pagination = newPagination
+    for (const item of items) {
+      yield item
+      await wait(0)
+    }
+    if (done) {
+      yield { '@type': 'http://bundled.media/StreamStatus', done, source: source.identifier }
+      console.log(`Done with ${source.identifier}`)
+      break
+    }
+  }  
 }

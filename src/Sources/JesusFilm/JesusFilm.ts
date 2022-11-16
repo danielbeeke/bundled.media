@@ -1,12 +1,11 @@
 import { FetcherInterface, SourceInterface, AbstractQuery, Thing } from '../../types.ts'
 import { JesusFilmOptions, JesusFilmRawItem } from './JesusFilmTypes.ts'
-import { fetched } from '../../Helpers/fetched.ts'
 import { FetchByPage } from '../../Fetchers/FetchByPage.ts'
 import { cache } from '../../Helpers/CacheDecorator.ts'
 
 export class JesusFilm implements SourceInterface<JesusFilmRawItem> {
 
-  #options: JesusFilmOptions
+  options: JesusFilmOptions
   public whitelistedDomains: Array<string> = [
     'api.arclight.org'
   ]
@@ -14,7 +13,7 @@ export class JesusFilm implements SourceInterface<JesusFilmRawItem> {
   public fetcher: FetcherInterface
 
   constructor (options: JesusFilmOptions) {
-    this.#options = options
+    this.options = options
     this.fetcher = new FetchByPage(this.fetch.bind(this), this.normalize.bind(this), {}, 10)
   }
 
@@ -27,16 +26,16 @@ export class JesusFilm implements SourceInterface<JesusFilmRawItem> {
   }
 
   @cache
-  async fetch (query: AbstractQuery, page = 0) {
+  async fetch (fetched: typeof globalThis.fetch, query: AbstractQuery, page = 0) {
     const langCode = query.bcp47 ? query.bcp47 : 'en'
-    const languages = await this.getLanguageIdsByBcp47(langCode)
+    const languages = await this.getLanguageIdsByBcp47(fetched, langCode)
     if (!languages.length) throw new Error('Could not get the language by bcp47')
     const fetchUrl = new URL('https://api.arclight.org/v2/media-components')
 
     fetchUrl.searchParams.set('subTypes', 'featureFilm')
     fetchUrl.searchParams.set('filter', 'default')
     fetchUrl.searchParams.set('metadataLanguageTags', `${langCode},en`)    
-    fetchUrl.searchParams.set('apiKey', this.#options.key)
+    fetchUrl.searchParams.set('apiKey', this.options.key)
     fetchUrl.searchParams.set('languageIds', languages.join(','))
     fetchUrl.searchParams.set('page', (page + 1).toString())
     fetchUrl.searchParams.set('limit', '10')    
@@ -47,7 +46,7 @@ export class JesusFilm implements SourceInterface<JesusFilmRawItem> {
     const genericItems = json._embedded?.mediaComponents ?? []
 
     const items = await Promise.all(genericItems.filter((item: any) => item.mediaComponentId).map(async (item: any) => {
-      const localizedItem = await this.getLocalizedItem(item.mediaComponentId, languages, langCode)
+      const localizedItem = await this.getLocalizedItem(fetched, item.mediaComponentId, languages, langCode)
       Object.assign(item, localizedItem)
       item.bcp47 = langCode
       return item
@@ -57,14 +56,14 @@ export class JesusFilm implements SourceInterface<JesusFilmRawItem> {
   }
 
   @cache
-  async getLocalizedItem (id: string, languageIds: Array<string>, bcp47: string) {
+  async getLocalizedItem (fetched: typeof globalThis.fetch, id: string, languageIds: Array<string>, bcp47: string) {
     const url = new URL(`https://api.arclight.org/v2/media-components/${id}/languages`)
     url.searchParams.set('bcp47', bcp47)
     url.searchParams.set('metadataLanguageTags', `${bcp47},en`)    
     url.searchParams.set('languageIds', languageIds.join(','))
     url.searchParams.set('filter', 'default')
     url.searchParams.set('platform', 'ios')
-    url.searchParams.set('apiKey', this.#options.key)
+    url.searchParams.set('apiKey', this.options.key)
     const response = await fetched(url)
     const json = await response.json()
     const data = json._embedded.mediaComponentLanguage[0]
@@ -79,12 +78,12 @@ export class JesusFilm implements SourceInterface<JesusFilmRawItem> {
   }
 
   @cache
-  async getLanguageIdsByBcp47 (bcp47: string) {
+  async getLanguageIdsByBcp47 (fetched: typeof globalThis.fetch, bcp47: string) {
     const fetchLanguageUrl = new URL(`https://api.arclight.org/v2/media-languages`)
     fetchLanguageUrl.searchParams.set('bcp47', bcp47)
     fetchLanguageUrl.searchParams.set('metadataLanguageTags', 'en')    
     fetchLanguageUrl.searchParams.set('filter', 'default')
-    fetchLanguageUrl.searchParams.set('apiKey', this.#options.key)
+    fetchLanguageUrl.searchParams.set('apiKey', this.options.key)
     fetchLanguageUrl.searchParams.set('limit', '10')    
     const languageResponse = await fetched(fetchLanguageUrl)
     const languageJson = await languageResponse.json()
