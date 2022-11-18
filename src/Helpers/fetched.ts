@@ -3,7 +3,7 @@ const cache = await caches.open('fetched')
 
 const stubs: Map<string, any> = new Map()
 
-const debug = false
+const debug = true
 const dumpOutput = false
 
 export async function fetched(

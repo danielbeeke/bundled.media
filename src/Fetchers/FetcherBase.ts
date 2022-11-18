@@ -1,10 +1,17 @@
 import { AbstractQuery, LocalMechanismsInterface, Thing } from '../types.ts'
 import JSONLD from 'npm:jsonld'
-import { AugmentedCategories } from '../Core/AugmentedCategories.ts'
+import { AugmentedData } from '../Core/AugmentedData.ts'
+import merge from 'npm:deepmerge'
+import { tryToExtractLanguage } from '../Helpers/tryToExtractLanguage.ts'
 
 export type FetchByTokenCallback = (query: AbstractQuery, token: string | null) => Promise<{ items: Array<Thing>, token: string | null }>
 export type NormalizeCallback = (item: any) => Thing
 export type FetchByTokenPagination = { token: string | null, sliceOffset: number }
+
+const extractValues = (rdfValues: Array<{ '@value': string }> | undefined) => {
+  if (!rdfValues) return []
+  return rdfValues.map(value => value['@value'])
+}
 
 export class FetcherBase<FetchCallback> {
 
@@ -22,21 +29,38 @@ export class FetcherBase<FetchCallback> {
    * Normalizes and expands to JSON-ld items.
    */
    async normalizeItems (allItems: Array<Thing>) {
-    const normalizedItems = (await Promise.all(allItems.map(item => {
+    const normalizedItems = (await Promise.all(allItems.map(async item => {
       try {
-        const normalizedItem = this.normalizeCallback(item)
+        let normalizedItem = this.normalizeCallback(item)
         normalizedItem['@context'] = { '@vocab': 'http://schema.org/' }
         if (!normalizedItem['@id']) return null
 
-        const categories = AugmentedCategories.get(normalizedItem['@id'])
-        if (categories?.length) {
-          normalizedItem['http://taxonomy.mediaworks.global/category'] = categories
+        /**
+         * Add additional data given by the .env.ts
+         */
+        const itemAugmentedData = AugmentedData.get(normalizedItem['@id'])
+        if (itemAugmentedData && Object.keys(itemAugmentedData)?.length) {
+          normalizedItem = merge(normalizedItem, itemAugmentedData)
         }
 
-        return JSONLD.expand(normalizedItem).then((graph: Array<any>) => graph.pop())
+        const expandedItem = await JSONLD.expand(normalizedItem).then((graph: Array<any>) => graph.pop())
+
+        if (!expandedItem['http://schema.org/inLanguage']) {
+          const language = tryToExtractLanguage([
+            ...extractValues(expandedItem['http://schema.org/name']),
+            ...extractValues(expandedItem['http://schema.org/keywords']),
+            ...extractValues(expandedItem['http://schema.org/genre']),
+          ])
+
+          if (language) {
+            expandedItem['http://schema.org/inLanguage'] = [{ '@value': language }]
+          }
+        }
+
+        return expandedItem
       }
       catch (exception) {
-        console.error('error', item, exception)
+        console.error('error', exception)
         return null
       }
     }))).filter(Boolean)

@@ -4,7 +4,7 @@ import { serveFileWithTs } from 'https://deno.land/x/ts_serve@v1.4.1/mod.ts'
 import { toPathRegex } from './Helpers/toPathRegex.ts'
 import { existsSync } from 'https://deno.land/std@0.157.0/fs/mod.ts'
 import { sources } from '../.env.ts'
-import { AugmentedCategories } from './Core/AugmentedCategories.ts'
+import { AugmentedData } from './Core/AugmentedData.ts'
 
 import { serve } from 'https://deno.land/std@0.163.0/http/server.ts'
 
@@ -83,4 +83,4 @@ async function serveHttp(request: Request) {
   return new Response(`Page not found`, { status: 404 })
 }
 
-AugmentedCategories.index(sources)
+AugmentedData.index(sources)

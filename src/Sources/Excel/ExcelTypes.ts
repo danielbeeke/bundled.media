@@ -1,3 +1,5 @@
+import { sourceOptions } from '../../types.ts'
+
 export type ExcelRawItem = {
   [key: string]: string
 }
@@ -8,7 +10,7 @@ export type ColumnGetter = {
   langCodeColumn?: string
 }
 
-export type ExcelOptions = {
+export type ExcelOptions = sourceOptions & {
   mapping: {
     name: Array<ColumnGetter>,
     author: Array<ColumnGetter>,

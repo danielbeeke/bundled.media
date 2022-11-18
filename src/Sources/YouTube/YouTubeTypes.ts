@@ -1,4 +1,6 @@
-export type YouTubeOptions = {
+import { sourceOptions } from '../../types.ts'
+
+export type YouTubeOptions = sourceOptions & {
   channel: string,
   key: string
 }

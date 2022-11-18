@@ -1,3 +1,5 @@
+import { sourceOptions } from '../../types.ts'
+
 export type ApiBibleRawItem = {
   id: string,
   dblId: string,
@@ -21,6 +23,6 @@ export type ApiBibleRawItem = {
   audioBibles: Array<any>
 }
 
-export type ApiBibleOptions = {
+export type ApiBibleOptions = sourceOptions & {
   key: string,
 }

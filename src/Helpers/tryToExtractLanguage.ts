@@ -15,15 +15,25 @@ for (const language of iso6393) {
 }
 
 /**
- * TODO Convert to a method that receives an array of strings such as keywords, title, category etc.
+ * Convert to a method that receives an array of strings such as keywords, title, category etc.
  * And given that makes a scored array of possible bcp47 tags.
  * The highest score will be for anything prefixed wth "bcp47:"
  * 
  * It would be amazing if organizations that use platforms, use "bcp47:LANGCODE" in on of the keywords / categories or in the title.
  * TODO propagate this idea to the media publishers.
  */
-export const tryToExtractLanguage = (text: string) => {
-  const parts = text.split(' - ').pop()!.split(' ')
+export const tryToExtractLanguage = (texts: Array<string>) => {
+  const prefixedBcp47 = texts.find(text => text.startsWith('bcp47:'))
+
+  if (prefixedBcp47) {
+    return prefixedBcp47.split(':').pop()
+  }
+
+  const parts = [
+    ...texts.flatMap(text => text.split(' - ').pop()!.split(' ')),
+    ...texts
+  ].flatMap(string => string.split('_')).filter(Boolean)
+
   let langCode = 'und'
 
   const matches = new Map()
@@ -56,11 +66,6 @@ export const tryToExtractLanguage = (text: string) => {
     langCode = highestMatch.code
   }
 
-  if (langCode === 'und') {
-    const regex = /\(([A-Z]{2,3})\)/g
-    langCode = regex.exec(text)?.[1] ?? 'und'
-  }
-
-  return bcp47Normalize(langCode)
+  return !langCode || langCode === 'und' ? 'und' : bcp47Normalize(langCode)
 
 }

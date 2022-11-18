@@ -14,7 +14,7 @@ export const input = (defaultValue: string) => {
   const stream = fromEvent(element!, 'input').pipe(
     map((e: any) => e.target.value),
     debounceTime(1000),
-    filter((search: string) =>  search.length === 0 || search.length > 4),
+    filter((search: string) =>  search.length === 0 || search.length > 3),
     startWith(defaultValue)
   )
   

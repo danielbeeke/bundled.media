@@ -1,87 +1,87 @@
 @prefix cgt: <http://taxonomy.mediaworks.global/>.
-@prefix schema: <https://schema.org/>.
+@prefix schema: <http://schema.org/>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix mediaworks: <https://rdf.mediaworks.global/contents/ebook/>.
 
-mediaworks:50-bible-stories-and-the-gospel-of-luke schema:subject cgt:bibles-and-bible-storybooks.
-mediaworks:the-cat-and-the-custard schema:subject cgt:children.
-mediaworks:the-fortune-tellers-dream schema:subject cgt:novels.
-mediaworks:picture-dictionary schema:subject cgt:educational.
-mediaworks:gods-apostle-the-adventures-of-paul schema:subject cgt:children.
-mediaworks:milena schema:subject cgt:comics-and-graphic-novels, cgt:teens-and-young-adults.
-mediaworks:open-bible-stories schema:subject cgt:bibles-and-bible-storybooks, cgt:children, cgt:teens-and-young-adults.
-mediaworks:dorie-the-girl-nobody-loved schema:subject cgt:comics-and-graphic-novels, cgt:teens-and-young-adults.
-mediaworks:the-gospel-of-luke-1-2 schema:subject cgt:bibles-and-bible-storybooks.
-mediaworks:extreme-devotion schema:subject cgt:devotionals.
-mediaworks:eucharistic-socialism schema:subject cgt:devotionals.
-mediaworks:forgotten-factors-of-sexual-sin schema:subject cgt:support-and-counseling, cgt:personal-growth.
-mediaworks:we-would-see-jesus schema:subject cgt:personal-growth, cgt:spiritual-growth.
-mediaworks:hearts-of-fire schema:subject cgt:biographies-and-memoirs.
-mediaworks:more-drops-mystery-mercy-messiology schema:subject cgt:ministry-and-evangelism.
-mediaworks:jesus-is-lord schema:subject cgt:bibles-and-bible-storybooks.
-mediaworks:the-triumphant-church schema:subject cgt:biblical-studies, cgt:theology.
-mediaworks:foxes-book-of-martyrs schema:subject cgt:biblical-and-church-history.
-mediaworks:tortured-for-christ schema:subject cgt:biographies-and-memoirs.
-mediaworks:guide-to-understanding-your-bible schema:subject cgt:study-materials.
-mediaworks:into-the-den-of-infidels schema:subject cgt:biographies-and-memoirs.
-mediaworks:why-pro-life schema:subject cgt:ethics-and-social-issues.
-mediaworks:the-calvary-road schema:subject cgt:spiritual-growth.
-mediaworks:she-said-yes schema:subject cgt:biographies-and-memoirs.
-mediaworks:the-roma-chronicles schema:subject cgt:novels.
-mediaworks:sos-save-our-sisters schema:subject cgt:ethics-and-social-issues.
-mediaworks:family-picture-bible-for-roma schema:subject cgt:bibles-and-bible-storybooks, cgt:children, cgt:teens-and-young-adults.
-mediaworks:light-in-the-darkness schema:subject cgt:comics-and-graphic-novels, cgt:teens-and-young-adults, cgt:children.
-mediaworks:the-gospel-of-mark schema:subject cgt:bibles-and-bible-storybooks.
-mediaworks:tortured-for-christ-50th-anniversary-edition schema:subject cgt:biographies-and-memoirs.
-mediaworks:in-the-shadow-of-the-cross schema:subject cgt:theology, cgt:biblical-studies.
-mediaworks:into-the-light schema:subject cgt:biographies-and-memoirs.
-mediaworks:grace-awakened-leadership schema:subject cgt:ministry-and-evangelism.
-mediaworks:why-follow-jesus schema:subject cgt:theology, cgt:educational.
-mediaworks:star-of-light schema:subject cgt:novels, cgt:children, cgt:teens-and-young-adults.
-mediaworks:the-davinci-code-quest-for-answers schema:subject cgt:educational.
-mediaworks:gipsy-smithhis-life-and-work schema:subject cgt:biographies-and-memoirs.
-mediaworks:bible-lexicon schema:subject cgt:educational, cgt:study-materials.
-mediaworks:doctrines-of-the-bible schema:subject cgt:educational, cgt:study-materials.
-mediaworks:gods-outlaw-the-real-story-of-william-tyndale-and-the-english-bible schema:subject cgt:children.
-mediaworks:gods-prisoner-the-story-of-richard-wurmbrand schema:subject cgt:children.
-mediaworks:gods-missionary-thomas schema:subject cgt:children.
-mediaworks:gods-pilgrim-the-real-story-of-john-bunyan-and-the-pilgrims-progress schema:subject cgt:children.
-mediaworks:gods-witness-the-courage-of-stephen schema:subject cgt:children.
-mediaworks:in-search-of-certainty schema:subject cgt:theology.
-mediaworks:your-personal-encourager schema:subject cgt:support-and-counseling, cgt:biblical-studies, cgt:devotionals.
-mediaworks:global-action schema:subject cgt:study-materials.
-mediaworks:wurmbrand-tortured-for-christ-the-complete-story schema:subject cgt:biographies-and-memoirs.
-mediaworks:out-of-the-comfort-zone schema:subject cgt:ministry-and-evangelism.
-mediaworks:the-right-choices-bible schema:subject cgt:bibles-and-bible-storybooks, cgt:children.
-mediaworks:hunger-for-reality schema:subject cgt:personal-growth.
-mediaworks:the-pastors-wife schema:subject cgt:biographies-and-memoirs.
-mediaworks:imprisoned-with-isis schema:subject cgt:biographies-and-memoirs.
-mediaworks:bible-stories-from-the-bible-in-nivkh-and-russian schema:subject cgt:bibles-and-bible-storybooks, cgt:children, cgt:teens-and-young-adults.
-mediaworks:the-living-story-of-jesus_2 schema:subject cgt:bibles-and-bible-storybooks, cgt:children, cgt:teens-and-young-adults.
-mediaworks:drops-from-a-leaking-tap schema:subject cgt:ministry-and-evangelism.
-mediaworks:the-key-to-understanding-revelation schema:subject cgt:biblical-studies.
-mediaworks:literature-evangelism schema:subject cgt:ministry-and-evangelism.
-mediaworks:marx-and-satan schema:subject cgt:educational.
-mediaworks:my-journeyfrom-skepticism-to-faith schema:subject cgt:biographies-and-memoirs.
-mediaworks:my-first-bible-in-pictures schema:subject cgt:bibles-and-bible-storybooks, cgt:children.
-mediaworks:supernatural-what-the-bible-teaches-about-the-unseen-world-and-why-it-matters schema:subject cgt:biblical-studies.
-mediaworks:the-new-foxes-book-of-martyrs schema:subject cgt:biblical-and-church-history.
-mediaworks:bible-survey schema:subject cgt:educational, cgt:study-materials.
-mediaworks:occult-abc schema:subject cgt:educational.
-mediaworks:from-saul-to-paul schema:subject cgt:biographies-and-memoirs.
-mediaworks:beyond-belief-to-convictions schema:subject cgt:family-and-relationships, cgt:theology.
-mediaworks:answers-to-tough-questions-skeptics-ask-about-the-christian-faith schema:subject cgt:theology.
-mediaworks:captive-in-iran schema:subject cgt:biographies-and-memoirs.
-mediaworks:mind-over-media schema:subject cgt:teens-and-young-adults, cgt:family-and-relationships.
-mediaworks:caught-with-bibles schema:subject cgt:biographies-and-memoirs.
-mediaworks:learning-about-islam schema:subject cgt:educational.
-mediaworks:following-jesus-christ schema:subject cgt:biblical-studies.
-mediaworks:the-story-of-saint-nicholas schema:subject cgt:children.
-mediaworks:let-the-waters-roar schema:subject cgt:biographies-and-memoirs.
-mediaworks:children-of-the-storm schema:subject cgt:biographies-and-memoirs.
-mediaworks:the-witness schema:subject cgt:novels, cgt:teens-and-young-adults.
-<https://rdf.mediaworks.global/contents/ebook/25-scripture-stories> schema:subject cgt:bibles-and-bible-storybooks.
-mediaworks:i-am-n schema:subject cgt:biographies-and-memoirs.
-mediaworks:how-to-really-love-your-child schema:subject cgt:family-and-relationships.
-mediaworks:spiritual-leadership schema:subject cgt:leadership, cgt:ministry-and-evangelism.
+mediaworks:50-bible-stories-and-the-gospel-of-luke schema:genre cgt:bibles-and-bible-storybooks.
+mediaworks:the-cat-and-the-custard schema:genre cgt:children.
+mediaworks:the-fortune-tellers-dream schema:genre cgt:novels.
+mediaworks:picture-dictionary schema:genre cgt:educational.
+mediaworks:gods-apostle-the-adventures-of-paul schema:genre cgt:children.
+mediaworks:milena schema:genre cgt:comics-and-graphic-novels, cgt:teens-and-young-adults.
+mediaworks:open-bible-stories schema:genre cgt:bibles-and-bible-storybooks, cgt:children, cgt:teens-and-young-adults.
+mediaworks:dorie-the-girl-nobody-loved schema:genre cgt:comics-and-graphic-novels, cgt:teens-and-young-adults.
+mediaworks:the-gospel-of-luke-1-2 schema:genre cgt:bibles-and-bible-storybooks.
+mediaworks:extreme-devotion schema:genre cgt:devotionals.
+mediaworks:eucharistic-socialism schema:genre cgt:devotionals.
+mediaworks:forgotten-factors-of-sexual-sin schema:genre cgt:support-and-counseling, cgt:personal-growth.
+mediaworks:we-would-see-jesus schema:genre cgt:personal-growth, cgt:spiritual-growth.
+mediaworks:hearts-of-fire schema:genre cgt:biographies-and-memoirs.
+mediaworks:more-drops-mystery-mercy-messiology schema:genre cgt:ministry-and-evangelism.
+mediaworks:jesus-is-lord schema:genre cgt:bibles-and-bible-storybooks.
+mediaworks:the-triumphant-church schema:genre cgt:biblical-studies, cgt:theology.
+mediaworks:foxes-book-of-martyrs schema:genre cgt:biblical-and-church-history.
+mediaworks:tortured-for-christ schema:genre cgt:biographies-and-memoirs.
+mediaworks:guide-to-understanding-your-bible schema:genre cgt:study-materials.
+mediaworks:into-the-den-of-infidels schema:genre cgt:biographies-and-memoirs.
+mediaworks:why-pro-life schema:genre cgt:ethics-and-social-issues.
+mediaworks:the-calvary-road schema:genre cgt:spiritual-growth.
+mediaworks:she-said-yes schema:genre cgt:biographies-and-memoirs.
+mediaworks:the-roma-chronicles schema:genre cgt:novels.
+mediaworks:sos-save-our-sisters schema:genre cgt:ethics-and-social-issues.
+mediaworks:family-picture-bible-for-roma schema:genre cgt:bibles-and-bible-storybooks, cgt:children, cgt:teens-and-young-adults.
+mediaworks:light-in-the-darkness schema:genre cgt:comics-and-graphic-novels, cgt:teens-and-young-adults, cgt:children.
+mediaworks:the-gospel-of-mark schema:genre cgt:bibles-and-bible-storybooks.
+mediaworks:tortured-for-christ-50th-anniversary-edition schema:genre cgt:biographies-and-memoirs.
+mediaworks:in-the-shadow-of-the-cross schema:genre cgt:theology, cgt:biblical-studies.
+mediaworks:into-the-light schema:genre cgt:biographies-and-memoirs.
+mediaworks:grace-awakened-leadership schema:genre cgt:ministry-and-evangelism.
+mediaworks:why-follow-jesus schema:genre cgt:theology, cgt:educational.
+mediaworks:star-of-light schema:genre cgt:novels, cgt:children, cgt:teens-and-young-adults.
+mediaworks:the-davinci-code-quest-for-answers schema:genre cgt:educational.
+mediaworks:gipsy-smithhis-life-and-work schema:genre cgt:biographies-and-memoirs.
+mediaworks:bible-lexicon schema:genre cgt:educational, cgt:study-materials.
+mediaworks:doctrines-of-the-bible schema:genre cgt:educational, cgt:study-materials.
+mediaworks:gods-outlaw-the-real-story-of-william-tyndale-and-the-english-bible schema:genre cgt:children.
+mediaworks:gods-prisoner-the-story-of-richard-wurmbrand schema:genre cgt:children.
+mediaworks:gods-missionary-thomas schema:genre cgt:children.
+mediaworks:gods-pilgrim-the-real-story-of-john-bunyan-and-the-pilgrims-progress schema:genre cgt:children.
+mediaworks:gods-witness-the-courage-of-stephen schema:genre cgt:children.
+mediaworks:in-search-of-certainty schema:genre cgt:theology.
+mediaworks:your-personal-encourager schema:genre cgt:support-and-counseling, cgt:biblical-studies, cgt:devotionals.
+mediaworks:global-action schema:genre cgt:study-materials.
+mediaworks:wurmbrand-tortured-for-christ-the-complete-story schema:genre cgt:biographies-and-memoirs.
+mediaworks:out-of-the-comfort-zone schema:genre cgt:ministry-and-evangelism.
+mediaworks:the-right-choices-bible schema:genre cgt:bibles-and-bible-storybooks, cgt:children.
+mediaworks:hunger-for-reality schema:genre cgt:personal-growth.
+mediaworks:the-pastors-wife schema:genre cgt:biographies-and-memoirs.
+mediaworks:imprisoned-with-isis schema:genre cgt:biographies-and-memoirs.
+mediaworks:bible-stories-from-the-bible-in-nivkh-and-russian schema:genre cgt:bibles-and-bible-storybooks, cgt:children, cgt:teens-and-young-adults.
+mediaworks:the-living-story-of-jesus_2 schema:genre cgt:bibles-and-bible-storybooks, cgt:children, cgt:teens-and-young-adults.
+mediaworks:drops-from-a-leaking-tap schema:genre cgt:ministry-and-evangelism.
+mediaworks:the-key-to-understanding-revelation schema:genre cgt:biblical-studies.
+mediaworks:literature-evangelism schema:genre cgt:ministry-and-evangelism.
+mediaworks:marx-and-satan schema:genre cgt:educational.
+mediaworks:my-journeyfrom-skepticism-to-faith schema:genre cgt:biographies-and-memoirs.
+mediaworks:my-first-bible-in-pictures schema:genre cgt:bibles-and-bible-storybooks, cgt:children.
+mediaworks:supernatural-what-the-bible-teaches-about-the-unseen-world-and-why-it-matters schema:genre cgt:biblical-studies.
+mediaworks:the-new-foxes-book-of-martyrs schema:genre cgt:biblical-and-church-history.
+mediaworks:bible-survey schema:genre cgt:educational, cgt:study-materials.
+mediaworks:occult-abc schema:genre cgt:educational.
+mediaworks:from-saul-to-paul schema:genre cgt:biographies-and-memoirs.
+mediaworks:beyond-belief-to-convictions schema:genre cgt:family-and-relationships, cgt:theology.
+mediaworks:answers-to-tough-questions-skeptics-ask-about-the-christian-faith schema:genre cgt:theology.
+mediaworks:captive-in-iran schema:genre cgt:biographies-and-memoirs.
+mediaworks:mind-over-media schema:genre cgt:teens-and-young-adults, cgt:family-and-relationships.
+mediaworks:caught-with-bibles schema:genre cgt:biographies-and-memoirs.
+mediaworks:learning-about-islam schema:genre cgt:educational.
+mediaworks:following-jesus-christ schema:genre cgt:biblical-studies.
+mediaworks:the-story-of-saint-nicholas schema:genre cgt:children.
+mediaworks:let-the-waters-roar schema:genre cgt:biographies-and-memoirs.
+mediaworks:children-of-the-storm schema:genre cgt:biographies-and-memoirs.
+mediaworks:the-witness schema:genre cgt:novels, cgt:teens-and-young-adults.
+<https://rdf.mediaworks.global/contents/ebook/25-scripture-stories> schema:genre cgt:bibles-and-bible-storybooks.
+mediaworks:i-am-n schema:genre cgt:biographies-and-memoirs.
+mediaworks:how-to-really-love-your-child schema:genre cgt:family-and-relationships.
+mediaworks:spiritual-leadership schema:genre cgt:leadership, cgt:ministry-and-evangelism.

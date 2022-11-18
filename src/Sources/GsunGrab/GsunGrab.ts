@@ -1,7 +1,7 @@
 import { GsunGrabRawItem } from './GsunGrabTypes.ts'
 import merge from 'npm:deepmerge'
 import { DOMParser, Element } from 'https://deno.land/x/deno_dom/deno-dom-wasm.ts';
-import { FetcherInterface, SourceInterface, AbstractQuery, Thing, LocalMechanismsInterface } from '../../types.ts'
+import { FetcherInterface, sourceOptions, SourceInterface, AbstractQuery, Thing, LocalMechanismsInterface } from '../../types.ts'
 import { FetchAll } from '../../Fetchers/FetchAll.ts'
 import { cache } from '../../Helpers/CacheDecorator.ts'
 
@@ -9,7 +9,11 @@ export class GsunGrab implements SourceInterface<GsunGrabRawItem> {
 
   public fetcher: FetcherInterface
 
-  constructor () {
+  public options: sourceOptions
+
+  constructor (options: sourceOptions) {
+    this.options = options
+
     const localMechanisms: LocalMechanismsInterface = {
       fulltextSearch: true,
       languageFilter: true

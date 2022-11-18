@@ -1,3 +1,5 @@
+import { sourceOptions } from '../../types.ts'
+
 export type JesusFilmRawItem = {
   mediaComponentId: string,
   componentType: string,
@@ -29,6 +31,6 @@ export type JesusFilmRawItem = {
   metadataLanguageTag: string
 }
 
-export type JesusFilmOptions = {
+export type JesusFilmOptions = sourceOptions & {
   key: string,
 }
