@@ -58,7 +58,7 @@ export class SearchRoute extends BaseRoute {
     const paginationsCompressed = this.compressPaginations(paginations, filteredSources)
 
     const nextUrl = new URL(baseUrl)
-    url.pathname = 'search'
+    nextUrl.pathname = 'search'
     nextUrl.searchParams.set('pagination', paginationsCompressed)
     nextUrl.searchParams.set('lastIndex', newLastIndex.toString())
 
