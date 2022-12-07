@@ -31,8 +31,10 @@ export class SearchRoute extends BaseRoute {
    * We create a fresh set of dataSources and then fetch results.
    */
   async handle () {
-    const url = new URL(baseUrl)
-    url.pathname = 'search'
+    const url = new URL(this.url)
+    url.hostname = baseUrl.hostname
+    url.protocol = baseUrl.protocol
+    url.port = baseUrl.port
 
     const query: AbstractQuery = {
       limit: url.searchParams.get('limit') ? parseInt(url.searchParams.get('limit')!) : 20,
@@ -57,10 +59,12 @@ export class SearchRoute extends BaseRoute {
 
     const paginationsCompressed = this.compressPaginations(paginations, filteredSources)
 
-    const nextUrl = new URL(baseUrl)
-    nextUrl.pathname = 'search'
+    const nextUrl = new URL(this.url)
     nextUrl.searchParams.set('pagination', paginationsCompressed)
     nextUrl.searchParams.set('lastIndex', newLastIndex.toString())
+    nextUrl.hostname = baseUrl.hostname
+    nextUrl.protocol = baseUrl.protocol
+    nextUrl.port = baseUrl.port
 
     return { 
       items, 
