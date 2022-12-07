@@ -3,6 +3,7 @@ import { Search } from '../Search/Search.ts'
 import { AbstractQuery, Paginations, SourceInterface } from '../types.ts'
 import { sources } from '../../.env.ts'
 import { filterSourcesStatically } from '../Helpers/filterSourcesStatically.ts'
+import { baseUrl } from '../../.env.ts'
 
 const paginationTerms = {
   sliceOffset: 's',
@@ -30,7 +31,8 @@ export class SearchRoute extends BaseRoute {
    * We create a fresh set of dataSources and then fetch results.
    */
   async handle () {
-    const url = new URL(this.url)
+    const url = new URL(baseUrl)
+    url.pathname = 'search'
 
     const query: AbstractQuery = {
       limit: url.searchParams.get('limit') ? parseInt(url.searchParams.get('limit')!) : 20,
