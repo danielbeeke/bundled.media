@@ -5,7 +5,6 @@ import { toPathRegex } from './Helpers/toPathRegex.ts'
 import { existsSync } from 'https://deno.land/std@0.157.0/fs/mod.ts'
 import { sources } from '../.env.ts'
 import { AugmentedData } from './Core/AugmentedData.ts'
-
 import { serve } from 'https://deno.land/std@0.163.0/http/server.ts'
 
 const port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 8080

@@ -1,5 +1,5 @@
 import { SourceInterface } from '../types.ts'
-import { Parser, Store, Quad, NamedNode } from 'https://cdn.skypack.dev/n3'
+import { Parser, Store, Quad, NamedNode } from "https://esm.sh/n3"
 
 class AugmentedDataClass {
 
