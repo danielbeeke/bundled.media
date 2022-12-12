@@ -1,7 +1,8 @@
-import { html } from 'https://esm.sh/uhtml'
+import { html, render } from 'https://esm.sh/uhtml'
 import { getIcon } from './getIcon.ts'
 const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 import { parse } from 'https://cdn.skypack.dev/bcp-47@2?dts'
+import { model } from './model.ts'
 
 const url = new URL(location.toString())
 
@@ -51,7 +52,13 @@ export const card = (item: any) => {
 
   const imageFooter = html`${mediaIcon}${languageLabel}`
 
-  return html`<div onclick=${async () => {console.log(item)}} 
+  return html`<div onclick=${async () => {
+    const modelWrapper = document.createElement('div')
+    render(modelWrapper, await model(item, () => {
+      modelWrapper.remove()
+    }))
+    document.body.appendChild(modelWrapper)
+  }} 
     class=${`card ${type} ${!thumbnail && type === 'book' ? 'bible' : ''}`}>
     ${image ? html`
       <div class="image-wrapper">
