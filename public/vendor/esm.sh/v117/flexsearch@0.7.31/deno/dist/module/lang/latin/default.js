@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(flexsearch@0.7.31/dist/module/lang/latin/default) deno production */
+import"/v117/flexsearch@0.7.31/deno/dist/module/type.js";import{pipeline as t,regex_whitespace as o}from"/v117/flexsearch@0.7.31/deno/dist/module/lang.js";var l=!1,a="",x={encode:r,rtl:!1,tokenize:""};function r(e){return t.call(this,(""+e).toLowerCase(),!1,o,!1)}export{x as default,r as encode,l as rtl,a as tokenize};
+//# sourceMappingURL=default.js.map

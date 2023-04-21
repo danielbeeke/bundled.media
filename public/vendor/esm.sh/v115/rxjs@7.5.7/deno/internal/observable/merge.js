@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/observable/merge) deno production */
+import{mergeAll as t}from"/v115/rxjs@7.5.7/deno/internal/operators/mergeAll.js";import{innerFrom as n}from"/v115/rxjs@7.5.7/deno/internal/observable/innerFrom.js";import{EMPTY as p}from"/v115/rxjs@7.5.7/deno/internal/observable/empty.js";import{popNumber as c,popScheduler as i}from"/v115/rxjs@7.5.7/deno/internal/util/args.js";import{from as f}from"/v115/rxjs@7.5.7/deno/internal/observable/from.js";function g(...o){let e=i(o),m=c(o,1/0),r=o;return r.length?r.length===1?n(r[0]):t(m)(f(r,e)):p}export{g as merge};
+//# sourceMappingURL=merge.js.map

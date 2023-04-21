@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(@webreflection/uwire@1.2.1) deno production */
+var l=({firstChild:e,lastChild:t})=>{let s=document.createRange();return s.setStartAfter(e),s.setEndAfter(t),s.deleteContents(),e},r=(e,t)=>e.nodeType===111?1/t<0?t?l(e):e.lastChild:t?e.valueOf():e.firstChild:e,o=e=>{let{firstChild:t,lastChild:s}=e;if(t===s)return s||e;let{childNodes:n}=e,c=[...n];return{ELEMENT_NODE:1,nodeType:111,firstChild:t,lastChild:s,valueOf(){return n.length!==c.length&&e.append(...c),e}}};export{r as diffable,o as persistent};
+//# sourceMappingURL=uwire.mjs.map

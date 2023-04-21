@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/util/errorContext) deno production */
+import{config as n}from"/v115/rxjs@7.5.7/deno/internal/config.js";var r=null;function u(o){if(n.useDeprecatedSynchronousErrorHandling){let e=!r;if(e&&(r={errorThrown:!1,error:null}),o(),e){let{errorThrown:t,error:i}=r;if(r=null,t)throw i}}else o()}function c(o){n.useDeprecatedSynchronousErrorHandling&&r&&(r.errorThrown=!0,r.error=o)}export{c as captureError,u as errorContext};
+//# sourceMappingURL=errorContext.js.map

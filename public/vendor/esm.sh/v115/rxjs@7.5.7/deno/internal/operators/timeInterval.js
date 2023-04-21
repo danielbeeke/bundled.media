@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/timeInterval) deno production */
+import{asyncScheduler as s}from"/v115/rxjs@7.5.7/deno/internal/scheduler/async.js";import{operate as p}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as l}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function w(r=s){return p((o,t)=>{let n=r.now();o.subscribe(l(t,c=>{let a=r.now(),i=a-n;n=a,t.next(new e(c,i))}))})}var e=class{constructor(o,t){this.value=o,this.interval=t}};export{e as TimeInterval,w as timeInterval};
+//# sourceMappingURL=timeInterval.js.map

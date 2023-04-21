@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/observable/connectable) deno production */
+import{Subject as i}from"/v115/rxjs@7.5.7/deno/internal/Subject.js";import{Observable as b}from"/v115/rxjs@7.5.7/deno/internal/Observable.js";import{defer as l}from"/v115/rxjs@7.5.7/deno/internal/observable/defer.js";var f={connector:()=>new i,resetOnDisconnect:!0};function O(c,o=f){let e=null,{connector:t,resetOnDisconnect:s=!0}=o,n=t(),r=new b(u=>n.subscribe(u));return r.connect=()=>((!e||e.closed)&&(e=l(()=>c).subscribe(n),s&&e.add(()=>n=t())),e),r}export{O as connectable};
+//# sourceMappingURL=connectable.js.map

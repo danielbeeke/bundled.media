@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/util/args) deno production */
+import{isFunction as t}from"/v115/rxjs@7.5.7/deno/internal/util/isFunction.js";import{isScheduler as p}from"/v115/rxjs@7.5.7/deno/internal/util/isScheduler.js";function n(e){return e[e.length-1]}function i(e){return t(n(e))?e.pop():void 0}function f(e){return p(n(e))?e.pop():void 0}function c(e,o){return typeof n(e)=="number"?e.pop():o}export{c as popNumber,i as popResultSelector,f as popScheduler};
+//# sourceMappingURL=args.js.map

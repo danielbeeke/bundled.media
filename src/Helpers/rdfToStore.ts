@@ -1,4 +1,4 @@
-import { Parser, Quad, Store } from 'https://esm.sh/n3'
+import { Parser, Quad, Store } from 'npm:n3'
 
 export const rdfToStore = (text: string): Promise<{ store: Store, prefixes: any }> => {
   const parser = new Parser()

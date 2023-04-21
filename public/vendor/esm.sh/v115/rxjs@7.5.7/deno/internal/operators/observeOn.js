@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/observeOn) deno production */
+import{executeSchedule as p}from"/v115/rxjs@7.5.7/deno/internal/util/executeSchedule.js";import{operate as n}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as f}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function a(t,e=0){return n((r,o)=>{r.subscribe(f(o,m=>p(o,t,()=>o.next(m),e),()=>p(o,t,()=>o.complete(),e),m=>p(o,t,()=>o.error(m),e)))})}export{a as observeOn};
+//# sourceMappingURL=observeOn.js.map

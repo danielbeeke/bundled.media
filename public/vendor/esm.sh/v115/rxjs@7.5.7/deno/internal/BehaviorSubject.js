@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/BehaviorSubject) deno production */
+import{Subject as u}from"/v115/rxjs@7.5.7/deno/internal/Subject.js";var r=class extends u{constructor(t){super(),this._value=t}get value(){return this.getValue()}_subscribe(t){let e=super._subscribe(t);return!e.closed&&t.next(this._value),e}getValue(){let{hasError:t,thrownError:e,_value:s}=this;if(t)throw e;return this._throwIfClosed(),s}next(t){super.next(this._value=t)}};export{r as BehaviorSubject};
+//# sourceMappingURL=BehaviorSubject.js.map

@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/util/throwUnobservableError) deno production */
+function r(e){return new TypeError(`You provided ${e!==null&&typeof e=="object"?"an invalid object":`'${e}'`} where a stream was expected. You can provide an Observable, Promise, ReadableStream, Array, AsyncIterable, or Iterable.`)}export{r as createInvalidObservableTypeError};
+//# sourceMappingURL=throwUnobservableError.js.map

@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/scheduler/immediateProvider) deno production */
+import{Immediate as m}from"/v115/rxjs@7.5.7/deno/internal/util/Immediate.js";var{setImmediate:i,clearImmediate:a}=m,d={setImmediate(...t){let{delegate:e}=d;return(e?.setImmediate||i)(...t)},clearImmediate(t){let{delegate:e}=d;return(e?.clearImmediate||a)(t)},delegate:void 0};export{d as immediateProvider};
+//# sourceMappingURL=immediateProvider.js.map

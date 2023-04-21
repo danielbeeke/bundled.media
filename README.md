@@ -94,7 +94,7 @@ Would it be possible to subscribe to a search query, so that when new content is
 
 - Install Deno: https://deno.land/
 - Copy .env.default.ts to .env.ts and configure it
-- `deno run --allow-run --allow-env --allow-write --allow-read run.ts --watch`
+- `deno run --allow-run --allow-env --allow-write --allow-read src/App.ts --watch`
 
 ## Development
 

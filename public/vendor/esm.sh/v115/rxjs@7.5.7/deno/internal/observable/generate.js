@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/observable/generate) deno production */
+import{identity as a}from"/v115/rxjs@7.5.7/deno/internal/util/identity.js";import{isScheduler as r}from"/v115/rxjs@7.5.7/deno/internal/util/isScheduler.js";import{defer as y}from"/v115/rxjs@7.5.7/deno/internal/observable/defer.js";import{scheduleIterable as b}from"/v115/rxjs@7.5.7/deno/internal/scheduled/scheduleIterable.js";function l(o,i,g,f,t){let m,n;arguments.length===1?{initialState:n,condition:i,iterate:g,resultSelector:m=a,scheduler:t}=o:(n=o,!f||r(f)?(m=a,t=f):m=f);function*p(){for(let e=n;!i||i(e);e=g(e))yield m(e)}return y(t?()=>b(p(),t):p)}export{l as generate};
+//# sourceMappingURL=generate.js.map

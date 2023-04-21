@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/pairwise) deno production */
+import{operate as a}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as n}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function f(){return a((p,r)=>{let e,t=!1;p.subscribe(n(r,o=>{let i=e;e=o,t&&r.next([i,o]),t=!0}))})}export{f as pairwise};
+//# sourceMappingURL=pairwise.js.map

@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/scheduled/scheduleIterable) deno production */
+import{Observable as a}from"/v115/rxjs@7.5.7/deno/internal/Observable.js";import{iterator as u}from"/v115/rxjs@7.5.7/deno/internal/symbol/iterator.js";import{isFunction as f}from"/v115/rxjs@7.5.7/deno/internal/util/isFunction.js";import{executeSchedule as l}from"/v115/rxjs@7.5.7/deno/internal/util/executeSchedule.js";function c(m,r){return new a(t=>{let e;return l(t,r,()=>{e=m[u](),l(t,r,()=>{let o,n;try{({value:o,done:n}=e.next())}catch(i){t.error(i);return}n?t.complete():t.next(o)},0,!0)}),()=>f(e?.return)&&e.return()})}export{c as scheduleIterable};
+//# sourceMappingURL=scheduleIterable.js.map

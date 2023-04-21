@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/shareReplay) deno production */
+import{ReplaySubject as r}from"/v115/rxjs@7.5.7/deno/internal/ReplaySubject.js";import{share as s}from"/v115/rxjs@7.5.7/deno/internal/operators/share.js";function y(t,n,l){let e,o=!1;return t&&typeof t=="object"?{bufferSize:e=1/0,windowTime:n=1/0,refCount:o=!1,scheduler:l}=t:e=t??1/0,s({connector:()=>new r(e,n,l),resetOnError:!0,resetOnComplete:!1,resetOnRefCountZero:o})}export{y as shareReplay};
+//# sourceMappingURL=shareReplay.js.map

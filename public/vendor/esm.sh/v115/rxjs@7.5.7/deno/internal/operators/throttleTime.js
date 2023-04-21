@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/throttleTime) deno production */
+import{asyncScheduler as i}from"/v115/rxjs@7.5.7/deno/internal/scheduler/async.js";import{defaultThrottleConfig as m,throttle as n}from"/v115/rxjs@7.5.7/deno/internal/operators/throttle.js";import{timer as f}from"/v115/rxjs@7.5.7/deno/internal/observable/timer.js";function h(t,r=i,o=m){let e=f(t,r);return n(()=>e,o)}export{h as throttleTime};
+//# sourceMappingURL=throttleTime.js.map

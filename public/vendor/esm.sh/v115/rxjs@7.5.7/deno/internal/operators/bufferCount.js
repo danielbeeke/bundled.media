@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/bufferCount) deno production */
+import{operate as m}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as r}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";import{arrRemove as c}from"/v115/rxjs@7.5.7/deno/internal/util/arrRemove.js";function b(u,l=null){return l=l??u,m((p,f)=>{let t=[],i=0;p.subscribe(r(f,e=>{let o=null;i++%l===0&&t.push([]);for(let n of t)n.push(e),u<=n.length&&(o=o??[],o.push(n));if(o)for(let n of o)c(t,n),f.next(n)},()=>{for(let e of t)f.next(e);f.complete()},void 0,()=>{t=null}))})}export{b as bufferCount};
+//# sourceMappingURL=bufferCount.js.map

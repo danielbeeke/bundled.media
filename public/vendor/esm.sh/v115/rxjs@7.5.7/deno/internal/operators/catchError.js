@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/catchError) deno production */
+import{innerFrom as b}from"/v115/rxjs@7.5.7/deno/internal/observable/innerFrom.js";import{createOperatorSubscriber as o}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";import{operate as s}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";function f(u){return s((i,r)=>{let e=null,t=!1,n;e=i.subscribe(o(r,void 0,void 0,l=>{n=b(u(l,f(u)(i))),e?(e.unsubscribe(),e=null,n.subscribe(r)):t=!0})),t&&(e.unsubscribe(),e=null,n.subscribe(r))})}export{f as catchError};
+//# sourceMappingURL=catchError.js.map

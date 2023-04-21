@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/scheduler/AsyncScheduler) deno production */
+import{Scheduler as i}from"/v115/rxjs@7.5.7/deno/internal/Scheduler.js";var r=class extends i{constructor(e,s=i.now){super(e,s),this.actions=[],this._active=!1}flush(e){let{actions:s}=this;if(this._active){s.push(e);return}let t;this._active=!0;do if(t=e.execute(e.state,e.delay))break;while(e=s.shift());if(this._active=!1,t){for(;e=s.shift();)e.unsubscribe();throw t}}};export{r as AsyncScheduler};
+//# sourceMappingURL=AsyncScheduler.js.map

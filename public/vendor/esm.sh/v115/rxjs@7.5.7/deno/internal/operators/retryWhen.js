@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/retryWhen) deno production */
+import{Subject as f}from"/v115/rxjs@7.5.7/deno/internal/Subject.js";import{operate as c}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as u}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function a(o){return c((s,i)=>{let r,t=!1,e,n=()=>{r=s.subscribe(u(i,void 0,void 0,b=>{e||(e=new f,o(e).subscribe(u(i,()=>r?n():t=!0))),e&&e.next(b)})),t&&(r.unsubscribe(),r=null,t=!1,n())};n()})}export{a as retryWhen};
+//# sourceMappingURL=retryWhen.js.map

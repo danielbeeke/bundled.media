@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(flexsearch@0.7.31/dist/module/async) deno production */
+import"/v117/flexsearch@0.7.31/deno/dist/module/type.js";import{is_function as m}from"/v117/flexsearch@0.7.31/deno/dist/module/common.js";function y(e){n(e,"add"),n(e,"append"),n(e,"search"),n(e,"update"),n(e,"remove")}function n(e,i){e[i+"Async"]=function(){let o=this,t=arguments,s=t[t.length-1],c;m(s)&&(c=s,delete t[t.length-1]);let r=new Promise(function(f){setTimeout(function(){o.async=!0;let u=o[i].apply(o,t);o.async=!1,f(u)})});return c?(r.then(c),this):r}}export{y as default};
+//# sourceMappingURL=async.js.map

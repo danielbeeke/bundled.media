@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/observable/range) deno production */
+import{Observable as m}from"/v115/rxjs@7.5.7/deno/internal/Observable.js";import{EMPTY as p}from"/v115/rxjs@7.5.7/deno/internal/observable/empty.js";function h(n,o,f){if(o==null&&(o=n,n=0),o<=0)return p;let i=o+n;return new m(f?e=>{let l=n;return f.schedule(function(){l<i?(e.next(l++),this.schedule()):e.complete()})}:e=>{let l=n;for(;l<i&&!e.closed;)e.next(l++);e.complete()})}export{h as range};
+//# sourceMappingURL=range.js.map

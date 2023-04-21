@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/observable/using) deno production */
+import{Observable as t}from"/v115/rxjs@7.5.7/deno/internal/Observable.js";import{innerFrom as u}from"/v115/rxjs@7.5.7/deno/internal/observable/innerFrom.js";import{EMPTY as c}from"/v115/rxjs@7.5.7/deno/internal/observable/empty.js";function p(e,s){return new t(n=>{let r=e(),o=s(r);return(o?u(o):c).subscribe(n),()=>{r&&r.unsubscribe()}})}export{p as using};
+//# sourceMappingURL=using.js.map

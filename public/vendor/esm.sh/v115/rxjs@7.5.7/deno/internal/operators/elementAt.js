@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/elementAt) deno production */
+import{ArgumentOutOfRangeError as r}from"/v115/rxjs@7.5.7/deno/internal/util/ArgumentOutOfRangeError.js";import{filter as n}from"/v115/rxjs@7.5.7/deno/internal/operators/filter.js";import{throwIfEmpty as p}from"/v115/rxjs@7.5.7/deno/internal/operators/throwIfEmpty.js";import{defaultIfEmpty as i}from"/v115/rxjs@7.5.7/deno/internal/operators/defaultIfEmpty.js";import{take as u}from"/v115/rxjs@7.5.7/deno/internal/operators/take.js";function E(t,e){if(t<0)throw new r;let o=arguments.length>=2;return m=>m.pipe(n((a,f)=>f===t),u(1),o?i(e):p(()=>new r))}export{E as elementAt};
+//# sourceMappingURL=elementAt.js.map

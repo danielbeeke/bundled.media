@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/observable/fromEventPattern) deno production */
+import{Observable as e}from"/v115/rxjs@7.5.7/deno/internal/Observable.js";import{isFunction as m}from"/v115/rxjs@7.5.7/deno/internal/util/isFunction.js";import{mapOneOrManyArgs as u}from"/v115/rxjs@7.5.7/deno/internal/util/mapOneOrManyArgs.js";function s(r,n,i){return i?s(r,n).pipe(u(i)):new e(f=>{let o=(...t)=>f.next(t.length===1?t[0]:t),p=r(o);return m(n)?()=>n(o,p):void 0})}export{s as fromEventPattern};
+//# sourceMappingURL=fromEventPattern.js.map

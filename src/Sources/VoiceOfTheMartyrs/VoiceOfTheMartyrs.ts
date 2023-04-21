@@ -16,7 +16,10 @@ export class VoiceOfTheMartyrs implements SourceInterface<VoiceOfTheMartyrsRawIt
 
   constructor (options: VoiceOfTheMartyrsOptions) {
     this.options = options
-    this.fetcher = new FetchAll(this.fetch.bind(this), this.normalize.bind(this), {})
+    this.fetcher = new FetchAll(this.fetch.bind(this), this.normalize.bind(this), {
+      fulltextSearch: true,
+      languageFilter: false
+    })
   }
 
   get label () {

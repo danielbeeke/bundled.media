@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/sample) deno production */
+import{operate as n}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{noop as p}from"/v115/rxjs@7.5.7/deno/internal/util/noop.js";import{createOperatorSubscriber as o}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function i(a){return n((u,e)=>{let t=!1,r=null;u.subscribe(o(e,l=>{t=!0,r=l})),a.subscribe(o(e,()=>{if(t){t=!1;let l=r;r=null,e.next(l)}},p))})}export{i as sample};
+//# sourceMappingURL=sample.js.map

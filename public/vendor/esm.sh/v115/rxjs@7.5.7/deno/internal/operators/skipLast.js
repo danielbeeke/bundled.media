@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/skipLast) deno production */
+import{identity as m}from"/v115/rxjs@7.5.7/deno/internal/util/identity.js";import{operate as f}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as s}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function u(e){return e<=0?m:f((l,n)=>{let r=new Array(e),a=0;return l.subscribe(s(n,o=>{let t=a++;if(t<e)r[t]=o;else{let i=t%e,c=r[i];r[i]=o,n.next(c)}})),()=>{r=null}})}export{u as skipLast};
+//# sourceMappingURL=skipLast.js.map

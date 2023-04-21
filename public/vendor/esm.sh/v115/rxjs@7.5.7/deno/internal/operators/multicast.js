@@ -1,0 +1,3 @@
+/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/multicast) deno production */
+import{ConnectableObservable as m}from"/v115/rxjs@7.5.7/deno/internal/observable/ConnectableObservable.js";import{isFunction as t}from"/v115/rxjs@7.5.7/deno/internal/util/isFunction.js";import{connect as e}from"/v115/rxjs@7.5.7/deno/internal/operators/connect.js";function a(n,o){let r=t(n)?n:()=>n;return t(o)?e(o,{connector:r}):i=>new m(i,r)}export{a as multicast};
+//# sourceMappingURL=multicast.js.map

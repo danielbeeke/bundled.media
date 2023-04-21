@@ -68,6 +68,16 @@ async function serveHttp(request: Request) {
 
   // Try static resources.
   try {
+    const file = await Deno.readTextFile('./public/vendor' + requestURL.pathname)
+    if (file) {
+      return await serveFileWithTs(request, './public/vendor' + requestURL.pathname)
+    }  
+  }
+  catch {}
+
+
+  // Try static resources.
+  try {
     const file = await Deno.readTextFile('./public' + requestURL.pathname)
     if (file) {
       return await serveFileWithTs(request, './public' + requestURL.pathname)

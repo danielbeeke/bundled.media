@@ -1,4 +1,3 @@
-import Comunica from '../Vendor/comunica-browser.js'
-const { QueryEngine } = Comunica
+import { QueryEngine } from 'npm:@comunica/query-sparql'
 
 export const queryEngine = new QueryEngine()
