@@ -50,7 +50,7 @@ export class FetcherBase<FetchCallback> {
             ...extractValues(expandedItem['http://schema.org/name']),
             ...extractValues(expandedItem['http://schema.org/keywords']),
             ...extractValues(expandedItem['http://schema.org/genre']),
-          ])
+          ]) ?? 'und'
 
           if (language) {
             expandedItem['http://schema.org/inLanguage'] = [{ '@value': language }]

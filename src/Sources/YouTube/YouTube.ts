@@ -3,6 +3,7 @@ import { FetcherInterface, SourceInterface, AbstractQuery, Thing, LocalMechanism
 import { Html5Entities } from 'https://deno.land/x/html_entities@v1.0/mod.js'
 import { YouTubeRawItem, YouTubeOptions } from './YouTubeTypes.ts'
 import { cache } from '../../Helpers/CacheDecorator.ts'
+import { tryToExtractLanguage } from '../../Helpers/tryToExtractLanguage.ts'
 
 /**
  * YouTube has a token based API. This is great, each time when more results are needed we can fetch it.
@@ -103,11 +104,15 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
    * The transformation from an API specific item to a schema.org item.
    */
    normalize(item: YouTubeRawItem): Thing {
+    const title = Html5Entities.decode(item.snippet.title)
+    const extractedLanguage = tryToExtractLanguage([...title.split(' ')])
+    const language = extractedLanguage ?? item.defaultAudioLanguage ?? item.defaultLanguage
+
     return {
       '@id': `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`,
-      'name': Html5Entities.decode(item.snippet.title),
+      'name': title,
       'description': item.snippet.description,
-      'inLanguage': item.defaultAudioLanguage ?? item.defaultLanguage,
+      'inLanguage': language,
       '@type': 'VideoObject',
       'thumbnail': {
         'url': item.snippet.thumbnails.high.url,

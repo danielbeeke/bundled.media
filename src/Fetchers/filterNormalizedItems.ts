@@ -16,7 +16,8 @@ export const filterNormalizedItems = (query: AbstractQuery, items: Array<Thing>,
 
   if (query.bcp47 && languageFilter) {
     filteredItems = filteredItems.filter(item => 
-      item['http://schema.org/inLanguage']?.some((value: any) => value['@value'].includes(query.bcp47))
+      // TODO allow inclusive or exclusive filtering.
+      item['http://schema.org/inLanguage']?.some((value: any) => value['@value'] === query.bcp47)
     )
   }
 

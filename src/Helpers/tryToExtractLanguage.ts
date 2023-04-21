@@ -26,46 +26,12 @@ export const tryToExtractLanguage = (texts: Array<string>) => {
   const prefixedBcp47 = texts.find(text => text.startsWith('bcp47:'))
 
   if (prefixedBcp47) {
-    return prefixedBcp47.split(':').pop()
+    return bcp47Normalize(prefixedBcp47.split(':').pop()!)
   }
 
-  const parts = [
-    ...texts.flatMap(text => text.split(' - ').pop()!.split(' ')),
-    ...texts
-  ].flatMap(string => string.split('_')).filter(Boolean)
+  const blockquotedLangCode = texts.find(text => /^\[[a-zA-Z0-9]*\]$/.test(text.trim()))
 
-  let langCode = 'und'
-
-  const matches = new Map()
-
-  for (const part of parts) {
-    if (langCode === 'und' && languageNames[part.toLowerCase()]) {
-      for (const match of languageNames[part.toLowerCase()]) {
-        matches.set(match, 1)
-      }
-    }
+  if (blockquotedLangCode) {
+    return bcp47Normalize(blockquotedLangCode.substring(1, blockquotedLangCode.length - 1))
   }
-
-  let highestMatch = null
-  let highestMatchScore = 0
-  for (let [match, score] of matches.entries()) {
-    for (const part of parts) {
-      if (languageNames[part.toLowerCase()]) {
-        score++
-        matches.set(match, score)
-
-        if (score > highestMatchScore) {
-          highestMatch = match
-          highestMatchScore = score
-        }
-      }
-    }
-  }
-
-  if (highestMatchScore > 1) {
-    langCode = highestMatch.code
-  }
-
-  return !langCode || langCode === 'und' ? 'und' : bcp47Normalize(langCode)
-
 }
