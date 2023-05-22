@@ -20,9 +20,12 @@ export const card = (item: any) => {
     image = 'https://images.unsplash.com/photo-1499652848871-1527a310b13a'
   }
 
-  let video = ''
-  if (!image) {
-    video = urls.find((url: string) => url.endsWith('.mp4'))
+  if (!image && type === 'audioobject') {
+    image = 'https://images.unsplash.com/photo-1458560871784-56d23406c091'
+  }
+
+  const video = urls.find((url: string) => url.endsWith('.mp4'))
+  if (!image && video) {
     image = `${location.protocol}//${location.hostname}${location.port ? `:${location.port}` : ''}/thumb/${video}`
   }
 

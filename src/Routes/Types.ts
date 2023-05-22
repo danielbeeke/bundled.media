@@ -4,6 +4,7 @@ import { sources } from '../../.env.ts'
 const typeLabels: { [key: string]: string } = {
   'http://schema.org/Book': 'Book',
   'http://schema.org/VideoObject': 'Video',
+  'http://schema.org/AudioObject': 'Audio',
 }
 
 export class TypesRoute extends BaseRoute {

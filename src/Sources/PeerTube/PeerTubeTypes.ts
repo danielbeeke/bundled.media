@@ -56,5 +56,6 @@ export type Category = {
 
 export type PeerTubeOptions = sourceOptions & {
   label: string,
+  playlist: string,
   url: string,
 }
