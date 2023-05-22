@@ -51,10 +51,10 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
    */
   @cache
   async channelNameToPlaylistId (fetched: typeof globalThis.fetch, channel: string) {
-    const fetchUrl = new URL(`https://www.youtube.com/c/${channel}`)
+    const fetchUrl = new URL(`https://www.youtube.com/@${channel}`)
     const response = await fetched(fetchUrl)
     const page = await response.text()
-    const regex = /<meta itemprop="channelId" content="UC([a-zA-Z0-9_]*)">/g
+    const regex = /c4TabbedHeaderRenderer":{"channelId":"UC([a-zA-Z0-9_]*)"/g
     const matches = regex.exec(page)
     return `UU${matches?.[1]}`
   }
@@ -65,6 +65,8 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
   @cache
   async fetch (fetched: typeof globalThis.fetch, _query: AbstractQuery, token: string | null) {
     const channelId = await this.channelNameToPlaylistId(fetched, this.options.channel)
+
+    console.log(channelId)
 
     const fetchUrl = new URL('https://www.googleapis.com/youtube/v3/playlistItems')
     fetchUrl.searchParams.set('part', 'snippet')

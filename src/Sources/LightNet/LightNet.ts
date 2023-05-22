@@ -23,7 +23,7 @@ export class LightNet implements SourceInterface<LightNetRawItem> {
     return `lightnet/${this.options.url.split('://').pop()}/${this.options.channel}`
   }
 
-  // @cache
+  @cache
   async fetch (fetched: typeof globalThis.fetch, query: AbstractQuery, offset: number, limit: number) {
     let types = this.options.types.join(',')
     
