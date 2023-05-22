@@ -1,6 +1,5 @@
 import { BaseRoute } from './BaseRoute.ts'
-import { Marked } from 'https://deno.land/x/markdown@v2.0.0/mod.ts'
-
+import { CSS, render } from "https://deno.land/x/gfm/mod.ts";
 export class AboutRoute extends BaseRoute {
 
   static path = '/about'
@@ -9,7 +8,7 @@ export class AboutRoute extends BaseRoute {
 
   handle () {
     const markdown = Deno.readTextFileSync('./README.md')
-    return Marked.parse(markdown)
+    return render(markdown)
 
   }
 
