@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "dev": "deno run --allow-all --watch src/App.ts",
+    "vendor": "rm -rf public/vendor && deno vendor --no-config public/search.ts --output public/vendor"
+  }
+}

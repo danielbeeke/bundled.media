@@ -78,7 +78,7 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
     const request = await fetched(fetchUrl)
     const response = await request.json()
 
-    const ids = response.items.map((item: YouTubeRawItem) => item.snippet.resourceId.videoId)
+    const ids = response.items?.map((item: YouTubeRawItem) => item.snippet.resourceId.videoId) ?? []
     const videosUrl = new URL('https://www.googleapis.com/youtube/v3/videos')
     videosUrl.searchParams.set('fields', 'nextPageToken,items(id,snippet(defaultAudioLanguage,defaultLanguage))')
     videosUrl.searchParams.set('part', 'snippet')
