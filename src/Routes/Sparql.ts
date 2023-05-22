@@ -1,18 +1,19 @@
 import { BaseRoute } from './BaseRoute.ts'
-import { Store, Parser } from "npm:n3"
-import { Parser as SparqlParser, Generator as SparqlGenerator } from 'https://esm.sh/sparqljs@3.5.2'
+import { Store } from "npm:n3"
+import { Parser as SparqlParser } from 'https://esm.sh/sparqljs@3.5.2'
 import { walker } from '../Helpers/walker.ts'
 import { Search } from '../Search/Search.ts'
 import JSONLD from 'npm:jsonld'
 import { queryEngine } from '../Core/QueryEngine.ts'
 import { streamToString } from '../Helpers/streamToString.ts'
+import { AbstractQuery } from '../types.ts'
 
 const filtersToUri = {
-  'http://www.w3.org/1999/02/22-rdf-syntax-ns#type': 'types',
-  'http://bundled.media#text': 'text',
-  'http://schema.org/inLanguage': 'langCode',
-  'http://taxonomy.mediaworks.global/category' : 'categories',
-}
+  'http://www.w3.org/1999/02/22-rdf-syntax-ns#type': 'type',
+  'http://bundled.media#text': 'fulltextSearch',
+  'http://schema.org/inLanguage': 'bcp47',
+  'http://taxonomy.mediaworks.global/category' : 'category',
+} as const
 
 export class SparqlRoute extends BaseRoute {
 
@@ -30,7 +31,7 @@ export class SparqlRoute extends BaseRoute {
 
   async execute (query: string) {
     const abstractQuery = this.parseQuery(query)
-    const searcher = new Search(abstractQuery, 'http://localhost/')
+    const searcher = new Search(abstractQuery, 3)
     const { items } = await searcher.handle()
     const quads = await JSONLD.toRDF({
       '@graph': items,
@@ -42,38 +43,52 @@ export class SparqlRoute extends BaseRoute {
 
     const store = new Store()
     store.addQuads(quads)
-    const response = await queryEngine.query(query, { sources: [store] })
+
+    const cleanedQuery = this.cleanQuery(query)
+
+    const response = await queryEngine.query(cleanedQuery, { sources: [store] })
     const { data } = await queryEngine.resultToString(response, 'application/sparql-results+json')
     const output = await streamToString(data)
+
     return JSON.parse(output)
   }
 
-  parseQuery (query: string) {
+  /**
+   * TODO For production things we might need a better clean up.
+   */
+  cleanQuery (query: string) {
+    return query
+      .split('\n')
+      .filter(line => !line.includes('<http://bundled.media#text>'))
+      .join('\n')
+  }
+
+  parseQuery (query: string): AbstractQuery {
     const parser = new SparqlParser()
     const parsedQuery = parser.parse(query)
 
-    const filters: {[key: string]: string} = {}
+    const filters: AbstractQuery = {
+      limit: 100
+    }
 
     walker(parsedQuery, (key: string, value: any, _parent: any) => {
       if (key === 'expression' && value.operator === 'langmatches') {
         if (value.args[1].value)
-          filters.langCode = value.args[1].value
+          filters.bcp47 = value.args[1].value
       }
 
       if (key === 'limit') {
-        filters.size = value
+        filters.limit = value
       }
-      if (value.predicate && value.predicate.value in filtersToUri && value.object.termType === 'NamedNode') {
-        filters[filtersToUri[value.predicate.value as keyof typeof filtersToUri]] = value.object.value
+      
+      if (value.predicate && value.predicate.value in filtersToUri && value.object.termType === 'Literal') {
+        const predicate = value.predicate.value as keyof typeof filtersToUri
+        const filter = filtersToUri[predicate]
+        filters[filter] = value.object.value
       }
     })
 
-    const abstractQuery = new AbstractQuery(new URL('https://example.com'))
-    for (const [key, value] of Object.entries(filters)) {
-      abstractQuery.params.set(key, value)
-    }
-
-    return abstractQuery
+    return filters
   }
 
   /**

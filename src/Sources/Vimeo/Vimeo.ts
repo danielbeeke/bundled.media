@@ -61,20 +61,25 @@ export class Vimeo implements SourceInterface<VimeoRawItem> {
    normalize(item: VimeoRawItem): Thing {
     const image = item.pictures.sizes.pop()!
 
-    return {
+    const output: any = {
       '@id': item.link,
       'name': item.name,
       'description': item.description,
       '@type': 'VideoObject',
       'url': item.link,
       'keywords': item.tags?.map(tag => tag.tag) ?? [],
-      'thumbnail': {
+      'inLanguage': item.language
+    }
+
+    if (image) {
+      output.thumbnail = {
         'url': image.link,
         'width': image.width.toString(),
         'height': image.height.toString(),
-      },
-      'inLanguage': item.language
+      }
     }
+
+    return output
   }
 
   /**

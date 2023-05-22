@@ -12,7 +12,10 @@ export class PeerTube implements SourceInterface<PeerTubeRawItem> {
 
   constructor (options: PeerTubeOptions) {
     this.options = options
-    this.fetcher = new FetchByOffsetAndLimit(this.fetch.bind(this), this.normalize.bind(this), {}, 100)
+    this.fetcher = new FetchByOffsetAndLimit(this.fetch.bind(this), this.normalize.bind(this), {
+      fulltextSearch: true,
+      languageFilter: true
+    }, 100)
   }
 
   get label () {

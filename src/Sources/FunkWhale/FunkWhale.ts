@@ -12,7 +12,10 @@ export class FunkWhale implements SourceInterface<FunkWhaleRawItem> {
 
   constructor (options: FunkWhaleOptions) {
     this.options = options
-    this.fetcher = new FetchByPage(this.fetch.bind(this), this.normalize.bind(this), {}, 25)
+    this.fetcher = new FetchByPage(this.fetch.bind(this), this.normalize.bind(this), {
+      fulltextSearch: true,
+      languageFilter: true
+    }, 25)
   }
 
   get label () {
