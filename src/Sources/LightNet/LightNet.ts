@@ -72,16 +72,16 @@ export class LightNet implements SourceInterface<LightNetRawItem> {
   normalize(item: LightNetRawItem) {
     const image = item.covers ? item.covers.find(image => image.url.includes('front')) ?? item.covers[0] : item.cover
 
-    const authors = item.authorsData.map((authorTranslations) => authorTranslations
+    const authors = item.authorsData?.map((authorTranslations) => authorTranslations
       .find((authorTranslation: any) => authorTranslation.langCode === item.langCode) ?? authorTranslations[0])
-    .filter(Boolean)  
-    .map(author => {
-      return {
-        '@type': author.type.substring(0, 1).toUpperCase() + author.type.substring(1),
-        name: author.name,
-        url: `${this.options.url.toString().replace('data', 'rdf')}/contents/${author.type}/${author.id}`
-      }
-    })
+      .filter(Boolean)  
+      .map(author => {
+        return {
+          '@type': author.type.substring(0, 1).toUpperCase() + author.type.substring(1),
+          name: author.name,
+          url: `${this.options.url.toString().replace('data', 'rdf')}/contents/${author.type}/${author.id}`
+        }
+      }) ?? []
 
     const languageIndependantId = `${this.options.url.toString().replace('data', 'rdf')}/contents/${item.type}/${item.id}`
 
