@@ -10,7 +10,6 @@ import { AbstractQuery } from '../types.ts'
 
 const filtersToUri = {
   'http://www.w3.org/1999/02/22-rdf-syntax-ns#type': 'type',
-  'http://bundled.media#text': 'fulltextSearch',
   'http://schema.org/inLanguage': 'bcp47',
   'http://taxonomy.mediaworks.global/category' : 'category',
 } as const
@@ -43,24 +42,11 @@ export class SparqlRoute extends BaseRoute {
 
     const store = new Store()
     store.addQuads(quads)
-
-    const cleanedQuery = this.cleanQuery(query)
-
-    const response = await queryEngine.query(cleanedQuery, { sources: [store] })
+    const response = await queryEngine.query(query, { sources: [store] })
     const { data } = await queryEngine.resultToString(response, 'application/sparql-results+json')
     const output = await streamToString(data)
 
     return JSON.parse(output)
-  }
-
-  /**
-   * TODO For production things we might need a better clean up.
-   */
-  cleanQuery (query: string) {
-    return query
-      .split('\n')
-      .filter(line => !line.includes('<http://bundled.media#text>'))
-      .join('\n')
   }
 
   parseQuery (query: string): AbstractQuery {
@@ -72,11 +58,62 @@ export class SparqlRoute extends BaseRoute {
       filters.limit = parsedQuery.limit
     }
 
-    walker(parsedQuery, (key: string, value: any, _parent: any) => {
-    })
-
+    const mainSubject = this.parseMainsubject(parsedQuery)
+    if (!mainSubject) throw new Error('Missing subject')
+    const variables = this.parseVariables(parsedQuery)
+    const fulltextSearch = this.parseFulltextSearch(parsedQuery, mainSubject, variables)
+    if (fulltextSearch) filters.fulltextSearch = fulltextSearch
 
     return filters
+  }
+
+  parseMainsubject (parsedQuery: any) {
+    let mainSubject: string | undefined = undefined
+
+    walker(parsedQuery.where, (_key: string, value: any, _parent: any) => {
+      if (!mainSubject && value.termType === 'Variable') {
+        mainSubject = value.value
+        return 'BREAK'
+      }
+    })
+
+    return mainSubject
+  }
+
+  parseVariables (parsedQuery: any) {
+    const variables: any = {}
+    
+    walker(parsedQuery.where, (_key: string, value: any, _parent: any) => {
+      if (value.type === 'bgp') {
+        for (const triple of value.triples) {
+          if (triple.object.termType === 'Variable') {
+            if (!variables[triple.subject.value]) variables[triple.subject.value] = {}
+            variables[triple.subject.value][triple.object.value] = triple.predicate.value
+          }
+        }
+      }
+    })
+
+    return variables
+  }
+
+  parseFulltextSearch (parsedQuery: any, mainSubject: string, variables: any) {
+    const predicatesToMatch = [
+      'http://schema.org/name',
+      'http://schema.org/description',
+    ]
+    
+    const fulltextSearches: Set<string> = new Set()
+    walker(parsedQuery.where, (_key: string, value: any, _parent: any) => {
+      if (value.type && value.type === 'operation' && value.operator === 'contains') {
+        if (value.args[0].value in variables[mainSubject]) {
+          const predicate = variables[mainSubject][value.args[0].value]
+          if (predicate && predicatesToMatch.includes(predicate)) fulltextSearches.add(value.args[1].value)
+        }
+      }
+    })
+    
+    return [...fulltextSearches.values()].pop()
   }
 
   /**

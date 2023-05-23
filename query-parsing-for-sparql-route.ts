@@ -17,9 +17,6 @@ SELECT * WHERE {
 LIMIT 100
 `
 
-
-// anything predicate variable
-
 const parser = new SparqlParser()
 const parsedQuery = parser.parse(query) as any
 const filters: any = {}
@@ -31,19 +28,20 @@ const predicatesToMatch = [
   'http://schema.org/description',
 ]
 
-// console.log(parsedQuery)
 let mainSubject: string | undefined = undefined
 const fulltextSearches: Set<string> = new Set()
 
-walker(parsedQuery, (key: string, value: any, _parent: any) => {
+// Grabs the first variable of the query
+walker(parsedQuery.where, (key: string, value: any, _parent: any) => {
   if (!mainSubject && value.termType === 'Variable') {
     mainSubject = value.value
+    return 'BREAK'
   }
 })
 
 const variables: any = {}
 
-walker(parsedQuery, (key: string, value: any, _parent: any) => {
+walker(parsedQuery.where, (key: string, value: any, _parent: any) => {
   if (value.type === 'bgp') {
     for (const triple of value.triples) {
       if (triple.object.termType === 'Variable') {
@@ -56,7 +54,7 @@ walker(parsedQuery, (key: string, value: any, _parent: any) => {
   }
 })
 
-walker(parsedQuery, (key: string, value: any, _parent: any) => {
+walker(parsedQuery.where, (key: string, value: any, _parent: any) => {
   if (value.type && value.type === 'operation' && value.operator === 'contains') {
     if (value.args[0].value in variables) {
       const predicate = variables[value.args[0].value]
