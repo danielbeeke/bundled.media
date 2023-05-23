@@ -65,28 +65,16 @@ export class SparqlRoute extends BaseRoute {
 
   parseQuery (query: string): AbstractQuery {
     const parser = new SparqlParser()
-    const parsedQuery = parser.parse(query)
+    const parsedQuery = parser.parse(query) as any
+    const filters: AbstractQuery = { limit: 1 }
 
-    const filters: AbstractQuery = {
-      limit: 100
+    if (parsedQuery.limit) {
+      filters.limit = parsedQuery.limit
     }
 
     walker(parsedQuery, (key: string, value: any, _parent: any) => {
-      if (key === 'expression' && value.operator === 'langmatches') {
-        if (value.args[1].value)
-          filters.bcp47 = value.args[1].value
-      }
-
-      if (key === 'limit') {
-        filters.limit = value
-      }
-      
-      if (value.predicate && value.predicate.value in filtersToUri && value.object.termType === 'Literal') {
-        const predicate = value.predicate.value as keyof typeof filtersToUri
-        const filter = filtersToUri[predicate]
-        filters[filter] = value.object.value
-      }
     })
+
 
     return filters
   }

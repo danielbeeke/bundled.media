@@ -1,9 +1,12 @@
 <mxfile host="65bd71144e">
     <diagram id="UzllzLov6MiDBfOCMm3I" name="Page-1">
-        <mxGraphModel dx="986" dy="552" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1556" dy="976" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
+                <mxCell id="36" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2000" y="1545" width="100" height="70" as="geometry"/>
+                </mxCell>
                 <mxCell id="10" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=18;" parent="1" source="4" target="7" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
@@ -59,6 +62,78 @@
                 </mxCell>
                 <mxCell id="24" value="&lt;b&gt;output()&lt;/b&gt;&lt;br&gt;Depending on the mode we return one response or a stream of items. We also return metadata such as the 'next_url', maybe aggregate information, development information etc." style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;spacing=15;" parent="1" vertex="1">
                     <mxGeometry x="40" y="1800" width="620" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="LightNet&lt;br&gt;library.mediaworks.global&lt;br&gt;&lt;br&gt;API" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+                    <mxGeometry x="1590" y="1070" width="210" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="YouTube&lt;br&gt;TheBibleProject&lt;br&gt;&lt;br&gt;API" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+                    <mxGeometry x="1880" y="1070" width="210" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="?" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+                    <mxGeometry x="2140" y="1080" width="210" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="Excel" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+                    <mxGeometry x="2400" y="1070" width="210" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="2380" y="1460" width="30" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" style="edgeStyle=none;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="31" target="26">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="31" target="27">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" style="edgeStyle=none;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="31" target="28">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" style="edgeStyle=none;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="31" target="29">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="SearchTerm" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacing=13;" vertex="1" parent="1">
+                    <mxGeometry x="1930" y="1450" width="320" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2010" y="1555" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2020" y="1565" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="39" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2030" y="1575" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2040" y="1585" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2050" y="1595" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="42" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2000" y="1770" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="43" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2010" y="1780" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="45" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2030" y="1800" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="46" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2040" y="1810" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="48" value="Filtering in framework and sorting" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="1840" y="1700" width="460" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="49" value="in memory data store: N3" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+                    <mxGeometry x="1980" y="1920" width="220" height="73.33" as="geometry"/>
+                </mxCell>
+                <mxCell id="50" value="Comunica.Query(query, store)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1935" y="2060" width="290" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2035" y="2180" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2025" y="2170" width="100" height="70" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
