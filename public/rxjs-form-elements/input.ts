@@ -17,6 +17,6 @@ export const input = (defaultValue: string) => {
     filter((search: string) =>  search.length === 0 || search.length > 3),
     startWith(defaultValue)
   )
-  
+
   return { element, stream }
 }

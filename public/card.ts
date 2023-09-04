@@ -1,4 +1,4 @@
-import { html, render } from 'https://esm.sh/uhtml'
+import { html, render } from 'https://esm.sh/uhtml/async'
 import { getIcon } from './getIcon.ts'
 const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 import { parse } from 'https://cdn.skypack.dev/bcp-47@2?dts'
@@ -6,7 +6,7 @@ import { model } from './model.ts'
 
 const url = new URL(location.toString())
 
-export const card = (item: any) => {
+export const card = async (item: any) => {
   const type: string = item['@type'][0].split(/\/|:|#/g).pop().toLowerCase()
   const urls = item['http://schema.org/url']?.map((item: any) => item?.['@value'])
   const names = item['http://schema.org/name']?.map((item: any) => item?.['@value'])
@@ -37,12 +37,12 @@ export const card = (item: any) => {
     
   const bcp47Picker = document.createElement('bcp47-picker')
 
-  const languageLabels = [...langCodes].map((langCode: string) => { 
+  const languageLabels = (await Promise.all([...langCodes].map((async (langCode: string) => { 
     /** @ts-ignore */
-    const label = bcp47Picker?.label && bcp47Picker?.label(parse(langCode)) 
+    const label = bcp47Picker?.label && await bcp47Picker?.label(parse(langCode)) 
     return label ? label : langCode
-  })
-    .filter(Boolean)
+  }))))
+  .filter(Boolean)
 
   const languageLabel = html`
     <span class="badge rounded-pill text-bg-light language-label">

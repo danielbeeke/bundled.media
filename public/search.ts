@@ -1,6 +1,6 @@
 import { BundledMedia, ApiResponse, Filters } from './BundledMedia.ts'
 import { fromEvent, startWith, map, exhaustMap, tap } from 'https://esm.sh/rxjs@7.5.7'
-import { html, render } from "https://esm.sh/uhtml@3.1.0"
+import { html, render } from 'https://esm.sh/uhtml/async'
 import { card } from './card.ts'
 
 const bundledMedia = new BundledMedia(location.toString())

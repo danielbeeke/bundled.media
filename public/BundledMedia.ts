@@ -2,8 +2,8 @@ import { stream } from 'https://esm.sh/ndjson-rxjs';
 import { select } from './rxjs-form-elements/select.ts'
 import { input } from './rxjs-form-elements/input.ts'
 import { langcode } from './rxjs-form-elements/langcode.ts'
-import { map, combineLatestWith, fromEvent, filter, from, tap, bufferCount, startWith, Observable, EMPTY } from 'https://esm.sh/rxjs@7.5.7'
-import { html, render, Hole } from 'https://esm.sh/uhtml'
+import { map, combineLatestWith, fromEvent, filter, from, tap, startWith, Observable } from 'https://esm.sh/rxjs@7.5.7'
+import { html, render, Hole } from 'https://esm.sh/uhtml/async'
 
 export type Filters = {
   fulltextSearch: string, 

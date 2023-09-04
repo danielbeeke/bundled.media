@@ -1,6 +1,6 @@
 import { BundledMedia, Filters } from './BundledMedia.ts'
 import { switchMap, tap, bufferWhen, interval, filter, bufferCount, fromEvent } from 'https://esm.sh/rxjs@7.5.7'
-import { html, render } from 'https://esm.sh/uhtml'
+import { html, render } from 'https://esm.sh/uhtml/async'
 import { card } from './card.ts'
 import { getIcon } from './getIcon.ts'
 
