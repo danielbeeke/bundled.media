@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/materialize) deno production */
-import{Notification as o}from"/v115/rxjs@7.5.7/deno/internal/Notification.js";import{operate as m}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as a}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function c(){return m((r,e)=>{r.subscribe(a(e,t=>{e.next(o.createNext(t))},()=>{e.next(o.createComplete()),e.complete()},t=>{e.next(o.createError(t)),e.complete()}))})}export{c as materialize};
-//# sourceMappingURL=materialize.js.map

@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/takeWhile) deno production */
-import{operate as m}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as a}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function l(o,n=!1){return m((p,e)=>{let i=0;p.subscribe(a(e,t=>{let r=o(t,i++);(r||n)&&e.next(t),!r&&e.complete()}))})}export{l as takeWhile};
-//# sourceMappingURL=takeWhile.js.map

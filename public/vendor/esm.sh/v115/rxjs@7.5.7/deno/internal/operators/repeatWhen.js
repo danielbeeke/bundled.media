@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/repeatWhen) deno production */
-import{Subject as m}from"/v115/rxjs@7.5.7/deno/internal/Subject.js";import{operate as a}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as u}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function h(c){return a((f,r)=>{let e,o=!1,t,l=!1,n=!1,s=()=>n&&l&&(r.complete(),!0),p=()=>(t||(t=new m,c(t).subscribe(u(r,()=>{e?i():o=!0},()=>{l=!0,s()}))),t),i=()=>{n=!1,e=f.subscribe(u(r,void 0,()=>{n=!0,!s()&&p().next()})),o&&(e.unsubscribe(),e=null,o=!1,i())};i()})}export{h as repeatWhen};
-//# sourceMappingURL=repeatWhen.js.map

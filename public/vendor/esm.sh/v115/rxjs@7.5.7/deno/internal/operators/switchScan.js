@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/switchScan) deno production */
-import{switchMap as s}from"/v115/rxjs@7.5.7/deno/internal/operators/switchMap.js";import{operate as m}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";function a(e,c){return m((i,p)=>{let r=c;return s((o,t)=>e(r,o,t),(o,t)=>(r=t,t))(i).subscribe(p),()=>{r=null}})}export{a as switchScan};
-//# sourceMappingURL=switchScan.js.map

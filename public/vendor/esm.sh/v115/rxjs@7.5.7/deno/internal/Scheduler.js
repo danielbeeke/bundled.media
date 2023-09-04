@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/Scheduler) deno production */
-import{dateTimestampProvider as e}from"/v115/rxjs@7.5.7/deno/internal/scheduler/dateTimestampProvider.js";var t=class{constructor(o,s=t.now){this.schedulerActionCtor=o,this.now=s}schedule(o,s=0,r){return new this.schedulerActionCtor(this,o).schedule(r,s)}};t.now=e.now;export{t as Scheduler};
-//# sourceMappingURL=Scheduler.js.map

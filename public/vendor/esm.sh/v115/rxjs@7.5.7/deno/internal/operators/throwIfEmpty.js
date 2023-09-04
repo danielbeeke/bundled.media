@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/throwIfEmpty) deno production */
-import{EmptyError as p}from"/v115/rxjs@7.5.7/deno/internal/util/EmptyError.js";import{operate as a}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as f}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function i(e=n){return a((o,r)=>{let t=!1;o.subscribe(f(r,m=>{t=!0,r.next(m)},()=>t?r.complete():r.error(e())))})}function n(){return new p}export{i as throwIfEmpty};
-//# sourceMappingURL=throwIfEmpty.js.map

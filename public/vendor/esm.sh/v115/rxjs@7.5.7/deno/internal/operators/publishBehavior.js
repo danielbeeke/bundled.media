@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/publishBehavior) deno production */
-import{BehaviorSubject as t}from"/v115/rxjs@7.5.7/deno/internal/BehaviorSubject.js";import{ConnectableObservable as n}from"/v115/rxjs@7.5.7/deno/internal/observable/ConnectableObservable.js";function u(e){return r=>{let o=new t(e);return new n(r,()=>o)}}export{u as publishBehavior};
-//# sourceMappingURL=publishBehavior.js.map

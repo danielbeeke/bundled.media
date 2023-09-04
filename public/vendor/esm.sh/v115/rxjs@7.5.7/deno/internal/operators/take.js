@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/take) deno production */
-import{EMPTY as p}from"/v115/rxjs@7.5.7/deno/internal/observable/empty.js";import{operate as f}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as i}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function x(e){return e<=0?()=>p:f((o,r)=>{let t=0;o.subscribe(i(r,m=>{++t<=e&&(r.next(m),e<=t&&r.complete())}))})}export{x as take};
-//# sourceMappingURL=take.js.map

@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/lastValueFrom) deno production */
-import{EmptyError as f}from"/v115/rxjs@7.5.7/deno/internal/util/EmptyError.js";function i(a,e){let s=typeof e=="object";return new Promise((t,r)=>{let l=!1,o;a.subscribe({next:u=>{o=u,l=!0},error:r,complete:()=>{l?t(o):s?t(e.defaultValue):r(new f)}})})}export{i as lastValueFrom};
-//# sourceMappingURL=lastValueFrom.js.map

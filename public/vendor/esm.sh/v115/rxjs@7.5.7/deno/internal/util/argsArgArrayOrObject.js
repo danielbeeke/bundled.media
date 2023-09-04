@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/util/argsArgArrayOrObject) deno production */
-var{isArray:o}=Array,{getPrototypeOf:s,prototype:y,keys:c}=Object;function i(t){if(t.length===1){let r=t[0];if(o(r))return{args:r,keys:null};if(f(r)){let e=c(r);return{args:e.map(n=>r[n]),keys:e}}}return{args:t,keys:null}}function f(t){return t&&typeof t=="object"&&s(t)===y}export{i as argsArgArrayOrObject};
-//# sourceMappingURL=argsArgArrayOrObject.js.map

@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/switchMap) deno production */
-import{innerFrom as f}from"/v115/rxjs@7.5.7/deno/internal/observable/innerFrom.js";import{operate as x}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as p}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function C(c,o){return x((u,t)=>{let e=null,s=0,n=!1,r=()=>n&&!e&&t.complete();u.subscribe(p(t,i=>{e?.unsubscribe();let d=0,l=s++;f(c(i,l)).subscribe(e=p(t,m=>t.next(o?o(i,m,l,d++):m),()=>{e=null,r()}))},()=>{n=!0,r()}))})}export{C as switchMap};
-//# sourceMappingURL=switchMap.js.map

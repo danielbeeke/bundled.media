@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/scheduler/AnimationFrameScheduler) deno production */
-import{AsyncScheduler as f}from"/v115/rxjs@7.5.7/deno/internal/scheduler/AsyncScheduler.js";var t=class extends f{flush(e){this._active=!0;let d=this._scheduled;this._scheduled=void 0;let{actions:s}=this,h;e=e||s.shift();do if(h=e.execute(e.state,e.delay))break;while((e=s[0])&&e.id===d&&s.shift());if(this._active=!1,h){for(;(e=s[0])&&e.id===d&&s.shift();)e.unsubscribe();throw h}}};export{t as AnimationFrameScheduler};
-//# sourceMappingURL=AnimationFrameScheduler.js.map

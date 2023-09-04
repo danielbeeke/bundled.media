@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/scheduled/scheduleAsyncIterable) deno production */
-import{Observable as a}from"/v115/rxjs@7.5.7/deno/internal/Observable.js";import{executeSchedule as r}from"/v115/rxjs@7.5.7/deno/internal/util/executeSchedule.js";function f(t,o){if(!t)throw new Error("Iterable cannot be null");return new a(e=>{r(e,o,()=>{let l=t[Symbol.asyncIterator]();r(e,o,()=>{l.next().then(n=>{n.done?e.complete():e.next(n.value)})},0,!0)})})}export{f as scheduleAsyncIterable};
-//# sourceMappingURL=scheduleAsyncIterable.js.map

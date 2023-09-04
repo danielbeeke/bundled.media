@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/scheduler/QueueAction) deno production */
-import{AsyncAction as u}from"/v115/rxjs@7.5.7/deno/internal/scheduler/AsyncAction.js";var r=class extends u{constructor(t,s){super(t,s),this.scheduler=t,this.work=s}schedule(t,s=0){return s>0?super.schedule(t,s):(this.delay=s,this.state=t,this.scheduler.flush(this),this)}execute(t,s){return s>0||this.closed?super.execute(t,s):this._execute(t,s)}requestAsyncId(t,s,e=0){return e!=null&&e>0||e==null&&this.delay>0?super.requestAsyncId(t,s,e):(t.flush(this),0)}};export{r as QueueAction};
-//# sourceMappingURL=QueueAction.js.map

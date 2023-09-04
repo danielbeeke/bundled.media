@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/debounceTime) deno production */
-import{asyncScheduler as d}from"/v115/rxjs@7.5.7/deno/internal/scheduler/async.js";import{operate as f}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as p}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function T(i,o=d){return f((m,t)=>{let e=null,l=null,u=null,a=()=>{if(e){e.unsubscribe(),e=null;let n=l;l=null,t.next(n)}};function r(){let n=u+i,c=o.now();if(c<n){e=this.schedule(void 0,n-c),t.add(e);return}a()}m.subscribe(p(t,n=>{l=n,u=o.now(),e||(e=o.schedule(r,i),t.add(e))},()=>{a(),t.complete()},void 0,()=>{l=e=null}))})}export{T as debounceTime};
-//# sourceMappingURL=debounceTime.js.map

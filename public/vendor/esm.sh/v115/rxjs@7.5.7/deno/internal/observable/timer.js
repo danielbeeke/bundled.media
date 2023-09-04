@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/observable/timer) deno production */
-import{Observable as m}from"/v115/rxjs@7.5.7/deno/internal/Observable.js";import{async as p}from"/v115/rxjs@7.5.7/deno/internal/scheduler/async.js";import{isScheduler as s}from"/v115/rxjs@7.5.7/deno/internal/util/isScheduler.js";import{isValidDate as a}from"/v115/rxjs@7.5.7/deno/internal/util/isDate.js";function w(o=0,t,n=p){let e=-1;return t!=null&&(s(t)?n=t:e=t),new m(f=>{let i=a(o)?+o-n.now():o;i<0&&(i=0);let l=0;return n.schedule(function(){f.closed||(f.next(l++),0<=e?this.schedule(void 0,e):f.complete())},i)})}export{w as timer};
-//# sourceMappingURL=timer.js.map

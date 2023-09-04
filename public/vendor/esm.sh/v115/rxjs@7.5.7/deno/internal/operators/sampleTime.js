@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/sampleTime) deno production */
-import{asyncScheduler as e}from"/v115/rxjs@7.5.7/deno/internal/scheduler/async.js";import{sample as o}from"/v115/rxjs@7.5.7/deno/internal/operators/sample.js";import{interval as t}from"/v115/rxjs@7.5.7/deno/internal/observable/interval.js";function a(r,m=e){return o(t(r,m))}export{a as sampleTime};
-//# sourceMappingURL=sampleTime.js.map

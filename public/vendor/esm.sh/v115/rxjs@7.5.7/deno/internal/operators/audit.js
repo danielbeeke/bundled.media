@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/audit) deno production */
-import{operate as c}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{innerFrom as f}from"/v115/rxjs@7.5.7/deno/internal/observable/innerFrom.js";import{createOperatorSubscriber as r}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function x(a){return c((i,l)=>{let t=!1,n=null,e=null,u=!1,m=()=>{if(e?.unsubscribe(),e=null,t){t=!1;let o=n;n=null,l.next(o)}u&&l.complete()},p=()=>{e=null,u&&l.complete()};i.subscribe(r(l,o=>{t=!0,n=o,e||f(a(o)).subscribe(e=r(l,m,p))},()=>{u=!0,(!t||!e||e.closed)&&l.complete()}))})}export{x as audit};
-//# sourceMappingURL=audit.js.map

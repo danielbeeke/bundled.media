@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/scheduler/animationFrameProvider) deno production */
-import{Subscription as m}from"/v115/rxjs@7.5.7/deno/internal/Subscription.js";var t={schedule(n){let e=requestAnimationFrame,i=cancelAnimationFrame,{delegate:a}=t;a&&(e=a.requestAnimationFrame,i=a.cancelAnimationFrame);let r=e(o=>{i=void 0,n(o)});return new m(()=>i?.(r))},requestAnimationFrame(...n){let{delegate:e}=t;return(e?.requestAnimationFrame||requestAnimationFrame)(...n)},cancelAnimationFrame(...n){let{delegate:e}=t;return(e?.cancelAnimationFrame||cancelAnimationFrame)(...n)},delegate:void 0};export{t as animationFrameProvider};
-//# sourceMappingURL=animationFrameProvider.js.map

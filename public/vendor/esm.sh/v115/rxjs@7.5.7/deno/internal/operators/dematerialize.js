@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/dematerialize) deno production */
-import{observeNotification as t}from"/v115/rxjs@7.5.7/deno/internal/Notification.js";import{operate as i}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as m}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function c(){return i((e,r)=>{e.subscribe(m(r,o=>t(o,r)))})}export{c as dematerialize};
-//# sourceMappingURL=dematerialize.js.map

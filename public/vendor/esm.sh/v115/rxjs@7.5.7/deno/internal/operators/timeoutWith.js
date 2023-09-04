@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/timeoutWith) deno production */
-import{async as m}from"/v115/rxjs@7.5.7/deno/internal/scheduler/async.js";import{isValidDate as n}from"/v115/rxjs@7.5.7/deno/internal/util/isDate.js";import{timeout as p}from"/v115/rxjs@7.5.7/deno/internal/operators/timeout.js";function y(o,e,t){let i,r,f;if(t=t??m,n(o)?i=o:typeof o=="number"&&(r=o),e)f=()=>e;else throw new TypeError("No observable provided to switch to");if(i==null&&r==null)throw new TypeError("No timeout provided.");return p({first:i,each:r,scheduler:t,with:f})}export{y as timeoutWith};
-//# sourceMappingURL=timeoutWith.js.map

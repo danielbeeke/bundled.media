@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/debounce) deno production */
-import{operate as a}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{noop as s}from"/v115/rxjs@7.5.7/deno/internal/util/noop.js";import{createOperatorSubscriber as u}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";import{innerFrom as c}from"/v115/rxjs@7.5.7/deno/internal/observable/innerFrom.js";function v(i){return a((m,o)=>{let r=!1,l=null,e=null,t=()=>{if(e?.unsubscribe(),e=null,r){r=!1;let n=l;l=null,o.next(n)}};m.subscribe(u(o,n=>{e?.unsubscribe(),r=!0,l=n,e=u(o,t,s),c(i(n)).subscribe(e)},()=>{t(),o.complete()},void 0,()=>{l=e=null}))})}export{v as debounce};
-//# sourceMappingURL=debounce.js.map

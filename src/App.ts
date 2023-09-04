@@ -36,12 +36,10 @@ async function serveHttp(request: Request) {
         body = await initiatedRoute.template({})
       }
       else {
-        const preloadModules = existsSync('./public/preloadmodules.json') ? JSON.parse(Deno.readTextFileSync('./public/preloadmodules.json') ?? '[]') : []
         const variables = await initiatedRoute.htmlVariables()
         const templateResult = await initiatedRoute.template(variables)
         body = layout(Object.assign(variables, {
           body: templateResult,
-          preloadModules
         }))  
       }
       const response = new Response(new TextEncoder().encode(body), { status: 200 })

@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/defaultIfEmpty) deno production */
-import{operate as f}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as p}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function n(o){return f((r,e)=>{let t=!1;r.subscribe(p(e,a=>{t=!0,e.next(a)},()=>{t||e.next(o),e.complete()}))})}export{n as defaultIfEmpty};
-//# sourceMappingURL=defaultIfEmpty.js.map

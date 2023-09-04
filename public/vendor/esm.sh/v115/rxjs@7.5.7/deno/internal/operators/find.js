@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/find) deno production */
-import{operate as x}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as c}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function u(t,n){return x(m(t,n,"value"))}function m(t,n,f){let o=f==="index";return(i,e)=>{let p=0;i.subscribe(c(e,r=>{let d=p++;t.call(n,r,d,i)&&(e.next(o?d:r),e.complete())},()=>{e.next(o?-1:void 0),e.complete()}))}}export{m as createFind,u as find};
-//# sourceMappingURL=find.js.map

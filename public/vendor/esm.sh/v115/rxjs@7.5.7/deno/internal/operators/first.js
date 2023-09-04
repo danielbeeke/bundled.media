@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/first) deno production */
-import{EmptyError as p}from"/v115/rxjs@7.5.7/deno/internal/util/EmptyError.js";import{filter as e}from"/v115/rxjs@7.5.7/deno/internal/operators/filter.js";import{take as n}from"/v115/rxjs@7.5.7/deno/internal/operators/take.js";import{defaultIfEmpty as a}from"/v115/rxjs@7.5.7/deno/internal/operators/defaultIfEmpty.js";import{throwIfEmpty as l}from"/v115/rxjs@7.5.7/deno/internal/operators/throwIfEmpty.js";import{identity as u}from"/v115/rxjs@7.5.7/deno/internal/util/identity.js";function I(t,m){let o=arguments.length>=2;return r=>r.pipe(t?e((f,i)=>t(f,i,r)):u,n(1),o?a(m):l(()=>new p))}export{I as first};
-//# sourceMappingURL=first.js.map

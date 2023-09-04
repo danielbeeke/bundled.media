@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/window) deno production */
-import{Subject as n}from"/v115/rxjs@7.5.7/deno/internal/Subject.js";import{operate as i}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as l}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";import{noop as u}from"/v115/rxjs@7.5.7/deno/internal/util/noop.js";function f(m){return i((p,e)=>{let o=new n;e.next(o.asObservable());let t=r=>{o.error(r),e.error(r)};return p.subscribe(l(e,r=>o?.next(r),()=>{o.complete(),e.complete()},t)),m.subscribe(l(e,()=>{o.complete(),e.next(o=new n)},u,t)),()=>{o?.unsubscribe(),o=null}})}export{f as window};
-//# sourceMappingURL=window.js.map

@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/pluck) deno production */
-import{map as f}from"/v115/rxjs@7.5.7/deno/internal/operators/map.js";function u(...t){let r=t.length;if(r===0)throw new Error("list of properties cannot be empty.");return f(i=>{let e=i;for(let n=0;n<r;n++){let o=e?.[t[n]];if(typeof o<"u")e=o;else return}return e})}export{u as pluck};
-//# sourceMappingURL=pluck.js.map

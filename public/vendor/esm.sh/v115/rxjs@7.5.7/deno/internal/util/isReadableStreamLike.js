@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/util/isReadableStreamLike) deno production */
-import{__asyncGenerator as n,__await as r}from"/v115/tslib@2.5.0/deno/tslib.mjs";import{isFunction as o}from"/v115/rxjs@7.5.7/deno/internal/util/isFunction.js";function c(e){return n(this,arguments,function*(){let t=e.getReader();try{for(;;){let{value:a,done:i}=yield r(t.read());if(i)return yield r(void 0);yield yield r(a)}}finally{t.releaseLock()}})}function s(e){return o(e?.getReader)}export{s as isReadableStreamLike,c as readableStreamLikeToAsyncGenerator};
-//# sourceMappingURL=isReadableStreamLike.js.map

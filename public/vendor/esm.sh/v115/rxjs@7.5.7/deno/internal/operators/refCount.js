@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/refCount) deno production */
-import{operate as f}from"/v115/rxjs@7.5.7/deno/internal/util/lift.js";import{createOperatorSubscriber as u}from"/v115/rxjs@7.5.7/deno/internal/operators/OperatorSubscriber.js";function l(){return f((n,o)=>{let e=null;n._refCount++;let r=u(o,void 0,void 0,void 0,()=>{if(!n||n._refCount<=0||0<--n._refCount){e=null;return}let t=n._connection,i=e;e=null,t&&(!i||t===i)&&t.unsubscribe(),o.unsubscribe()});n.subscribe(r),r.closed||(e=n.connect())})}export{l as refCount};
-//# sourceMappingURL=refCount.js.map

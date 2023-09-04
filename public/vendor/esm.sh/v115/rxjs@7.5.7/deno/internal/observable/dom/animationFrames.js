@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/observable/dom/animationFrames) deno production */
-import{Observable as f}from"/v115/rxjs@7.5.7/deno/internal/Observable.js";import{performanceTimestampProvider as F}from"/v115/rxjs@7.5.7/deno/internal/scheduler/performanceTimestampProvider.js";import{animationFrameProvider as i}from"/v115/rxjs@7.5.7/deno/internal/scheduler/animationFrameProvider.js";function d(n){return n?m(n):p}function m(n){return new f(r=>{let t=n||F,c=t.now(),o=0,e=()=>{r.closed||(o=i.requestAnimationFrame(s=>{o=0;let a=t.now();r.next({timestamp:n?a:s,elapsed:a-c}),e()}))};return e(),()=>{o&&i.cancelAnimationFrame(o)}})}var p=m();export{d as animationFrames};
-//# sourceMappingURL=animationFrames.js.map

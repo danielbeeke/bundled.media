@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/operators/last) deno production */
-import{EmptyError as i}from"/v115/rxjs@7.5.7/deno/internal/util/EmptyError.js";import{filter as e}from"/v115/rxjs@7.5.7/deno/internal/operators/filter.js";import{takeLast as n}from"/v115/rxjs@7.5.7/deno/internal/operators/takeLast.js";import{throwIfEmpty as a}from"/v115/rxjs@7.5.7/deno/internal/operators/throwIfEmpty.js";import{defaultIfEmpty as l}from"/v115/rxjs@7.5.7/deno/internal/operators/defaultIfEmpty.js";import{identity as u}from"/v115/rxjs@7.5.7/deno/internal/util/identity.js";function I(t,m){let o=arguments.length>=2;return r=>r.pipe(t?e((f,p)=>t(f,p,r)):u,n(1),o?l(m):a(()=>new i))}export{I as last};
-//# sourceMappingURL=last.js.map

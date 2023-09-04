@@ -1,3 +1,0 @@
-/* esm.sh - esbuild bundle(rxjs@7.5.7/internal/util/reportUnhandledError) deno production */
-import{config as t}from"/v115/rxjs@7.5.7/deno/internal/config.js";import{timeoutProvider as e}from"/v115/rxjs@7.5.7/deno/internal/scheduler/timeoutProvider.js";function m(o){e.setTimeout(()=>{let{onUnhandledError:r}=t;if(r)r(o);else throw o})}export{m as reportUnhandledError};
-//# sourceMappingURL=reportUnhandledError.js.map
