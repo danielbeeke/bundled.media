@@ -24,8 +24,8 @@ class AugmentedDataClass {
   }
 
   get (id: string) {
-    // The extra ID is soley for the mediaWorks data where the last url part is the language 
-    // and we have created the data language independant.
+    // The extra ID is solely for the mediaWorks data where the last url part is the language 
+    // and we have created the data language independent.
     // TODO make a formal way of doing this. This itself may be fine by source may need a way too hook into this.
     const idSplit = id.split('/')
     idSplit.pop()
