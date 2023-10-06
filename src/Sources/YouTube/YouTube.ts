@@ -73,7 +73,7 @@ export class YouTube implements SourceInterface<YouTubeRawItem> {
     fetchUrl.searchParams.set('playlistId', channelId)
     fetchUrl.searchParams.set('key', this.options.key)
     fetchUrl.searchParams.set('maxResults', this.maxResults.toString())
-    fetchUrl.searchParams.set('fields', 'nextPageToken,items(id,snippet(title,resourceId,thumbnails.high))')
+    fetchUrl.searchParams.set('fields', 'nextPageToken,items(id,snippet(title,description,resourceId,thumbnails.high))')
 
     if (token) fetchUrl.searchParams.set('pageToken', token)
 
