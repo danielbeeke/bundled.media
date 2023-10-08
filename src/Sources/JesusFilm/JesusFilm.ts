@@ -41,7 +41,7 @@ export class JesusFilm implements SourceInterface<JesusFilmRawItem> {
     fetchUrl.searchParams.set('limit', '10')    
     if (query.fulltextSearch) fetchUrl.searchParams.set('term', query.fulltextSearch)
 
-    const response = await fetched(fetchUrl)
+    const response = await fetch(fetchUrl)
     const json = await response.json()
     const genericItems = json._embedded?.mediaComponents ?? []
 
@@ -64,7 +64,7 @@ export class JesusFilm implements SourceInterface<JesusFilmRawItem> {
     url.searchParams.set('filter', 'default')
     url.searchParams.set('platform', 'ios')
     url.searchParams.set('apiKey', this.options.key)
-    const response = await fetched(url)
+    const response = await fetch(url)
     const json = await response.json()
     const data = json._embedded.mediaComponentLanguage[0]
     const urls = data.streamingUrls.m3u8.map((urlObject: any) => urlObject.url.split('?apiSessionId')[0] + '#.m3u8')
