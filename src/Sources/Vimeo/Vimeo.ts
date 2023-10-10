@@ -30,7 +30,7 @@ export class Vimeo implements SourceInterface<VimeoRawItem> {
   }
 
   get label () {
-    return this.options.channel.charAt(0).toUpperCase() + this.options.channel.slice(1)
+    return this.options.label ?? this.options.channel.charAt(0).toUpperCase() + this.options.channel.slice(1)
   }
 
   get identifier () {

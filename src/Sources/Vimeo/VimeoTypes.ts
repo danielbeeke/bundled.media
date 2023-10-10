@@ -371,4 +371,5 @@ export type VimeoOptions = sourceOptions & {
   clientId: string,
   clientSecret: string,
   channel: string,
+  label?: string
 }
