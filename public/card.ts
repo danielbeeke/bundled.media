@@ -13,7 +13,11 @@ export const card = async (item: any) => {
   const descriptions = item['http://schema.org/description']?.map((item: any) => item?.['@value']) ?? []
   const authors = item['http://schema.org/author']?.flatMap((item: any) => item['http://schema.org/name']?.map((item: any) => item?.['@value']))
 
-  const thumbnail = item['http://schema.org/thumbnail']?.[0]?.['http://schema.org/url']?.[0]?.['@value']
+  const thumbnail = item['http://schema.org/thumbnail']?.[0]?.['http://schema.org/url']?.[0]?.['@value'] ??
+  item['http://schema.org/thumbnail']?.[0]?.['@value'] ??
+  item['http://schema.org/image']?.[0]?.['http://schema.org/url']?.[0]?.['@value'] ??
+  item['http://schema.org/image']?.[0]?.['@value']
+
   let image = thumbnail
 
   if (!image && type === 'book') {

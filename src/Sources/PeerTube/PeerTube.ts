@@ -55,7 +55,7 @@ export class PeerTube implements SourceInterface<PeerTubeRawItem> {
       '@id': item.url,
       'name': item.name,
       'description': item.description,
-      'inLanguage': item.language?.id ?? 'en',
+      'inLanguage': item.language?.id,
       '@type': 'VideoObject',
       'thumbnail': {
         'url': sourceUrl.origin + item.thumbnailPath,

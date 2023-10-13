@@ -99,7 +99,7 @@ export class JesusFilm implements SourceInterface<JesusFilmRawItem> {
       '@type': 'VideoObject',
       'name': item.title,
       'url': item.urls,
-      'inLanguage': item.bcp47 ?? 'en',
+      'inLanguage': item.bcp47,
       'description': item.longDescription,
       'thumbnail': {
         "@type": "ImageObject",

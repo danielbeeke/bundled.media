@@ -55,7 +55,6 @@ export class FunkWhale implements SourceInterface<FunkWhaleRawItem> {
       '@id': item.fid,
       'name': item.title,
       'description': item.title,
-      'inLanguage': 'und',
       '@type': 'AudioObject',
       'url': this.options.url + item.listen_url
     }

@@ -47,5 +47,6 @@ export type FetcherResult<Pagination> = Promise<{
 
 export type sourceOptions = {
   augmentedDataFiles?: Array<string>
-  langCode?: string | ((item: any) => string)
+  langCode?: string | ((item: any) => string),
+  label?: string
 }
