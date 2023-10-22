@@ -6,6 +6,8 @@ import { model } from './model.ts'
 
 const url = new URL(location.toString())
 
+const extensionRegex = /.jpg|.jpeg|.png/gi
+
 export const card = async (item: any) => {
   const type: string = item['@type'][0].split(/\/|:|#/g).pop().toLowerCase()
   const urls = item['http://schema.org/url']?.map((item: any) => item?.['@value'])
@@ -16,7 +18,8 @@ export const card = async (item: any) => {
   const thumbnail = item['http://schema.org/thumbnail']?.[0]?.['http://schema.org/url']?.[0]?.['@value'] ??
   item['http://schema.org/thumbnail']?.[0]?.['@value'] ??
   item['http://schema.org/image']?.[0]?.['http://schema.org/url']?.[0]?.['@value'] ??
-  item['http://schema.org/image']?.[0]?.['@value']
+  item['http://schema.org/image']?.[0]?.['@value'] ?? 
+  item['http://schema.org/url'].filter((item: any) => extensionRegex.test(item['@value']))?.[0]?.['@value']
 
   let image = thumbnail
 
@@ -97,7 +100,7 @@ export const card = async (item: any) => {
     <div class="card-body">
       <h5 class="card-title">${names[0]}</h5>
       ${authors?.length ? html`
-        <small class="card-sub-title d-block mb-2">${formatter.format(authors.map((author: string) => author))}</small>            
+        <small class="card-sub-title d-block mb-2">${formatter.format(authors.map((author: string) => author ?? ''))}</small>            
       ` : null}
       <p class="card-text">${descriptions[0]}</p>
     </div>

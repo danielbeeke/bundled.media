@@ -5,18 +5,15 @@ export type ExcelRawItem = {
 }
 
 export type ColumnGetter = {
-  column: string,
+  column?: string,
+  value?: string,
   langCode?: string
   langCodeColumn?: string
 }
 
 export type ExcelOptions = sourceOptions & {
   mapping: {
-    name: Array<ColumnGetter>,
-    author: Array<ColumnGetter>,
-    description: Array<ColumnGetter>,
-    url: Array<ColumnGetter>,
-    inLanguage: ColumnGetter,
+    [key: string]: Array<ColumnGetter> | ColumnGetter
   },
   label: string,
   url: string,

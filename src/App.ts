@@ -65,13 +65,12 @@ async function serveHttp(request: Request) {
 
   // Try static resources.
   try {
-    const file = await Deno.readTextFile('./public' + requestURL.pathname)
+    const file = await Deno.readTextFile('./public' + decodeURI(requestURL.pathname))
     if (file) {
-      return await serveFileWithTs(request, './public' + requestURL.pathname)
+      return await serveFileWithTs(request, './public' + decodeURI(requestURL.pathname))
     }  
   }
   catch (exception) {
-    console.log('exception', exception)
     // We continue with a 404.
   }
 

@@ -37,7 +37,7 @@ export class Excel implements SourceInterface<ExcelRawItem> {
   }
 
   @cache
-  async fetch (_query: AbstractQuery) {
+  async fetch (_fetched: typeof globalThis.fetch, _query: AbstractQuery) {
     const data = await Deno.readFile(`./data/${this.options.file}`)
     const workbook = xlsx.read(data)
     const sheetName = this.options.sheet ?? workbook.SheetNames[0]
@@ -49,29 +49,42 @@ export class Excel implements SourceInterface<ExcelRawItem> {
   /**
    * A helper that maps the settings to the Excel sheet.
    */
-  getColumn (columnGetters: Array<ColumnGetter>, row: ExcelRawItem) {
-    return columnGetters.map(columnGetter => {
-      const value = row[columnGetter.column]
+  getColumn (columnGetters: Array<ColumnGetter> | ColumnGetter, row: ExcelRawItem) {
+    const value = (Array.isArray(columnGetters) ? columnGetters : [columnGetters]).map(columnGetter => {
+      if (columnGetter.value) return columnGetter.value
+      
+      const value = row[columnGetter.column!]
       if (!value) return null
       const langCode = columnGetter.langCodeColumn ? row[columnGetter.langCodeColumn] : columnGetter.langCode ?? false
       if (langCode) return { '@value': value, '@language': langCode }  
       return value
     }).filter(Boolean)
+
+    if (!Array.isArray(columnGetters)) return value[0]
+
+    return value
   }
 
   /**
    * The transformation from an API specific item to a schema.org item.
    */
   normalize(item: ExcelRawItem): Thing {
-    const urls = this.options.mapping.url.map(columnGetter => item[columnGetter.column])
-    return {
+    const urls = this.options.mapping.url.map(columnGetter => item[columnGetter.column!])
+
+    const returnObject: { [key: string]: any } = {
       '@id': urls[0],
       '@type': this.options.types[0].split('/').pop(),
-      name: this.getColumn(this.options.mapping.name, item),
-      description: this.getColumn(this.options.mapping.description, item),
-      url: urls,
-      inLanguage: bcp47Normalize(item[this.options.mapping.inLanguage.column]),  
     }
+
+    for (const [key, mapping] of Object.entries(this.options.mapping)) {
+      returnObject[key] = this.getColumn(mapping, item)
+    }
+
+    if (typeof returnObject['inLanguage'] === 'string') {
+      returnObject['inLanguage'] = bcp47Normalize(returnObject['inLanguage'])
+    }
+
+    return returnObject
   }
 
   /**

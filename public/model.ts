@@ -14,7 +14,7 @@ export const model = async (selectedCardExpanded: any, closeCallback: any) => {
         <div class="modal-content">
           ${selectedCardCompacted ? html`
           <div class="modal-header">
-            <h5 class="modal-title">${selectedCardExpanded['http://schema.org/name'][0]['@value']}</h5>
+            <h5 class="modal-title">${selectedCardExpanded['http://schema.org/name']?.[0]['@value'] ?? ''}</h5>
             <button type="button" class="btn-close" onClick=${closeCallback}></button>
           </div>
           <div class="modal-body">
