@@ -41,7 +41,9 @@ const widgets = [
   },
   {
     applies: (url: string) => {
-      return url.endsWith('.pdf') || url.includes('https://bibles.org/bible/')
+      return url.endsWith('.pdf') || 
+      url.includes('https://bibles.org/bible/') ||
+      url.startsWith('https://arc.gt/') && url.endsWith('#viewer')
     },
     template (url: string) {
       return html`<iframe class="ebook-pdf" src=${url}></iframe>`
