@@ -72,6 +72,12 @@
     }
   }
 
+  &.imageobject {
+    .image {
+      object-fit: contain;
+    }
+  }
+
   &.videoobject {
     .image-wrapper {
       background-color: black;
