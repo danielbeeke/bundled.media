@@ -6,6 +6,8 @@ export class CssRoute extends BaseRoute {
   static path = '/styles.css'
   static mime = 'text/css'
 
+  public allowsInteractive = false
+
   handle (): string {
     const compile = sass('./scss/styles.scss')
     const output = compile.to_string()

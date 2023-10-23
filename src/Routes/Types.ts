@@ -5,6 +5,7 @@ const typeLabels: { [key: string]: string } = {
   'http://schema.org/Book': 'Book',
   'http://schema.org/VideoObject': 'Video',
   'http://schema.org/AudioObject': 'Audio',
+  'http://schema.org/ImageObject': 'Image',
 }
 
 export class TypesRoute extends BaseRoute {

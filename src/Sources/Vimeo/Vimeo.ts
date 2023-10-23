@@ -60,13 +60,14 @@ export class Vimeo implements SourceInterface<VimeoRawItem> {
    */
    normalize(item: VimeoRawItem): Thing {
     const image = item.pictures.sizes.pop()!
+    const id = item.uri.split('/').pop()
 
     const output: any = {
-      '@id': item.link,
+      '@id': `https://vimeo.com/${id}`,
       'name': item.name,
       'description': item.description,
       '@type': 'VideoObject',
-      'url': item.link,
+      'url': `https://vimeo.com/${id}`,
       'keywords': item.tags?.map(tag => tag.tag) ?? [],
       'inLanguage': item.language
     }

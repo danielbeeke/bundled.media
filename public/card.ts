@@ -8,18 +8,20 @@ const url = new URL(location.toString())
 
 const extensionRegex = /.jpg|.jpeg|.png/gi
 
+const schema = (suffix: string = '') => 'http://schema.org/' + suffix
+
 export const card = async (item: any) => {
   const type: string = item['@type'][0].split(/\/|:|#/g).pop().toLowerCase()
-  const urls = item['http://schema.org/url']?.map((item: any) => item?.['@value'])
-  const names = item['http://schema.org/name']?.map((item: any) => item?.['@value'])
-  const descriptions = item['http://schema.org/description']?.map((item: any) => item?.['@value']) ?? []
-  const authors = item['http://schema.org/author']?.flatMap((item: any) => item['http://schema.org/name']?.map((item: any) => item?.['@value']))
+  const urls = item[schema('url')]?.map((item: any) => item?.['@value'])
+  const names = item[schema('name')]?.map((item: any) => item?.['@value'])
+  const descriptions = item[schema('description')]?.map((item: any) => item?.['@value']) ?? []
+  const authors = item[schema('author')]?.flatMap((item: any) => item[schema('name')]?.map((item: any) => item?.['@value']))
 
-  const thumbnail = item['http://schema.org/thumbnail']?.[0]?.['http://schema.org/url']?.[0]?.['@value'] ??
-  item['http://schema.org/thumbnail']?.[0]?.['@value'] ??
-  item['http://schema.org/image']?.[0]?.['http://schema.org/url']?.[0]?.['@value'] ??
-  item['http://schema.org/image']?.[0]?.['@value'] ?? 
-  item['http://schema.org/url'].filter((item: any) => extensionRegex.test(item['@value']))?.[0]?.['@value']
+  const thumbnail = item[schema('thumbnail')]?.[0]?.[schema('url')]?.[0]?.['@value'] ??
+  item[schema('thumbnail')]?.[0]?.['@value'] ??
+  item[schema('image')]?.[0]?.[schema('url')]?.[0]?.['@value'] ??
+  item[schema('image')]?.[0]?.['@value'] ?? 
+  item[schema('url')].filter((item: any) => extensionRegex.test(item['@value']))?.[0]?.['@value']
 
   let image = thumbnail
 
@@ -40,7 +42,7 @@ export const card = async (item: any) => {
 
   const shouldShowMultiLingual = !url.searchParams.get('langCode') && item['http://bundled.media/multilingualItems']?.[0]?.['@value']
 
-  const langCodes: Set<string> = new Set(item['http://schema.org/inLanguage']?.[0]?.['@value'].split('-x-mltlngl-'))
+  const langCodes: Set<string> = new Set(item[schema('inLanguage')]?.[0]?.['@value'].split('-x-mltlngl-'))
     
   const bcp47Picker = document.createElement('bcp47-picker')
 
@@ -54,7 +56,7 @@ export const card = async (item: any) => {
   const languageLabel = html`
     <span class="badge rounded-pill text-bg-light language-label">
       ${shouldShowMultiLingual ? 
-        html`<div class="icon"  data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="This item is available in a lot of languages. Please filter to a language to see if this item is available." ref=${getIcon(`/images/translate.svg`)}></div>` : 
+        html`<div class="icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="This item is available in a lot of languages. Please filter to a language to see if this item is available." ref=${getIcon(`/images/translate.svg`)}></div>` : 
         languageLabels.join(' & ')
       }
     </span>

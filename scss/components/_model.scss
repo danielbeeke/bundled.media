@@ -1,0 +1,12 @@
+img, video {
+    max-width: 100%;
+}
+
+iframe {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+}
+
+iframe.ebook-pdf {
+    aspect-ratio: 1;
+}

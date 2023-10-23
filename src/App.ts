@@ -29,18 +29,13 @@ async function serveHttp(request: Request) {
 
     // We allow HTML output when the route exists as an endpoint.
     // This allows for easy learning of the API similar to HyperMedia.
-    if (allowsInteractive) {
+    if (allowsInteractive && initiatedRoute.allowsInteractive) {
       let body = ''
-      if (request.url.toString().includes('.css')) {
-        body = await initiatedRoute.template({})
-      }
-      else {
-        const variables = await initiatedRoute.htmlVariables()
-        const templateResult = await initiatedRoute.template(variables)
-        body = layout(Object.assign(variables, {
-          body: templateResult,
-        }))  
-      }
+      const variables = await initiatedRoute.htmlVariables()
+      const templateResult = await initiatedRoute.template(variables)
+      body = layout(Object.assign(variables, {
+        body: templateResult,
+      }))  
       const response = new Response(new TextEncoder().encode(body), { status: 200 })
       return response
     }
