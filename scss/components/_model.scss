@@ -1,5 +1,5 @@
 img, video {
-    max-width: 100%;
+    width: 100%;
 }
 
 iframe {
@@ -7,6 +7,6 @@ iframe {
     width: 100%;
 }
 
-iframe.ebook-pdf {
+iframe.viewer {
     aspect-ratio: 1;
 }
