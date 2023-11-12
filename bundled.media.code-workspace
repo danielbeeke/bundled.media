@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"deno.lint": true,
+		"deno.unstable": true,
+		"deno.config": ".vscode/deno.jsonc"
+	}
+}

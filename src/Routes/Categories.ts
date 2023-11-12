@@ -43,7 +43,6 @@ export class CategoriesRoute extends BaseRoute {
    */
   async template (_variables: { [key: string]: any }): Promise<string> { 
     const categories = await this.handle()
-
     return `
       <ul class="list-group">
       ${categories.map(({ uri, label }) => `

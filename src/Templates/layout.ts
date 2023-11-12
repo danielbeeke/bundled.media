@@ -15,7 +15,7 @@ export default ({ title, body }: { title: string, body: string }) => `
     <div class="p-3 mx-auto">
       <h3 class="mb-4"><a href="/">${title}</a></h3>
       <div id="app">
-        ${body}
+        ${body} 
       </div>
     </div>
   </body>
