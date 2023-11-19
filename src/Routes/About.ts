@@ -20,7 +20,7 @@ export class AboutRoute extends BaseRoute {
 
     return `
       <div style="max-width: 700px;">
-        ${markup.content.replace('<p>See a demo at', '<p hidden>')}
+      ${markup.content.replace('<p>See a demo at', '<p hidden>')}
       </div>
     `
   }
