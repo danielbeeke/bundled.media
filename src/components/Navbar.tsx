@@ -1,5 +1,6 @@
-const NavBar = (title, links) => {
-    const BASEURL = 'http://localhost:8080/'
+
+const NavBar = (title: string, links: string[]) => {
+  const BASEURL = 'http://localhost:8080/'
   return `
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href=${BASEURL}>${title}</a>
