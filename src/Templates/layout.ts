@@ -1,5 +1,5 @@
 import Navbar from '../components/Navbar.tsx'
-export default ({ title, links, body }: { title: string, links: Array, body: string }) => `
+export default ({ title, links, body }: { title: string, links: string[], body: string }) => `
   <!DOCTYPE html>
   <html lang="en">
   <head>

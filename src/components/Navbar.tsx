@@ -1,5 +1,5 @@
 
-const NavBar = (title: string, links: string[]) => {
+const Navbar = (title: string, links: string[]) => {
   const BASEURL = 'http://localhost:8080/'
   return `
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -22,4 +22,4 @@ const NavBar = (title: string, links: string[]) => {
 
 }
 
-export default NavBar
+export default Navbar

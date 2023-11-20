@@ -1,4 +1,3 @@
-import Navbar from '../components/Navbar.tsx'
 export abstract class BaseRoute {
 
   public url: URL
