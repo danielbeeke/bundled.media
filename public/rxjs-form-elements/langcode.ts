@@ -1,4 +1,4 @@
-import { html, render } from 'https://esm.sh/uhtml'
+import { html, render } from 'https://esm.sh/uhtml@3.2.2'
 import { fromEvent, map, startWith } from 'https://esm.sh/rxjs@7.5.7'
 import '../misc/init-bcp47-picker.ts'
 

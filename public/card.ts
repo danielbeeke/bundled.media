@@ -1,4 +1,4 @@
-import { html, render } from 'https://esm.sh/uhtml/async'
+import { html, render } from 'https://esm.sh/uhtml@3.2.2/async'
 import { getIcon } from './getIcon.ts'
 const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 import { parse } from 'https://cdn.skypack.dev/bcp-47@2?dts'

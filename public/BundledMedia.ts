@@ -3,7 +3,7 @@ import { select } from './rxjs-form-elements/select.ts'
 import { input } from './rxjs-form-elements/input.ts'
 import { langcode } from './rxjs-form-elements/langcode.ts'
 import { map, combineLatestWith, fromEvent, filter, from, tap, startWith, Observable } from 'https://esm.sh/rxjs@7.5.7'
-import { html, render, Hole } from 'https://esm.sh/uhtml/async'
+import { html, render, Hole } from 'https://esm.sh/uhtml@3.2.2/async'
 
 export type Filters = {
   fulltextSearch: string, 

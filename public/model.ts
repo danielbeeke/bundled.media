@@ -1,4 +1,4 @@
-import { html } from "https://esm.sh/uhtml/async"
+import { html } from "https://esm.sh/uhtml@3.2.2/async"
 import { JSONLD } from 'https://taisukef.github.io/jsonld-es/JSONLD.js'
 import './misc/json-viewer.ts'
 import Hls from "https://esm.sh/hls.js"

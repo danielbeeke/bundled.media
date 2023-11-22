@@ -47,7 +47,7 @@ export class Vimeo implements SourceInterface<VimeoRawItem> {
     fetchUrl.searchParams.set('page', (page + 1).toString())
     fetchUrl.searchParams.set('per_page', '50')
 
-    const request = await fetched(fetchUrl, {
+    const request = await fetch(fetchUrl, {
       headers: { 'Authorization': `basic ${btoa(`${this.options.clientId}:${this.options.clientSecret}`)}`}
     })
 
