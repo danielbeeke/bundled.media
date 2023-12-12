@@ -35,6 +35,7 @@ async function serveHttp(request: Request) {
       const templateResult = await initiatedRoute.template(variables)
       body = layout(Object.assign(variables, {
         body: templateResult,
+        route: matchedRoute
       }))  
       const response = new Response(new TextEncoder().encode(body), { status: 200 })
       return response

@@ -1,5 +1,13 @@
 import Navbar from '../components/Navbar.tsx'
-export default ({ title, links, body }: { title: string, links: string[], body: string }) => `
+
+type LayoutProps = { 
+  title: string, 
+  links: Array<{ path: string, title: string }>, 
+  body: string, 
+  route: any 
+}
+
+export default ({ title, links, body, route }: LayoutProps) => `
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -13,8 +21,8 @@ export default ({ title, links, body }: { title: string, links: string[], body: 
       <link href="/styles.css" rel="stylesheet" defer>
     </head>
   <body>
-      ${Navbar(title, links)}
-      <div id="app">
+      ${Navbar(title, links, route)}
+      <div id="app" class="m-4">
         ${body} 
       </div>
     </div>

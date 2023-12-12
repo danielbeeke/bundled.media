@@ -21,7 +21,16 @@ export abstract class BaseRoute {
   async htmlVariables () {
     return await {
       title: 'bundled.media',
-      links: ['about', 'stream', 'search']
+      links: [{
+        path: '/about',
+        title: 'About'
+      }, {
+        path: '/stream',
+        title: 'Stream'
+      }, {
+        path: '/search',
+        title: 'Search'
+      }]
     }
   }
 

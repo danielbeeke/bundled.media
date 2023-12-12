@@ -16,17 +16,25 @@ export class IndexRoute extends BaseRoute {
    */
   async template (_variables: { [key: string]: any }): Promise<string> { 
     return await `
-      <div class="">
-        <ul class="list-group">
-        ${routes.filter(route => route.description).map((route) => route.path !== '/' ? `
-          <li class="list-group-item">
-            <a href="${route.path}">${route.path}</a>
-            <br>
-            <small>${route.description}</small>
-          </li>
-        ` : '').join('')}
-        </ul>
-      </div>
+    <meta http-equiv="Refresh" content="0; url='/about'" />
+    `
+  }
+
+  async templateOld () {
+    return await `
+    
+    <div class="">
+      <ul class="list-group">
+      ${routes.filter(route => route.description).map((route) => route.path !== '/' ? `
+        <li class="list-group-item">
+          <a href="${route.path}">${route.path}</a>
+          <br>
+          <small>${route.description}</small>
+        </li>
+      ` : '').join('')}
+      </ul>
+    </div>
+    
     `
   }
 }
