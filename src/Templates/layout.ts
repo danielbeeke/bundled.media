@@ -1,4 +1,5 @@
-export default ({ title, body }: { title: string, body: string }) => `
+import Navbar from '../components/Navbar.tsx'
+export default ({ title, links, body }: { title: string, links: string[], body: string }) => `
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -12,10 +13,9 @@ export default ({ title, body }: { title: string, body: string }) => `
       <link href="/styles.css" rel="stylesheet" defer>
     </head>
   <body>
-    <div class="p-3 mx-auto">
-      <h3 class="mb-4"><a href="/">${title}</a></h3>
+      ${Navbar(title, links)}
       <div id="app">
-        ${body}
+        ${body} 
       </div>
     </div>
   </body>

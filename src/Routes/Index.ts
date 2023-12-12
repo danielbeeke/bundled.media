@@ -1,6 +1,5 @@
 import { BaseRoute } from './BaseRoute.ts'
 import routes from './routes.ts'
-
 export class IndexRoute extends BaseRoute {
   public allowsInteractive = true
 
