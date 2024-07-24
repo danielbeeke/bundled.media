@@ -11,7 +11,7 @@ const widgets = [
       return url.match(/.png$|.jpg$|.jpeg$/gi)
     },
     template (url: string) {
-      return html`<img src=${`//images.mediaworks.global/?url=${url}&w=1200`} />`
+      return html`<img src=${`//wsrv.nl/?url=${url}&w=1200`} />`
     }
   },
   {
