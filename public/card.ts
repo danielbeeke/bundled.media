@@ -76,7 +76,7 @@ export const card = async (item: any) => {
       <div class="image-wrapper">
         ${imageFooter}
         <img loading="lazy" ref=${(element: HTMLImageElement) => {
-          const url = ['localhost'].some(noImage => image.includes(noImage)) ? image : `//images.mediaworks.global/?url=${image}&h=200${type === 'videoobject' ? '' : ''}`
+          const url = ['localhost'].some(noImage => image.includes(noImage)) ? image : `//wsrv.nl/?url=${image}&h=200${type === 'videoobject' ? '' : ''}`
           element.classList.add('loading')
 
           element.src = ''
